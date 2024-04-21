@@ -9,11 +9,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: us-west-2
           role-to-assume: arn:aws:iam::005208535800:role/gh-deploy-role
+          role-session-name: samplerolesession
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
