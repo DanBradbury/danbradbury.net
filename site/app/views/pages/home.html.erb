@@ -1,0 +1,5 @@
+<h1>List of Posts</h1>
+<% @posts.each do |post| %>
+  <%= post.title %><br>
+  <%= GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, post.content).html_safe %>
+<% end %>
