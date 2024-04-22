@@ -1,10 +1,3 @@
----
-layout: post
-title: "matchadd vs match"
-date: 2015-07-15 23:20:07 -0700
-comments: true
-categories: vim, vimL, vim script
----
 The target of this post is to clear up any confusion about the subtle differences between `matchadd` and `match`/`2match`/`3match`. This is not meant for the novice vim user but folks that have some experience with vimL. I'll try to keep it as simple as possible for anyone interested in some of vim's inner workings.
 
 From `:help match` we get the following information:

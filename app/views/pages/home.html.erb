@@ -1,5 +1,19 @@
-<h1>List of Posts</h1>
+<header class="align--center">
+  <img src="https://avatars.githubusercontent.com/u/2555073?v=4" class="avatar" size="50x50">
+  <p class="text--uppercase text--spread text--subtle">Daniel Bradbury</p>
+</header>
+<section>
 <% @posts.each do |post| %>
-  <%= post.title %><br>
-  <%= GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, post.content).html_safe %>
+  <article class="card card-list">
+    <header class="align--center">
+        <span><%= post.created_at.strftime("%B %d, %Y") %></span>
+
+      <h2><%= post.title %></h2>
+    </header>
+    <div class="card__content">
+      <%= truncate(GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, post.content), length: 200, escape: false) %>
+    </div>
+  </article>
 <% end %>
+</section>
+
