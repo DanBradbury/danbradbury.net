@@ -434,3 +434,6 @@ a {
     display: inline-flex !important
 }
 
+h2 {
+  text-transform: capitalize;
+}
