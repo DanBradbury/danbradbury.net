@@ -7,4 +7,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "pages#home"
+  get "/post/:slug", to: "pages#post"
 end

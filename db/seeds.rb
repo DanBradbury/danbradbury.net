@@ -16,5 +16,11 @@ Dir["./posts/*.md"].each do |f|
   dashes =  file_name.split("-")
   post_date = dashes[0..2].join("-").to_datetime
   post_title = dashes.drop(3).join(" ")
-  Post.create! title: post_title, content: File.read(f), created_at: post_date
+  post_slug = post_title.gsub(" ", "-")
+  Post.create!(
+    title: post_title,
+    content: File.read(f),
+    created_at: post_date,
+    slug: post_slug
+  )
 end

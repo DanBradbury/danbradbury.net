@@ -190,6 +190,28 @@ figure figcaption {
   text-align: center;
 }
 
+.card--list {
+    min-height: 10em;
+    padding-bottom: 4em;
+    overflow: hidden;
+    position: relative
+}
+
+.card__link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-indent: -9999px;
+    z-index: 1
+}
+
+a {
+    color: var(--color-txt--action);
+    word-wrap: break-word
+}
+
 .card__date {
     display: flex;
     align-items: center;
