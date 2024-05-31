@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Site</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :base, "data-turbo-track": "reload" %>
+
+  </head>
+
+  <body>
+    <main class="page">
+      <div class="page-content">
+        <header class="align--center">
+          <a class="undecorated" aria-label="All posts from Dan Bradbury" href="/">
+            <img src="https://avatars.githubusercontent.com/u/2555073?v=4" class="avatar" size="50x50">
+            <p class="text--uppercase text--spread text--subtle">Daniel Bradbury</p>
+          </a>
+        </header>
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

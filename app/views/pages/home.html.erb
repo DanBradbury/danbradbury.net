@@ -1,0 +1,19 @@
+<section>
+<% @posts.each do |post| %>
+  <article class="card card--list">
+    <header class="align--center">
+      <span><%= post.created_at.strftime("%B %d, %Y") %></span>
+
+      <h2><%= post.title %></h2>
+    </header>
+    <div class="card__content">
+      <%= truncate(GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, post.content), length: 200, escape: false) %>
+    </div>
+    <a class="card__link" aria-label="Post: <%= post.slug %>" href="/post/<%= post.slug %>">Read more</a>
+    <div class="card__more txt--x-small" aria-hidden="true">
+      <span class="btn btn--subtle">Read more</span>
+    </div>
+  </article>
+<% end %>
+</section>
+
