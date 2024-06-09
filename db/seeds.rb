@@ -16,7 +16,6 @@ Dir["./posts/*.md"].each do |f|
   post_slug = post_title.gsub(" ", "-")
 
   #raw_file_contents = File.read(f)
-
   state = 0
   content = ""
   File.readlines(f).each do |line|

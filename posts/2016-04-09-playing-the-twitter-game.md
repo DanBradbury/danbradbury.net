@@ -48,24 +48,22 @@ So let's see how well formatted the twitter follower page is (and since it's Twi
 
 we also notice that twitter has some infinite scroll magic going on to continuous load the 1000s of people we follow. With that knowledge in our hands it's time to craft some Jquery flavored code to do the clicking for us
 
-```javascript
-$.each($('.user-actions-follow-button'), function(value,index) {
-  $(index).click();
-});
-```
+    $.each($('.user-actions-follow-button'), function(value,index) {
+      $(index).click();
+    });
+
 Pretty easy to click through each of the buttons on the page but that's only going to account for the ones we have manually scrolled through.. Not sufficient since we have >4000 but <20 buttons on the page. So let's handle that damned auto-scrolling
 
-```javascript
-var count = 0;
-function st(){
-  $("html, body").animate({ scrollTop: $(document).height() }, "fast");
-  if(count < 2000) {
-    count += 1;
-    setTimeout(st, 500);
-  }
-}
-st()
-```
+    var count = 0;
+    function st(){
+      $("html, body").animate({ scrollTop: $(document).height() }, "fast");
+      if(count < 2000) {
+        count += 1;
+        setTimeout(st, 500);
+      }
+    }
+    st()
+
 You might be thinking; why not just for loop this shit?! The scroll animation needs a bit of time to allow for the page load; if you call it too fast the entire page will bug out and the "click button" code wont work as expected. So we just use `setTimeout` and let that sucker run (good time to take a stretch or make some coffee). When you come back you should hopefully be at the bottom of the screen (wait for `GridTimeline-footer` to show up and you know you are done) :D
 
 Run the click code and patiently wait for your browser to slow down drastically and eventually unfollow your entire list. The result should look something like this

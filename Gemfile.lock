@@ -1,4 +1,14 @@
 GIT
+  remote: https://github.com/rails/propshaft.git
+  revision: af557fbd10dc9856c943b3324f340a87295f5041
+  specs:
+    propshaft (0.9.0)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
+      railties (>= 7.0.0)
+
+GIT
   remote: https://github.com/rails/rails.git
   revision: 0053ed2bd454a4109d1b308c59c41027301b821e
   branch: main
@@ -268,6 +278,7 @@ DEPENDENCIES
   github-markup
   importmap-rails
   jbuilder
+  propshaft!
   puma (>= 5.0)
   rails!
   redcarpet

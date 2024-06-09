@@ -32,31 +32,29 @@ The main thing I was looking for here was something in the databases/ or files/ 
 Inspeckage has the handy download .apk so there’s a few things we can do here (starting with the most obvious)
 - unzip it and take a look at what we’ve got
 
-```
-dan@dan-MacBookPro:~/riperino$ unzip og.apk
-Archive:  og.apk
-  inflating: META-INF/MANIFEST.MF
-  inflating: META-INF/CATEXTKY.SF
-  inflating: META-INF/CATEXTKY.RSA
-  inflating: AndroidManifest.xml
-  inflating: assets/_where-is-www.txt
-  ...
- extracting: assets/icudt46l.zip
- extracting: assets/www/assets/
- .... a ton of assets (selected some potential highlights)
-  inflating: assets/www/config/config.json
-  inflating: assets/www/cordova.js
-  inflating: assets/www/css/bootstrap/
-  inflating: assets/www/js/
- extracting: res/drawable/icon.png
-  inflating: res/xml/config.xml
- extracting: resources.arsc
-  inflating: classes.dex
-...
-  inflating: lib/armeabi/libsqlcipher.so
-  inflating: lib/armeabi-v7a/libsqlcipher.so
-  inflating: lib/x86/libsqlcipher.so
-```
+    dan@dan-MacBookPro:~/riperino$ unzip og.apk
+    Archive:  og.apk
+      inflating: META-INF/MANIFEST.MF
+      inflating: META-INF/CATEXTKY.SF
+      inflating: META-INF/CATEXTKY.RSA
+      inflating: AndroidManifest.xml
+      inflating: assets/_where-is-www.txt
+      ...
+     extracting: assets/icudt46l.zip
+     extracting: assets/www/assets/
+     .... a ton of assets (selected some potential highlights)
+      inflating: assets/www/config/config.json
+      inflating: assets/www/cordova.js
+      inflating: assets/www/css/bootstrap/
+      inflating: assets/www/js/
+     extracting: res/drawable/icon.png
+      inflating: res/xml/config.xml
+     extracting: resources.arsc
+      inflating: classes.dex
+    ...
+      inflating: lib/armeabi/libsqlcipher.so
+      inflating: lib/armeabi-v7a/libsqlcipher.so
+      inflating: lib/x86/libsqlcipher.so
 
 From looking at the contents we can tell the basic structure but we are mostly interested in a few files
 - libsqlcipher.so & assets/icudt46l.zip ([interesting fallback zip for sqlcipher](https://stackoverflow.com/questions/22024657/sqlcipher-for-android-icudt46l-zip-really-needed)..possible fun attack vector)
@@ -76,48 +74,42 @@ After reading the docs for [`getReadableDatabase`](https://developer.android.com
 ### Hooking and Winning
 Without getting too tangential Xposed is great and the [documentation is outstanding for anyone interesting in getting started](https://github.com/rovo89/XposedBridge/wiki/Development-tutorial). If the development tutorial is not enough the content online was more than enough to clear up any potential blockers.
 
-```
-public class Main implements IXposedHookLoadPackage {
-    public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
-        findAndHookMethod("com.****.core.db.DBHelper", lpparam.classLoader, "createAndGetDBPath", Context.class, String.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log("Hooked em': DBHelper#createAndGetDBPath ");
-                XposedBridge.log("----------------------------------------");
-                XposedBridge.log(param.args[1].toString());
-                XposedBridge.log("----------------------------------------");
-            }
-        });
+    public class Main implements IXposedHookLoadPackage {
+        public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+            findAndHookMethod("com.****.core.db.DBHelper", lpparam.classLoader, "createAndGetDBPath", Context.class, String.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    XposedBridge.log("Hooked em': DBHelper#createAndGetDBPath ");
+                    XposedBridge.log("----------------------------------------");
+                    XposedBridge.log(param.args[1].toString());
+                    XposedBridge.log("----------------------------------------");
+                }
+            });
+        }
     }
-}
-```
 
 We load our hook module, reboot our device and when we rerun the app we see something beautiful in the logs
 
-```
-Hooked em': DBHelper#createAndGetDBPath
-----------------------------------------
-base64masterKey== (totally legit..)
-----------------------------------------
-```
+    Hooked em': DBHelper#createAndGetDBPath
+    ----------------------------------------
+    base64masterKey== (totally legit..)
+    ----------------------------------------
 
 Now I should be able to
 
-```
-Sqlcipher rippedDB.db
-PRAGMA key=”base64masterKey==”
-.tables
-```
+    Sqlcipher rippedDB.db
+    PRAGMA key=”base64masterKey==”
+    .tables
 
 And get something other than `file is encrypted or not a database`. Unfortunately this didn’t work on my machine and I thought I was getting juked out and went to bed.
 
 ![](https://media.giphy.com/media/HzgfYh5H3MR0s/giphy.gif)
 
 After thinking about questions like these ([1](http://sqlite.1065341.n5.nabble.com/Getting-error-quot-file-is-encrypted-or-is-not-a-database-quot-when-trying-simple-C-example-td75837.html), [2](https://stackoverflow.com/questions/44161713/sqlite-file-is-encrypted-or-is-not-a-database), [3](https://github.com/sqlcipher/sqlcipher/issues/205)) all night + the following day of family time it became clear versions must be the issue in my case. After figuring out the difference between [Commercial and Community](https://www.zetetic.net/sqlcipher/buy/) it became clear this was just a time save and the same version was being used for both and the commercial folks were just given the latest binaries without having to work for them. Since we have some compatriots who dont like working much either I ran `brew install sqlcipher` and of course things just worked..
-```
-Mac - 3.15.2
-Ubuntu 16.04 - 3.8.6
-```
+
+    Mac - 3.15.2
+    Ubuntu 16.04 - 3.8.6
+
 As an additional aside there are some open source “sqlbrowser applications” that have sqlcipher as a feature but dont do a great job revealing the versioning. Just build community versions as they are released and things should be fine / bank on everyone being on commercial and brew updating at the same time :D
 
 Upon using the correct version we see a beautiful table list and can query to our heart's content.
