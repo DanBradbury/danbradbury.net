@@ -11,7 +11,12 @@ html {
     word-wrap: break-word;
     margin: 0 auto;
     padding: 1.5em;
- }
+}
+body {
+  background-color: #1c1c1c;
+  color: white;
+}
+
 
 @media (min-width: 768px) {
     html {
@@ -22,8 +27,12 @@ html {
 h1, h2, h3, h4 {
     margin: 2.5rem 0 1.5rem 0;
     line-height: 1.25;
-    color: #333;
- }
+    color: #ffffff;
+}
+
+header > span {
+  color: #ffcc00;
+}
 
 a {
     color: #fa6432;
@@ -38,7 +47,7 @@ p {
     line-height: 1.5;
  }
 p code {
-    background-color: #eee;
+    background-color: #303030;
     padding: 0.05em 0.2em;
     border: 1px solid #ccc;
  }
@@ -198,8 +207,8 @@ figure figcaption {
 }
 
 .btn {
-  color: var(--color-txt--subtle);
-  border: 1px solid var(--color-border);
+  color: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 3rem;
   padding: .3em .8em;
   margin: 0;
@@ -226,7 +235,7 @@ figure figcaption {
 }
 
 a {
-    color: var(--color-txt--action);
+    color: #004f27;
     word-wrap: break-word
 }
 
@@ -242,196 +251,21 @@ a {
 .card {
     border: 1px solid var(--color-border);
     border-radius: .2em;
-    color: var(--color-txt) !important;
-    box-shadow: 5px 5px 7px var(--color-shadow);
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 2px -1px rgb(255 255 255 / 0.5),
+    0 1rem 2rem 0 hsl(0deg 100% 0% / 0.4);
     margin-bottom: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
   }
-:root {
-    --rgb-black: 0, 0, 0;
-    --rgb-white: 255, 255, 255;
-    --rgb-almost-black: 35, 28, 51;
-    --rgb-almost-white: 236, 233, 230;
-    --rgb-mint: 157, 255, 236;
-    --rgb-red: 201, 36, 0;
-    --rgb-orange: 248, 121, 23;
-    --rgb-gold: 166, 119, 0;
-    --rgb-yellow: 255, 214, 10;
-    --rgb-green: 41, 152, 80;
-    --rgb-teal: 19, 142, 158;
-    --rgb-blue: 0, 116, 228;
-    --rgb-purple: 85, 34, 250;
-    --rgb-pink: 179, 25, 99;
-    --rgb-brown: 119, 109, 99;
-    --rgb-gray: 116, 116, 128;
-    --rgb-medium-gray: 226, 221, 215;
-    --rgb-light-gray: 251, 250, 249;
-    --rgb-neutral-light-gray: 244, 243, 245;
-    --rgb-always-blue: 0, 116, 228;
-    --rgb-canary: 255, 245, 202;
-    --rgb-yellow-gradient-middle: 255, 245, 205;
-    --rgb-peach: 255, 229, 218;
-    --rgb-coral: 249, 92, 92;
-    --rgb-light-green: 22, 186, 91;
-    --rgb-nighttime: 49, 51, 87;
-    --rgb-background: var(--rgb-white);
-    --rgb-ink: var(--rgb-almost-black);
-    --rgb-overlay: var(--rgb-white);
-    --color-black: rgb(var(--rgb-black));
-    --color-almost-black: rgb(var(--rgb-almost-black));
-    --color-always-black: rgb(var(--rgb-almost-black));
-    --color-primary: rgb(var(--rgb-mint));
-    --color-secondary: rgb(var(--rgb-blue));
-    --color-tertiary: rgb(var(--rgb-purple));
-    --color-positive: rgb(var(--rgb-green));
-    --color-negative: rgb(var(--rgb-red));
-    --color-coral: rgb(var(--rgb-coral));
-    --color-disabled: rgb(var(--rgb-gray));
-    --color-always-white: rgb(var(--rgb-white));
-    --color-yellow: rgb(var(--rgb-yellow));
-    --color-peach: rgb(var(--rgb-peach));
-    --color-orange: rgb(var(--rgb-orange));
-    --color-bg--main: rgb(var(--rgb-background));
-    --color-bg--main-transparent: rgba(var(--rgb-background), 0);
-    --color-bg--main-thin: rgba(var(--rgb-background), 0.5);
-    --color-bg--main-very-thin: rgba(var(--rgb-background), 0.25);
-    --color-bg--main-thick: rgba(var(--rgb-background), 0.95);
-    --color-bg--main-reversed: rgb(var(--rgb-ink));
-    --color-bg--surface: rgba(var(--rgb-medium-gray), 0.4);
-    --color-bg--surface-opaque: rgb(var(--rgb-medium-gray));
-    --color-bg--surface-solid: #f3f1ef;
-    --color-bg--surface-glint: rgba(var(--rgb-medium-gray), 0.15);
-    --color-bg--surface-glint-transparent: rgba(var(--rgb-light-gray), 0);
-    --color-bg--surface-glint-opaque: rgb(var(--rgb-light-gray));
-    --color-bg--surface-glint-thick: rgb(var(--rgb-light-gray), 0.9);
-    --color-bg--surface-light: rgba(var(--rgb-ink), 0.05);
-    --color-bg--surface-dark: rgba(var(--rgb-ink), 0.33);
-    --color-bg--neutral: rgb(var(--rgb-neutral-light-gray));
-    --color-bg--positive: rgba(var(--rgb-green), 0.25);
-    --color-bg--positive-glint: rgba(var(--rgb-green), 0.15);
-    --color-bg--negative: rgb(var(--rgb-red), 0.25);
-    --color-bg--negative-glint: rgb(var(--rgb-red), 0.15);
-    --color-bg--negative-glint-thin: rgb(var(--rgb-red), 0.05);
-    --color-bg--flash-notice: rgba(var(--rgb-ink), 0.65);
-    --color-bg--primary: rgba(var(--rgb-mint), 0.15);
-    --color-bg--primary-glint: rgba(var(--rgb-mint), 0.05);
-    --color-bg--secondary: rgba(var(--rgb-blue), 0.15);
-    --color-bg--secondary-glint: rgba(var(--rgb-blue), 0.05);
-    --color-bg--secondary-opaque: #E0EAF9;
-    --color-bg--secondary-glint-opaque: #F4F8FE;
-    --color-bg--tertiary: rgba(var(--rgb-purple), 0.15);
-    --color-bg--tertiary-glint: rgba(var(--rgb-purple), 0.05);
-    --color-bg--tertiary-opaque: #E5DFFF;
-    --color-bg--warning: rgb(var(--rgb-canary));
-    --color-bg--warning-opaque: rgb(var(--rgb-canary));
-    --color-bg--warning-glint: rgb(var(--rgb-peach));
-    --color-bg--warning-glint-opaque: rgb(var(--rgb-peach));
-    --color-bg--warning-urgent: rgb(var(--rgb-orange), 0.33);
-    --color-bg--collection: rgba(var(--rgb-green), 0.25);
-    --color-bg--collection-glint: rgba(var(--rgb-mint), 0.1);
-    --color-bg--collection-opaque: #D7EFDE;
-    --color-bg--collection-glint-opaque: #F2FDF9;
-    --color-bg--world-primary: #8edacd;
-    --color-bg--world-secondary: #4c63e1;
-    --color-bg--world-tertiary: #6550f0;
-    --color-bg--highlight: rgba(var(--rgb-yellow), 0.25);
-    --color-bg--overlay: rgb(var(--rgb-overlay));
-    --color-bg--overlay-dark: rgb(var(--rgb-almost-black), 0.95);
-    --color-bg--receded: rgb(var(--rgb-ink), 0.03);
-    --color-bg--receded-on-isolated-content: rgb(var(--rgb-ink), 0.03);
-    --color-bg--card: #fff;
-    --color-bg--sheet: var(--color-bg--main);
-    --color-bg--sheet-transparent: var(--color-bg--main-transparent);
-    --color-bg--entry-sheet: var(--color-bg--main);
-    --color-bg--message-content: #fff;
-    --color-bg--popup: rgba(var(--rgb-ink), 0.25);
-    --color-bg--tooltip: rgb(var(--rgb-almost-black));
-    --color-bg--go-button: rgba(var(--rgb-ink), 0.2);
-    --color-bg--note: rgba(var(--rgb-yellow), 0.35);
-    --color-bg--note-glint: rgba(var(--rgb-yellow), 0.15);
-    --color-bg--note-opaque: #FFF6C8;
-    --color-bg--thread: #FAF9F7;
-    --color-bg--note-blend: rgb(var(--rgb-yellow-gradient-middle));
-    --color-bg--nighttime: rgb(var(--rgb-nighttime));
-    --color-bg--nighttime-glint: rgba(var(--rgb-nighttime), 0.25);
-    --color-recycling: rgb(var(--rgb-light-green));
-    --color-txt: rgb(var(--rgb-ink));
-    --color-txt--reversed: rgb(var(--rgb-background));
-    --color-txt--subtle: rgba(var(--rgb-ink), 0.66);
-    --color-txt--very-subtle: rgba(var(--rgb-ink), 0.33);
-    --color-txt--subtle-reversed: rgba(var(--rgb-background), 0.66);
-    --color-txt--action: rgb(var(--rgb-blue));
-    --color-txt--placeholder: rgba(var(--rgb-ink), 0.60);
-    --color-txt--on-message-content: rgb(var(--rgb-almost-black));
-    --color-txt--action-on-message-content: rgb(var(--rgb-always-blue));
-    --color-txt--subtle-on-message-content: rgba(var(--rgb-almost-black), 0.66);
-    --color-border: rgba(var(--rgb-ink), 0.15);
-    --color-border--reversed: rgba(var(--rgb-almost-white), 0.25);
-    --color-border--light: rgba(var(--rgb-ink), 0.05);
-    --color-border--medium: rgba(var(--rgb-ink), 0.15);
-    --color-border--heavy: rgba(var(--rgb-ink), 0.5);
-    --color-border--solid: rgb(var(--rgb-ink));
-    --color-border--popup: rgba(var(--rgb-black), 0.15);
-    --color-shadow: rgba(var(--rgb-medium-gray), 0.5);
-    --color-shadow--light: rgba(var(--rgb-medium-gray), 0.3);
-    --color-shadow--dark: rgba(var(--rgb-black), 0.1);
-    --color-shadow--very-dark: rgba(var(--rgb-black), 0.2);
-    --color-focus-ring: #a4d2ff;
-    --color-unread: rgb(var(--rgb-orange));
-    --color-quote-toggle: #0068c8;
-    --color-tertiary--contrast: rgb(var(--rgb-purple));
-    --color-collection: rgb(var(--rgb-green));
-    --color-workflow: rgb(var(--rgb-coral));
-    --calendar-color-red: color-mix(in srgb, rgb(var(--rgb-red)) 75%, rgb(var(--rgb-white)));
-    --calendar-color-red-glint: color-mix(in srgb, rgb(var(--rgb-red)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-gold: color-mix(in srgb, rgb(var(--rgb-gold)) 80%, rgb(var(--rgb-white)));
-    --calendar-color-gold-glint: color-mix(in srgb, rgb(var(--rgb-gold)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-green: color-mix(in srgb, rgb(var(--rgb-green)) 80%, rgb(var(--rgb-white)));
-    --calendar-color-green-glint: color-mix(in srgb, rgb(var(--rgb-green)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-teal: color-mix(in srgb, rgb(var(--rgb-teal)) 80%, rgb(var(--rgb-white)));
-    --calendar-color-teal-glint: color-mix(in srgb, rgb(var(--rgb-teal)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-blue: color-mix(in srgb, rgb(var(--rgb-blue)) 85%, rgb(var(--rgb-white)));
-    --calendar-color-blue-glint: color-mix(in srgb, rgb(var(--rgb-blue)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-purple: color-mix(in srgb, rgb(var(--rgb-purple)) 80%, rgb(var(--rgb-white)));
-    --calendar-color-purple-glint: color-mix(in srgb, rgb(var(--rgb-purple)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-pink: color-mix(in srgb, rgb(var(--rgb-pink)) 70%, rgb(var(--rgb-white)));
-    --calendar-color-pink-glint: color-mix(in srgb, rgb(var(--rgb-pink)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-brown: color-mix(in srgb, rgb(var(--rgb-brown)) 90%, rgb(var(--rgb-white)));
-    --calendar-color-brown-glint: color-mix(in srgb, rgb(var(--rgb-brown)) 15%, rgb(var(--rgb-background)));
-    --calendar-color-black: rgb(var(--rgb-ink));
-    --calendar-color-black-glint: color-mix(in srgb, rgb(var(--rgb-ink)) 15%, rgb(var(--rgb-background)))
-}
-
-:root[data-color-scheme=dark] {
-    --rgb-almost-black: 27, 39, 51;
-    --rgb-red: 255, 120, 120;
-    --rgb-orange: 255, 184, 92;
-    --rgb-gold: 249, 213, 122;
-    --rgb-yellow: 251, 225, 144;
-    --rgb-green: 105, 240, 174;
-    --rgb-teal: 157, 255, 236;
-    --rgb-blue: 80, 162, 255;
-    --rgb-purple: 134, 126, 255;
-    --rgb-pink: 242, 136, 187;
-    --rgb-brown: 185, 165, 151;
-    --rgb-gray: 116, 116, 128;
-    --rgb-medium-gray: 51, 60, 71;
-    --rgb-light-gray: 39, 50, 62;
-    --rgb-neutral-light-gray: 39, 50, 62;
-    --rgb-yellow-gradient-middle: 225, 203, 133;
-    --rgb-peach: 83, 62, 25;
-    --rgb-coral: 222, 137, 131;
-    --rgb-light-green: 115, 240, 105;
-    --rgb-background: var(--rgb-almost-black);
-    --rgb-ink: var(--rgb-almost-white);
-    --rgb-overlay: 32, 44, 56
-}
 
 .text--normal {
     font-weight: normal
 }
 
 .text--subtle {
-    color: var(--color-txt--subtle)
+    color: #009c4d;
 }
 
 .text--uppercase {

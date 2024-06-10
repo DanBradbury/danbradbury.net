@@ -7,7 +7,7 @@
       <h2><%= post.title %></h2>
     </header>
     <div class="card__content">
-      <%= truncate(GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, post.content), length: 200, escape: false) %>
+      <%= extra_safe_truncate(post.content, length: 300, escape: false) %>
     </div>
     <a class="card__link" aria-label="Post: <%= post.slug %>" href="/post/<%= post.slug %>">Read more</a>
     <div class="card__more txt--x-small" aria-hidden="true">

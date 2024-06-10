@@ -4,7 +4,6 @@ categories: ['rants', 'economics']
 ---
 We are getting close to baseball season and since I try to catch the majority of games that means I get to watch a ton more local advertising!
 
-![](https://media.giphy.com/media/7ZjmsISzWnreE/giphy.gif)
 > yay ads!
 
 Last season I was lucky enough to return to Norcal and got to watch the Giants on CSN-Bay Area for the majority of televised games. While watching the the season I saw a ton of PG&E ads; ranging from [some lady telling I'm the reason my bill keeps going up and a PG&E rep will come out to help me buy more new enery effiencient appliances](https://www.youtube.com/watch?v=Mme4iBgTeO4) to [3 latina high school girls who turned off lights to save the school money](https://www.youtube.com/watch?v=kFz5kbPlaQY). Meaning, they are spending money by the boatload to make a wide range of ads in hopes of propagating the message that `PG&E` cares about its customers (and employees[Rich](https://www.youtube.com/watch?v=DvQL9rYWt5Q), and [Jannis](https://www.youtube.com/watch?v=Jp1DskH37Ys)).

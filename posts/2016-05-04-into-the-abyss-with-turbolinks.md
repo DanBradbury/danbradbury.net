@@ -2,7 +2,7 @@ title: Into the Abyss with Turbolinks
 comments: true
 categories: ['turbolinks', 'rails']
 ---
-Previous attempts to adopt `turbolinks` during upgrades or new projects led me to the conclusion that I have a burning hatred for everything the project stands for (rage hatred is the worst kind..). From conversations with other Rails folks + former CTOs it seemed like `turbolinks` was something I could avoid without batting an eyelash (see [comparisons to Windows 8 decision making](http://corlewsolutions.com/articles/article-9-remove-uninstall-delete-turbolinks-in-rails-4) or just ask a local Rails expert what their experience with `turbolinks` has been like)
+Previous attempts to adopt `turbolinks` during upgrades or new projects led me to the conclusion that I have a burning hatred for everything the project stands for (rage hatred is the worst kind..). From conversations with other Rails folks + former CTOs it seemed like turbolinks was something I could avoid without batting an eyelash (see [comparisons to Windows 8 decision making](http://corlewsolutions.com/articles/article-9-remove-uninstall-delete-turbolinks-in-rails-4) or just ask a local Rails expert what their experience with `turbolinks` has been like)
 
 As someone who previously ignored the efforts being made by DHH and the core team I would just start a new project with `--skip-turbolinks` to ensure my own sanity and continue with the hammering.
 
@@ -20,32 +20,28 @@ And this is where it starts to get fun.. I just stumbled upon a bug that reared 
 
 Imagine we are using [`typeahead.js`](https://twitter.github.io/typeahead.js/) we want to go ahead and initialize our typeahead input on a given page. Here's what the JS might look like
 
-```javascript
-  $('#searchBar .typeahead').typeahead({
-    hint: true,
-    highlight: true,
-    minLength: 2
-  },
-  {
-    name: 'estados',
-    source: matcher(items)
-  });
+    $('#searchBar .typeahead').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 2
+    },
+    {
+      name: 'estados',
+      source: matcher(items)
+    });
 
-```
 A pretty harmless call that you are probably going to copy paste in to try the first time you mess with `typeahead.js`. It works and you move on.. But be careful because `turbolinks` will give you some intereseting behaviour if we navigate between the page that has this piece of JS and another page. .
 
 `Turbolinks` will invoke this each time the page is "loaded". Because of this we will spawn a new instance of the typeahead input and the associated hint div.. For some reason (one I don't care to look into) `typeahead.js` will spawn a new instance and hide the others rather than truly cleaning up. No matter what we are left to fend for ourselves in the wilds of `turbolinks` so we search for a solution.
 
 I figure we can just handle global state a little better than your typical inline JS would. To do this we simply wrap the initializer in a conditional to verify the number of typeahead divs that are present on the screen. With proper naming we should be able to expand this approach to multiple typeahead instances.
 
-```javascript
-  if($('.typeahead.tt-input').size() < 1) {
-    $('#searchBar .typeahead').typeahead({
-      ...
+    if($('.typeahead.tt-input').size() < 1) {
+      $('#searchBar .typeahead').typeahead({
+        ...
+      }
     }
-  }
 
-```
 With that extra check we are able to handle the global state that turbolinks will create when natrually navigating and attempting to speed up our page.
 
 A recent webcast featuring DHH got me thinking about how simple the problem of a web application really is. The server demands are not a problem whatsoever (30ms response times are all you need to be perfect anything lower is not truly noticable or necessary). We have an issue when it comes to how the rest of the "page-load" occurs for the user.
@@ -58,4 +54,4 @@ If `Turbolinks` lives up to the into of the `README` I will be a happy Rails cam
 
 > Turbolinks makes navigating your web application faster. Get the performance benefits of a single-page application without the added complexity of a client-side JavaScript framework. Use HTML to render your views on the server side and link to pages as usual. When you follow a link, Turbolinks automatically fetches the page, swaps in its <body>, and merges its <head>, all without incurring the cost of a full page load.
 
-C'mon `Turbolinks` don't let me down again..
+C'mon Turbolinks don't let me down again..
