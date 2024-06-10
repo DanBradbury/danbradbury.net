@@ -21,10 +21,9 @@ There are a few options to disable the Git Credential Manager (detailed [here](h
 
 - `git config –global credential.helper “store –file ~/.gitcredentials”`
 - Create gitcredentials file and place my creds in there according to the specified format
-```
-username=myuser
-password=mypass
-```
+
+    username=myuser
+    password=mypass
 
 - `git config –edit –system`
 - Remove the `helper = manager` line that is still in the system even though we specified to use the file for cred info

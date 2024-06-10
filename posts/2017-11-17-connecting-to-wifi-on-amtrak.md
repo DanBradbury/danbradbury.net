@@ -9,13 +9,11 @@ Today I bring you the pain in the ass process I went through to get a really shi
 
 Connecting to the wifi network yields a proper connection (ip assigned & `network-manager` is happy)... but once you try to go to any page you are stopped..
 
-```
-dan@dan-MacBookPro:~/Documents$ ping google.com
-PING google.com (172.217.6.78) 56(84) bytes of data.
-^C
---- google.com ping statistics ---
-19 packets transmitted, 0 received, 100% packet loss, time 18143ms
-```
+    dan@dan-MacBookPro:~/Documents$ ping google.com
+    PING google.com (172.217.6.78) 56(84) bytes of data.
+    ^C
+    --- google.com ping statistics ---
+    19 packets transmitted, 0 received, 100% packet loss, time 18143ms
 
 If we go to `http://172.217.6.78:80` we will magically be redirected to www.amtrakconnect.com! The login page that failed to popup when the connection was established.
 

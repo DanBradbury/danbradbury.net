@@ -12,9 +12,9 @@ From `:help match` we get the following information:
     		Instead of // any character can be used to mark the start and
     		end of the {pattern}.  Watch out for using special characters,
     		such as '"' and '|'.
-    
+
     		{group} must exist at the moment this command is executed.
-    
+
     		The {group} highlighting still applies when a character is
     		to be highlighted for 'hlsearch', as the highlighting for
     		matches is given higher priority than that of 'hlsearch'.
@@ -52,5 +52,3 @@ In order to compensate for the limitation on match you can create more complex p
     endif
   endfor
 ```
-
-

@@ -12,8 +12,7 @@ After googling I found a [closed issue](https://github.com/turbolinks/turbolinks
 There are a few snippets to override the default behavior that could prove useful but this is something that I'd expect the `turbolinks` to have ironed out.
 
 Because I don't mind writing an `onclick` for the links I'll probably implement something like this for a similar effect
-```javascript
-$('html, body').animate({scrollTop: $('#anchor').offset().top}, 'slow')
-```
+
+    $('html, body').animate({scrollTop: $('#anchor').offset().top}, 'slow')
 
 I'm definitely disappointed in `turbolinks` for failing me on this instance but will continue on this less travelled mysterious path DHH wants me to believe in.
