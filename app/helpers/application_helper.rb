@@ -6,10 +6,7 @@ module ApplicationHelper
       truncated_text[f, 1] == "`"
     end
     if backtick_check.length % 2 != 0
-      puts "UH OH UH OH"
-      puts "BEFORE: #{truncated_text}"
       truncated_text = truncated_text[0..backtick_check[-1]-1]
-      puts "AFTER: #{truncated_text}"
     end
 
     truncate(GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, truncated_text), length: truncated_text.length, escape: false)
