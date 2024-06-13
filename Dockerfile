@@ -64,8 +64,8 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 EXPOSE 3000
 EXPOSE 80
 EXPOSE 443
-CMD ["bin/boot"]
+#CMD ["bin/boot"]
 #CMD ["./bin/rails", "server"]
 #CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
 #CMD ["thrust", "./bin/rails", "server", "-b", "0.0.0.0"]
-#CMD ["bundle", "exec", "thrust", "./bin/rails", "server"]
+CMD ["bundle", "exec", "thrust", "./bin/rails", "server"]
