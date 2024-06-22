@@ -6,7 +6,7 @@ image: uobradbury/personal-site
 
 # Deploy to these servers.
 servers:
-  - 164.90.156.212
+  - 138.68.40.171
 
 # Credentials for your image host.
 registry:
