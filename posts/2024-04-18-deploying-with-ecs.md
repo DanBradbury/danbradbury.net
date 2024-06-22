@@ -11,3 +11,8 @@ Our setup is going to be pretty straightforward:
 Was done manually within the AWS console but could / should be done with CDK for easy reusability. Beacuse of this there is currently no associated GitHub action/code to spin up the infra from scratch.
 
 When setting up the ALB it's important to make sure to route traffic from `443` -> `3000` (whatever port you are running the Rails server on within the task definition)
+
+### Issues with the Setup
+Too much going on for what we really need the majority of the time. When I need a new Rails server I want a bit more control and don't want to deal with the AWS Cost magic associated with routing traffic to my website. For a larger business who doesn't want to think about the extra cost then maybe ECS deploys are the way for you.
+
+If I have the freedom I'm going to stick to `kamal deploy`.
