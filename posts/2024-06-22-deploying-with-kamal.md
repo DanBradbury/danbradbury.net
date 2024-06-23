@@ -16,7 +16,6 @@ Attempting to put my biases aside I went ahead and `bundle add kamal` in the cur
 4. Run `kamal setup`
 5. Summertime… sadness
 
-
     INFO [392febf3] Running docker container start traefik || docker run --name traefik --detach --restart unless-stopped --publish 80:80 --volume /var/run/docker.sock:/var/run/docker.sock --env-file .kamal/env/traefik/traefik.env --log-opt max-size="10m" traefik:v2.9 --providers.docker --log.level="DEBUG" on vagrant-box
     Releasing the deploy lock...
     Finished all in 16.9 seconds
@@ -25,7 +24,6 @@ Attempting to put my biases aside I went ahead and `bundle add kamal` in the cur
     docker stderr: Error response from daemon: No such container: traefik
     Error: failed to start containers: traefik
     docker: open .kamal/env/traefik/traefik.env: no such file or directory.
-
 
 Had this issue here which was luckily already created by someone else https://github.com/basecamp/kamal/issues/538
 
