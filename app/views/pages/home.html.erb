@@ -7,7 +7,7 @@
       <h2><%= post.title %></h2>
     </header>
     <div class="card__content">
-      <%= extra_safe_truncate(post.content, length: 300, escape: false) %>
+      <%= post.render_preview %>
     </div>
     <a class="card__link" aria-label="Post: <%= post.slug %>" href="/post/<%= post.slug %>">Read more</a>
     <div class="card__more txt--x-small" aria-hidden="true">
