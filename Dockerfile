@@ -61,9 +61,9 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
-#EXPOSE 3000
+EXPOSE 3000
 EXPOSE 80
-#EXPOSE 443
+EXPOSE 443
 #CMD ["bin/boot"]
 #CMD ["./bin/rails", "server"]
 #CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
