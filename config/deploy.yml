@@ -7,9 +7,9 @@ image: uobradbury/personal-site
 # Deploy to these servers.
 servers:
   - 138.68.40.171
-proxy:
-  ssl: true
-  host: danbradbury.net
+#proxy:
+  #ssl: true
+  #host: danbradbury.net
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
@@ -20,8 +20,8 @@ registry:
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-builder:
-  arch: amd64
+#builder:
+  #arch: amd64
 
 # Inject ENV variables into containers (secrets come from .env).
 # Remember to run `kamal env push` after making changes!

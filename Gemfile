@@ -66,4 +66,4 @@ group :test do
 end
 
 gem "thruster"
-gem "kamal"
+gem "kamal", "1.9"
