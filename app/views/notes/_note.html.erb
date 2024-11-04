@@ -1,0 +1,4 @@
+<%= turbo_frame_tag "note_#{note.id}" do %>
+  <%= link_to "Edit", edit_note_path(note), class: "btn right-btn" %>
+  <%= note.render_note %><br>
+<% end %>

@@ -217,12 +217,18 @@ figure figcaption {
   position: relative
 }
 
+.right-btn {
+  float: right;
+  margin: 1rem !important;
+}
+
 .btn {
   color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 3rem;
   padding: .3em .8em;
   margin: 0;
+  background-color: transparent;
 }
 
 .card__more {
@@ -282,4 +288,18 @@ figure figcaption {
 
 h2 {
   text-transform: capitalize;
+}
+
+.single-note {
+  margin-top: 2em;
+  border: 1px solid white;
+}
+
+.note-content {
+  width: 100%;
+}
+
+trix-editor {
+  border: 1px solid green;
+  height: 20rem;
 }

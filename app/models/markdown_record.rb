@@ -1,0 +1,2 @@
+class MarkdownRecord < ApplicationRecord
+end
