@@ -49,10 +49,6 @@ ActiveRecord::Schema[8.1].define(version: 2024_11_03_231748) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-# Could not dump table "notes" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
-
-
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "content"
