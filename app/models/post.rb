@@ -1,4 +1,6 @@
-class Post < MarkdownRecord
+class Post < ApplicationRecord
+  include MarkdownRender
+
   default_scope { order(created_at: :desc) }
 
   def render_preview

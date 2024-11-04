@@ -1,2 +1,0 @@
-class MarkdownRecord < ApplicationRecord
-end
