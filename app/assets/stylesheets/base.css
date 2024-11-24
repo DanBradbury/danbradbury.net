@@ -293,13 +293,35 @@ h2 {
 .single-note {
   margin-top: 2em;
   border: 1px solid white;
+  height: 15vh;
 }
 
 .note-content {
   width: 100%;
+  height: 10vh;
 }
 
 trix-editor {
   border: 1px solid green;
   height: 20rem;
+}
+
+textarea {
+  background-color: transparent;
+  color: white;
+  outline: none;
+  border: none;
+  resize: none;
+}
+
+.blur-background {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+.edit-note {
+  display: none;
+}
+.single-note:hover .edit-note {
+  display: block;
 }

@@ -1,15 +1,14 @@
-<%= turbo_frame_tag "new_note_frame" do %>
-  <%= link_to "New Note", new_note_path, class: "btn", data: {turbo_frame: "new_note_section"} %>
-<% end %>
-<%= turbo_frame_tag "new_note_section" do %>
-<% end %>
-
-<div id="note-list">
-<%= turbo_frame_tag "note_list" do %>
-  <% @notes.each do |note| %>
-    <div class="single-note">
-    <%= render partial: "notes/note", locals: { note: note } %>
-    </div>
+<div class="note-editor" data-controller="note" data-action="click->note#registerClick">
+  <%= turbo_frame_tag "new_note_frame" do %>
+    <%= link_to "New Note", new_note_path, class: "btn new-note", data: { turbo_frame: "new_note_section", action: "click->note#blurBackground" } %>
   <% end %>
-<% end %>
+
+  <%= turbo_frame_tag "new_note_section" do %>
+  <% end %>
+
+  <div id="note-list">
+  <%= turbo_frame_tag "note_list" do %>
+    <%= render partial: "notes/note", collection: @notes %>
+  <% end %>
+  </div>
 </div>

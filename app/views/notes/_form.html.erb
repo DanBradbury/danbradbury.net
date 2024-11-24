@@ -1,5 +1,6 @@
+<div class="single-note">
 <%= simple_form_for note do |f| %>
-  <%= f.input :content, as: :text, input_html: { rows: 30, class: "note-content" } %>
-  <%= f.button :submit %>
+  <%= f.input :content, as: :text, input_html: { class: "note-content" }, label: false %>
+  <%= f.button :submit, data: { action: "click->note#removeBlur"} %>
 <% end %>
-
+</div>
