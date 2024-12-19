@@ -20,7 +20,7 @@ body {
 
 @media (min-width: 768px) {
   html {
-    font-size: x-large;
+    font-size: large;
     max-width: 70%;
   }
 }
@@ -229,6 +229,7 @@ figure figcaption {
   padding: .3em .8em;
   margin: 0;
   background-color: transparent;
+  font-size: medium;
 }
 
 .card__more {
@@ -239,6 +240,7 @@ figure figcaption {
 
 .card__content {
   margin: 5%;
+  font-size: medium;
 }
 
 .card__link {
@@ -261,6 +263,11 @@ figure figcaption {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+  transition: border ease-in-out 0.2s;
+}
+
+.card:hover {
+    border: 1px solid #009c4d;
 }
 
 .text--normal {
