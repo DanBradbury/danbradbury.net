@@ -8,7 +8,8 @@ This line makes me smile and think of a younger me writing simple plugins to hig
 
 The true magic of Vim script is what Bram left us with in `vim9`; as most folks know Bram is no longer with us but vim will continue and be forever grateful for his fantastic contributions to software engineering. With his passing I think its more imporant than ever to pay attention to the suggestions he had for the future of Vim Script, luckily for us he left some fantastic notes in his [fork for vim9](https://github.com/brammool/vim9). There are 2 main things that I want to point to;
 
-1. Vim Script is fast.
+## 1. Vim Script is fast.
+
 This was not always the case but since vim9 things have been pretty snappy. I've included the example from the README to demonstrate how much faster vim has become.
 
 ```vim
@@ -25,7 +26,8 @@ This was not always the case but since vim9 things have been pretty snappy. I've
 | Lua     | 0.078817 |
 | Vim new | 0.073595 |
 
-2. Removal of Interfaces
+## 2. Removal of Interfaces
+
 There was a period when vim functionatlity was handled with built-in script languages to make things easier. This was a cute idea but never caught on / is no longer necessary with the advancements of Vim 9. Bram encourages the phasing out the use of built-in language interfaces to help improve the maintenance of vim and allow for better backwards compatability. Since the introduction of channel/job into vim8 there is no reason to not write an external tool that just interfaces with vim as needed.
 
 From Bram himself..
