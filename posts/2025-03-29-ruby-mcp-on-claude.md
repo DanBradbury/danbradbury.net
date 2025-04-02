@@ -41,6 +41,8 @@ end
 I also found a post within the week of writing this showing off a [Rails MCP server that Mario Chavez has built for his own personal workflow](https://mariochavez.io/desarrollo/2025/03/21/rails-mcp-server-enhancing-ai-assisted-development/) that served as good inspiration + more code to review.
 
 ### Troubleshooting Claude Desktop MCP Configuration
+There's a good note that I thought would fully get me going on my Mac/Linux setup.. Windows just worked out of the box because installing Ruby is as simple as RubyInstaller + not having to fight with system installed version.
+
 > Claude Desktop launches the MCP server using my system’s default Ruby environment, bypassing version manager initialization (e.g., rbenv, RVM). The MCP server needs to use the same Ruby version where it was installed, as MCP server startup failures can occur when using an incompatible Ruby version.
 
 #### rbenv Users
@@ -58,3 +60,11 @@ Most installs will have a wrapper script that should be used to properly create 
 rvm wrapper show ruby
 sudo ln -s /Users/danbradbury/.rvm/gems/ruby-3.3.4/wrappers/ruby /usr/local/bin/ruby
 ```
+
+### Debugging Server Issues
+All you are looking for it the system specific Claude desktop install (same location where configuration is changed) and tail the `mcp.log`
+```
+tail -f c:\Users\YOU\AppData\Roaming\Claude\logs\mcp.log
+```
+
+The majority of server errors you are going to run into are things being printed to stdout so be careful as you bring in dependencies that might be loud for no reason. (e.g `ActiveRecord::Schema.verbose = false` to hae AR fun with sqlite)
