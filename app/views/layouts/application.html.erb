@@ -11,21 +11,28 @@
     <%= stylesheet_link_tag :base, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   </head>
 
   <body>
-    <main class="page">
-      <div class="page-content">
-        <header class="header">
-          <a class="undecorated" aria-label="All posts from Dan Bradbury" href="/">
-            <img src="https://avatars.githubusercontent.com/u/2555073?v=4" class="avatar">
-            <p class="text--uppercase">Daniel Bradbury</p>
-          </a>
-          <p>Software engineer based in Sacramento, CA</p>
-        </header>
-        <%= yield %>
-      </div>
-    </main>
+    <div class="page">
+      <header class="header">
+        <a class="undecorated" aria-label="All posts from Dan Bradbury" href="/">
+          <img src="https://avatars.githubusercontent.com/u/2555073?v=4" class="avatar">
+          <p class="text--uppercase">Daniel Bradbury</p>
+        </a>
+        <p>Software engineer based in Sacramento, CA</p>
+      </header>
+      <%= yield %>
+    </div>
+    <footer class="footer">
+      <p>&copy; <%= Time.now.year %> Daniel Bradbury. All rights reserved.</p>
+      <ul class="social-links">
+        <li><a href="https://github.com/danbradbury" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://twitter.com/duckhuntdano" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+        <li><a href="https://www.linkedin.com/in/daniel-bradbury-28003969/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+    </footer>
   </body>
 </html>
