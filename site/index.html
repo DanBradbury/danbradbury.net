@@ -1,1 +1,620 @@
-Simple test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Header Section */
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: normal;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .vim-keys {
+            display: inline-block;
+            background: var(--bg-secondary);
+            padding: 2px 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* Separator */
+        .separator {
+            color: var(--text-dim);
+            margin: 15px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* Navigation/Quick Reference */
+        .quick-nav {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .quick-nav-title {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .nav-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 5px;
+        }
+
+        /* Links */
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--link-hover);
+            background: var(--highlight-bg);
+            text-decoration: underline;
+        }
+
+        a:before {
+            content: '[';
+            color: var(--text-dim);
+        }
+
+        a:after {
+            content: ']';
+            color: var(--text-dim);
+        }
+
+        /* Section Headers */
+        h2 {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: normal;
+            margin: 20px 0 10px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        /* Content Sections */
+        .section {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .section-item {
+            margin: 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .item-label {
+            color: var(--text-dim);
+            min-width: 100px;
+        }
+
+        .item-content {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Project Cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .project-card:hover {
+            border-color: var(--text-secondary);
+            background: var(--highlight-bg);
+        }
+
+        .project-name {
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .project-desc {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            background: var(--bg-primary);
+            color: var(--text-dim);
+            padding: 2px 5px;
+            font-size: 11px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        /* Command prompt style elements */
+        .prompt {
+            color: var(--text-secondary);
+        }
+
+        .prompt:before {
+            content: '$ ';
+        }
+
+        /* Status line */
+        .status-line {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--text-secondary);
+            color: var(--bg-primary);
+            padding: 5px 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mode-indicator {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2px 5px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .nav-items {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding-left: 10px;
+            }
+
+            .section-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .item-label {
+                min-width: auto;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-line {
+                font-size: 11px;
+                padding: 3px 10px;
+                flex-wrap: wrap;
+            }
+
+            /* Reduce separator on mobile */
+            .separator {
+                font-size: 10px;
+            }
+        }
+
+        /* Small mobile adjustments */
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+
+            h1 {
+                font-size: 14px;
+            }
+
+            h2 {
+                font-size: 13px;
+            }
+
+            .vim-keys {
+                font-size: 11px;
+            }
+        }
+
+        /* ASCII Art Logo (Optional) */
+        .ascii-art {
+            color: var(--text-secondary);
+            font-size: 10px;
+            line-height: 1;
+            text-align: center;
+            margin: 20px 0;
+            white-space: pre;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+        }
+
+        /* Ensure no horizontal scroll on mobile */
+        @media (max-width: 768px) {
+            .ascii-art {
+                font-size: 8px;
+            }
+            
+            .code-block {
+                font-size: 11px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="title-bar">
+                <span>dev.txt</span>
+                <span>For version 2025.1</span>
+                <span>Last change: 2025 Jan</span>
+            </div>
+            
+            <h1>DEVELOPER DOCUMENTATION</h1>
+            
+            <div class="ascii-art">
+     _                 
+    | |                
+  __| | _____   __     
+ / _` |/ _ \ \ / /     
+| (_| |  __/\ V /      
+ \__,_|\___| \_/       
+            </div>
+
+            <div style="text-align: center; color: var(--text-dim); font-size: 12px; margin: 10px 0;">
+                Navigate: <span class="vim-keys">h</span> left, 
+                <span class="vim-keys">j</span> down, 
+                <span class="vim-keys">k</span> up, 
+                <span class="vim-keys">l</span> right
+            </div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <div class="quick-nav">
+            <div class="quick-nav-title">QUICK NAVIGATION:</div>
+            <div class="nav-items">
+                <a href="#projects">projects</a>
+                <a href="#skills">technical_skills</a>
+                <a href="#contact">contact_info</a>
+                <a href="#blog">blog_posts</a>
+                <a href="https://github.com">github_profile</a>
+                <a href="https://linkedin.com">linkedin</a>
+            </div>
+        </div>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <h2 id="about">ABOUT</h2>
+        <div class="section">
+            <div class="section-item">
+                <span class="item-label">Name:</span>
+                <span class="item-content">John Developer</span>
+            </div>
+            <div class="section-item">
+                <span class="item-label">Role:</span>
+                <span class="item-content">Full Stack Developer</span>
+            </div>
+            <div class="section-item">
+                <span class="item-label">Location:</span>
+                <span class="item-content">San Francisco, CA</span>
+            </div>
+            <div class="section-item">
+                <span class="item-label">Experience:</span>
+                <span class="item-content">8+ years</span>
+            </div>
+        </div>
+
+        <div class="code-block">
+<span class="prompt">whoami</span>
+Passionate developer focused on building scalable web applications
+and contributing to open source projects. Vim enthusiast.
+</div>
+
+        <h2 id="projects">FEATURED PROJECTS</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-name">→ neural-vim</div>
+                <div class="project-desc">
+                    AI-powered code completion for Vim using neural networks
+                </div>
+                <div class="project-tags">
+                    <span class="tag">python</span>
+                    <span class="tag">tensorflow</span>
+                    <span class="tag">vim</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-name">→ rust-webserver</div>
+                <div class="project-desc">
+                    High-performance async web server written in Rust
+                </div>
+                <div class="project-tags">
+                    <span class="tag">rust</span>
+                    <span class="tag">async</span>
+                    <span class="tag">tokio</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-name">→ dotfiles</div>
+                <div class="project-desc">
+                    Personal configuration files for development environment
+                </div>
+                <div class="project-tags">
+                    <span class="tag">bash</span>
+                    <span class="tag">vim</span>
+                    <span class="tag">tmux</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-name">→ markdown-parser</div>
+                <div class="project-desc">
+                    Fast markdown parser with custom extensions
+                </div>
+                <div class="project-tags">
+                    <span class="tag">javascript</span>
+                    <span class="tag">node</span>
+                    <span class="tag">parser</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="blog">RECENT POSTS</h2>
+        <div class="section">
+            <div style="margin: 10px 0;">
+                <a href="#post1">2025-01-15</a> Why I switched from VS Code to Neovim
+            </div>
+            <div style="margin: 10px 0;">
+                <a href="#post2">2024-12-20</a> Building a LSP server in Rust
+            </div>
+            <div style="margin: 10px 0;">
+                <a href="#post3">2024-11-10</a> Optimizing PostgreSQL queries at scale
+            </div>
+            <div style="margin: 10px 0;">
+                <a href="#post4">2024-10-05</a> Introduction to WebAssembly with Rust
+            </div>
+        </div>
+
+        <h2 id="contact">CONTACT</h2>
+        <div class="section">
+            <div class="code-block">
+<span class="prompt">echo $EMAIL</span>
+dev@example.com
+
+<span class="prompt">gpg --keyserver pgp.mit.edu --recv-keys 0xDEADBEEF</span>
+
+<span class="prompt">ssh dev@example.com</span>
+</div>
+        </div>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+
+    <div class="status-line">
+        <div>
+            <span class="mode-indicator">NORMAL</span>
+            <span style="margin-left: 10px;">index.html</span>
+        </div>
+        <div>
+            <span>utf-8[unix]</span>
+            <span style="margin-left: 10px;">1,1</span>
+            <span style="margin-left: 10px;">Top</span>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Add vim-style keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Basic vim navigation keys
+            switch(e.key) {
+                case 'j':
+                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
+                        e.preventDefault();
+                        window.scrollBy(0, 40);
+                    }
+                    break;
+                case 'k':
+                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
+                        e.preventDefault();
+                        window.scrollBy(0, -40);
+                    }
+                    break;
+                case 'g':
+                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
+                        if (e.shiftKey) { // G - go to bottom
+                            e.preventDefault();
+                            window.scrollTo(0, document.body.scrollHeight);
+                        } else if (lastKeyWasG) { // gg - go to top
+                            e.preventDefault();
+                            window.scrollTo(0, 0);
+                            lastKeyWasG = false;
+                        } else {
+                            lastKeyWasG = true;
+                            setTimeout(() => { lastKeyWasG = false; }, 500);
+                        }
+                    }
+                    break;
+                case 'd':
+                    if (e.ctrlKey && !isInputFocused()) {
+                        e.preventDefault();
+                        window.scrollBy(0, window.innerHeight / 2);
+                    }
+                    break;
+                case 'u':
+                    if (e.ctrlKey && !isInputFocused()) {
+                        e.preventDefault();
+                        window.scrollBy(0, -window.innerHeight / 2);
+                    }
+                    break;
+            }
+        });
+
+        let lastKeyWasG = false;
+
+        function isInputFocused() {
+            const activeElement = document.activeElement;
+            return activeElement && (
+                activeElement.tagName === 'INPUT' ||
+                activeElement.tagName === 'TEXTAREA' ||
+                activeElement.contentEditable === 'true'
+            );
+        }
+
+        // Update status line position indicator
+        function updatePosition() {
+            const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            const statusPosition = document.querySelector('.status-line div:last-child span:last-child');
+            if (statusPosition) {
+                if (scrollPercent === 0) {
+                    statusPosition.textContent = 'Top';
+                } else if (scrollPercent >= 99) {
+                    statusPosition.textContent = 'Bot';
+                } else {
+                    statusPosition.textContent = scrollPercent + '%';
+                }
+            }
+        }
+
+        window.addEventListener('scroll', updatePosition);
+
+        // Add smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Optional: Flash mode indicator on keypress
+        document.addEventListener('keydown', function(e) {
+            const modeIndicator = document.querySelector('.mode-indicator');
+            if (modeIndicator && e.key === 'i' && !isInputFocused()) {
+                modeIndicator.textContent = 'INSERT';
+                setTimeout(() => {
+                    modeIndicator.textContent = 'NORMAL';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
