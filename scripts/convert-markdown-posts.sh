@@ -22,7 +22,8 @@ for md_file in posts/*.md; do
     pandoc "$md_file" \
         --standalone \
         --metadata title="$title" \
-        --css style.css \
+        --template=templates/post_template.html \
+        --lua-filter=scripts/wrap_codeblocks.lua \
         -o "site/${filename}.html"
 
     echo "Converted: $md_file -> site/${filename}.html"
