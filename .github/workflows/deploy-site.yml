@@ -6,8 +6,10 @@ on:
       #- main
 
 jobs:
-  build-and-deploy:
+  deploy:
+    environment: prod
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
