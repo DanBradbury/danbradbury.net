@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1></h1>
+            <div class="post-meta">2014-10-22</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>----<br>After deploying over 10 applications with Heroku I think that I can finally make a fair assessment on the general developer / Heroku relationship.</p>
+<p>After watching an excellent talk by Matz at Waza (link at the bottom) I was taken aback by how much he seemed to respect Heroku's ability to support the developer that wants to build. Heroku's use of  AWS to anyone to standup a system to run their code at no cost is an absolutely stunning accomplishment .</p>
+<p>My skepticism with this idealistic view is that at the end of the day Heroku is a business that needs to make money. But they also need to keep their image and offer the "playground" to build and prototype without needing a budget.</p>
+<p>During the talk Matz mentions this ability to spin up a prototype at no cost which as being something fundamentally new and exciting. Having this ability eliminates a the large risk of money puts people in a new age; one where there is no barrier of hardware costs preventing concepts to come to life.</p>
+<p>Heroku as a company proves that hardware is cheap and that it is feasible to remove the hardware barrier that used to exist less than 10 years ago(someone tell me if I'm wrong, I was 13 and it was too expensive for me). For developers that like to build things from the ground up Heroku is a wonderful tool that should be utilized to its fullest for as long as you can use it for free.</p>
+<p>I am not sure about the exact price model of Heroku's production ready systems are but I think that it becomes clear pretty quickly that if you are building to grow and scale Heroku may not be the best option.</p>
+<p>I will use a real world example of a small sinatra app that is currently hosted on Heroku for the steep price of $0.</p>
+<p>I have 1 Dyno with 512 MB of RAM that likes to shut off when it becomes inactive for a certain period of time (smart on Heroku's part for sure to keep costs down), 1 MongoHQ instance with 512 MB of storage (they call it sandbox mode so this is an expectedly low amount of storage).</p>
+<p>When upgrading from the Standard (free) dyno it would cost me $34.50 to essentially double my computer power and have a cycling set of dynos that will work together as a failsafe mechanism. I have just recently started crashing dynos and am thinking that it would be nice to have a backup that is reliable without having to do any system work to setup proper restarting and recovery (no god debugging for me sounds pretty sweet).</p>
+<p>For any additional storage I would be paying around $18 per GB of SSD storage hosted through MongoHQ (of course an Amazon service wrapped in an add-on pricing model). I am not sure what the going rate for a mongoDB hosted solution but that seems a bit pricey to me if you are going to do large lazy data storage like I have been enjoying. But to be fair that could easily be moved to another database since in reality it's just a minor detail.</p>
+<p>When laying out the costs to double the performance of my small application it would be ~$52 a month. TBH that isn't a horrible price for no extra work scaling. I am curious what the minimal cost of this setup would be on AWS directly (I do know that if you want to run tests on postgres instances it will cost you a pretty penny at the end of the month).</p>
+<p>References</p>
+<p>Matz at Heroku's Waza (2013)</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

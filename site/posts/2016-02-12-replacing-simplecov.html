@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replacing SimpleCov - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Replacing SimpleCov</h1>
+            <div class="post-meta">2016-02-12</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>After fighting with <a href="https://github.com/colszowka/simplecov"><code>simplecov</code></a> for a little longer that I would like to admit; was attempting to get it to start analyzing a group of files that were the meat and potatoes of my application(Golaith application). Unfortunately none of the default configs (<code>Simplecov.start 'rails'</code>, etc) nor the filters were allowing my files to be tracked and printed in the handy coverage html file. Because of all this struggling I decided to go ahead and create my own crude coverage module; I'll be using this post to discuss my learnings and share an early working iteration.</p>
+<p>To get started I wanted to have the invocation of coverage be exactly the same as <code>simplecov</code>; so let's start with the goal of adding <code>CrudeCov.start</code> inside of our <code>spec_helper.rb</code> to keep track of the files we care about.</p>
+<p>Before diving into the code I did a little research on how <code>Simplecov.start</code> worked. I was mainly looking for information on how it was able to keep track of files with only a single invokation inside of the <code>spec_helper</code>. Inside of <a href="https://github.com/colszowka/simplecov/blob/master/lib/simplecov.rb#L40-L53"><code>lib/simplecov.rb</code></a> we find a definition of the <code>start</code> method; which checks to see if the water is friendly (<code>SimpleCov.usable?</code>) and then starts the tracking with a call to <code>Coverage.start</code>. At this point during my investigation I was pretty sure that <code>Coverage</code> was a <code>Class</code>/<code>Module</code> defined within the <code>simplecov</code> source; after some grepping within the repo I only found one other reference to <code>Coverage</code> inside of <a href="https://github.com/colszowka/simplecov/blob/master/lib/simplecov/jruby_fix.rb"><code>lib/simplecov/jruby_fix.rb</code></a>. Unfortunately that reference is just as the name implies, a <code>jruby</code> specific fix for the <code>Coverage</code> module that overrides the <code>result</code> method. When I was that in the only reference to the module I ran off to google and was incredibly pleased to find that <code>Coverage</code> is a <code>Ruby</code> module! According to the <a href="http://ruby-doc.org/stdlib-2.0.0/libdoc/coverage/rdoc/Coverage.html">Ruby 2.0 Coverage doc</a></p>
+<p>>Coverage provides coverage measurement feature for Ruby. This feature is experimental, so these APIs may be changed in future.</p>
+<p>With that note about this being an experimental feature let's be flexible and see what we can do (<code>simplecov</code> uses it and it's a pretty successful gem). The usage note in the doc also looks fairly promising:</p>
+<p>> 1. require “coverage.so”<br>><br>> 1. do ::start<br>><br>> 1. require or load Ruby source file<br>><br>> 1. ::result will return a hash that contains filename as key and coverage array as value. A coverage array gives, for each line, the number of line execution by the interpreter. A nil value means coverage is disabled for this line (lines like else and end).</p>
+<p>So we don't have to worry about #1 (will be loaded by Ruby) and can start with #2 and call <code>Coverage#start</code>, load all the files that matter, and then use <code>Coverage.result</code> (which <code>Returns a hash that contains filename as key and coverage array as value and disables coverage measurement.</code>) to see how well the files have been covered.</p>
+<p>As a note Coverage will pickup <strong>any</strong> file that has been required after <code>do ::start</code> so it's a good idea to have a way to selectively find the files that you want to get the coverage results on (e.g. Array of keys <code>Dir['./app/apis/*rb']</code> to grab the coverage results you want)</p>
+<p>Since we don't have any intention of supporting <code>JRuby</code> we should be able to use <code>Coverage</code> as is for our <code>CrudeCov</code> example. Let's start off with the <code>#start</code> and <code>#print_result</code>(used after our test suite finishes)</p>
+<p>module CrudeCov<br>      class << self<br>        def start<br>          @filelist = []<br>          Coverage.start<br>        end</p>
+<p>def print_result<br>          cov_results = Coverage.result</p>
+<p>root = File.dirname(__FILE__)[0..-6]<br>          filelist = [<br>            "./app/apis/untested_endpoint.rb",<br>            "./app/apis/covered_endpoint.rb"<br>          ]</p>
+<p>filelist.each do |file|<br>            # process file results<br>            # coverage results returns Array([1,0,..,nil,3] where val = # of times line was hit & size = # of lines)<br>            # this makes for easy matching when creating the pretty html result file<br>            file_results = cov_results[file]<br>            results = file_results.compact.sort # remove all nil entries & sort to help with calculations</p>
+<p>puts "Results for: #{file}"<br>            total_lines = (results.length*1.00).to_f<br>            covered_lines = total_lines-results.find_index(1)<br>            percentage = (covered_lines/total_lines).round(2)*100<br>            puts "#{percentage}% Covered (#{covered_lines} of #{total_lines} Lines Covered)"<br>          end</p>
+<p># create html for easy viewing outside of shell<br>        end<br>      end<br>    end</p>
+<p>Our <code>CrudeCov</code> module above is pretty straightforward and covers our basic needs of (1)Having a one-line call to add to our <code>spec_helper</code>, and (2) a print method that we can call after our suite is finished running (ideally the module would figure out which test framework is being used and ensure that the hook is made to print results at the end of the suite). With the example above we will have to explicityly ensure that the <code>print_result</code> method is called.</p>
+<p>Assuming that we are testing with <code>RSpec</code> our <code>spec_helper</code> will look something like this</p>
+<p>require 'crudecov'</p>
+<p>CrudeCov.start<br>    # require project files..</p>
+<p>Rspec.configure do |config|<br>      # your other config..<br>      config.after(:suite) do<br>        CrudeCov.print_result<br>      end<br>    end</p>
+<p>With that basic setup you will get a print out of the coverage percentages for all files that have been included in the <code>filelist</code>. In less than 30 lines of code we were able to have an incredibly simple coverage module that we could use in a project to sanity check a file that may potentially lacking coverage or confirm proper testing. From that simple example you can start to see how a project like <code>simplecov</code> would come into being and how something as simple as <code>CrudeCov</code> could become a full ruby coverage suite.</p>
+<p>With the legitimate need to get data on the effectiveness of your tests; SaSS solutions like <a href="https://coveralls.io/"><code>Coveralls</code></a> (which did not recognize a Goliath application) + gems like <code>simplecov</code>, <code>rcov</code> and <code>cover_me</code> have all become relied upon staples for the TDD community.</p>
+<p>What's the point of even doing TDD if you aren't covering new lines of code that could result in bugs down the road? For that reason alone I'd say it's worthwhile to implement some sort of coverage tool when all the rest have failed.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

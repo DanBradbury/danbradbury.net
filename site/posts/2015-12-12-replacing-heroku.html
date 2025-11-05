@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1></h1>
+            <div class="post-meta">2015-12-12</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>categories: heroku digitalocean droplet graphite statsD<br>---<br>For anyone still on Heroku and throwing addons at your application please stop and seriously reconsider what you are doing. Across the board things are getting a bit ridiculous for the average hobbyist / fincially conscious company. I used to be quite the Heroku fanboy but after my recent experience with Hosted Graphite I have changed my tone completely.</p>
+<p>I was recently looking to add some Graphite metrics to a Heroku application that I'm working on and stumbled across a solution called Hosted Graphite. There was of course a starter package which shows off the beauty of Grafana and a few metrics to give you an idea of the potential. The current pricing can be found <a href="https://elements.heroku.com/addons/hostedgraphite">here</a> (this prices do fluctuate quite regularly depending on the service); I've also gone ahead and added the current prices as of writing this below:</p>
+<img src="http://i.imgur.com/Zg1r3PI.png" alt="" />
+<p>Each price point adds a few key features to the mix + increases your metric limit (this is a bullshit number stored by whatever service you are using so feel free to push it without too much fear. I'll do a follow-up post on my experience with a MongoDB solution that had a document "limit"). The paid features for Hosted Graphite are as follows:</p>
+<p>- Daily Backups (>Tiny)<br>- Data Retention (>Tiny)<br>- Hosted StatsD (>Small)<br>- Account Sharing (>Medium)</p>
+<p>For most folks that are looking to use Graphite in their application they are probably looking to use some StatsD wrapper to report metrics. If you only have a few data points that you care about and can deal with the low retention rate / backup policy then maybe you could add an aditional worker to handle the task and not have to deal with a "hosted StatsD" solution. Even with that stretch of the imagination you are looking at a $19 monthly solution but most likely going to be suckered into a higher cost if you seriously start to add metrics.</p>
+<p>Rather than paying for a plugable addon I'd highly recommend spinning up your own Digitalocean server for $10 bucks and get as much value as the Small package (this is being very generous..) being offered on Heroku. If you don't know how to spin up a Graphite+StatsD server there is no excuse with the resources provided by DO alone:</p>
+<p>- <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-graphite-on-an-ubuntu-14-04-server">Installing Graphite</a><br>- <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-statsd-to-collect-arbitrary-stats-for-graphite-on-ubuntu-14-04">Configure StatsD to Collect Data for Graphite</a></p>
+<p>Assuming that you can get through a basic set of steps then you should have a working Graphite+StatsD service at your disposal with 1/2 the monthly cost. The interface will be exactly the same (API key/namespace + service endpoint) and you will have the freedom to manage the server as you please. And when you are measuring things you sure as hell don't want things to stop reporting because a reporting mechanism fails and you have no way to tell..</p>
+<p>This is another major gripe that I have with Hosted Graphite; why would I pay for a service like "hosted statsD" when it will fall over and I have no debug info into why that might have happened. When testing with a Small instance of Hosted Graphite the StatsD endpoint would become unresponsive for minutes at a time while UDP/TCP were working as expected. On the other hand with a droplet you have the freedom of config (and Graphite, Carbon, and StatsD have a lot of configuration).</p>
+<p>Configuration brings me to the final point I want to make. "Features" like Data retention length are nothing more than configuration that can be managed when setting up your Graphite instance. By <a href="http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf">configuring carbon</a> you can set custom retention policies on different data points (regex matching FTW) and ensure that you have the policy in place that makes sense for the data being stored. This gives you the freedom of full flexibility inside of a problem-set that you are actively engaged in when adding measurements (naming new metrics). As a best practice you should set a reasonable default and add new metrics into the appropriate policies as needed.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

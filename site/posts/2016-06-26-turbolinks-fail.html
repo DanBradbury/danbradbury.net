@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turbolinks and anchors - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Turbolinks and anchors</h1>
+            <div class="post-meta">2016-06-26</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>So far my journey with <code>turbolinks</code> hasn't been too bad; I write my slop and things work as I'd expect them to. I knew this streak of good luck was bound to come to an end at some point and today is the day.</p>
+<p>I had the misfortune of attempting to implement simple anchor tags. At first I thought I had made a typo but upon checking my code everything was fine. Another test and I noticed the damned <code>.turbolinks-progress-bar</code> appearing onclick. It was clear <code>turbolinks</code> had mistook my anchor link and was intercepting the click like it should be doing with other links. Things got strange when adding <code>data-no-turbolinks</code> yielded the same results..</p>
+<p>After googling I found a <a href="https://github.com/turbolinks/turbolinks-classic/issues/399">closed issue</a> that had apparently been resolved. Checked my <code>turbolinks</code> version and we've got the latest and greatest. Hastily closed issue back in 2014 leads us to the <a href="https://github.com/turbolinks/turbolinks/issues/75">same issue in present day</a>. There's a bit of discussion on the issue but doesn't look like anyone has offered a PR to resolve the issue :(</p>
+<p>There are a few snippets to override the default behavior that could prove useful but this is something that I'd expect the <code>turbolinks</code> to have ironed out.</p>
+<p>Because I don't mind writing an <code>onclick</code> for the links I'll probably implement something like this for a similar effect</p>
+<p>$('html, body').animate({scrollTop: $('#anchor').offset().top}, 'slow')</p>
+<p>I'm definitely disappointed in <code>turbolinks</code> for failing me on this instance but will continue on this less travelled mysterious path DHH wants me to believe in.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

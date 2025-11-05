@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploying with Kamal - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Deploying with Kamal</h1>
+            <div class="post-meta">2024-06-22</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>After seeing the costs from 2 months of ECS running on my personal AWS account it was time to tryout something that doesn’t cost more than $15 a month to get a minimalist website up and running (this personal site)</p>
+<p>I had listened to a podcast from DHH where he was talking about the simplicity of something like Kamal to become the out-of-box way for Rails 8 to provide deploy capabilities. The high-level sell goes as follows;</p>
+<p>“Kamal offers everything you need to deploy and manage your web app in production with Docker. Originally built for Rails apps, Kamal will work with any type of web app that can be containerized.”</p>
+<p>If you have every worked with Capistrano in the past you will be familiar with with Kamal is trying to offer with the <code>deploy.yml</code> configuration + gem level commands to run <code>capistrano/sshkit</code> (https://github.com/capistrano/sshkit) under the covers. As someone who vividly remembers capistrano deploy<code> I am very much into the baseline work that was done by the Capistrano team and am curious how that simplicity plays out in the case of this abstraction.</p>
+<p>Attempting to put my biases aside I went ahead and </code>bundle add kamal<code> in the current personal site application you are on right now (here’s the commit that initially transitioned to using kamal over ECS deploy). All that was done here was following along with the install docs that were currently available</p>
+<p>1. Run </code>bundle add kamal<code><br>2. </code>bundle exec kamal init<code> (createds the </code>config/deploy.yml<code> template)<br>3. Edit the details for my server<br>4. Run </code>kamal setup`<br>5. Summertime… sadness</p>
+<p>INFO [392febf3] Running docker container start traefik || docker run --name traefik --detach --restart unless-stopped --publish 80:80 --volume /var/run/docker.sock:/var/run/docker.sock --env-file .kamal/env/traefik/traefik.env --log-opt max-size="10m" traefik:v2.9 --providers.docker --log.level="DEBUG" on vagrant-box<br>    Releasing the deploy lock...<br>    Finished all in 16.9 seconds<br>    ERROR (SSHKit::Command::Failed): Exception while executing on host vagrant-box: docker exit status: 125<br>    docker stdout: Nothing written<br>    docker stderr: Error response from daemon: No such container: traefik<br>    Error: failed to start containers: traefik<br>    docker: open .kamal/env/traefik/traefik.env: no such file or directory.</p>
+<p>Had this issue here which was luckily already created by someone else https://github.com/basecamp/kamal/issues/538</p>
+<p>I added some debugging help for the maintainers in hopes that I was just using the commands incorrectly (https://github.com/basecamp/kamal/issues/538#issuecomment-2165096272)</p>
+<p>After a bit of a wait we got confirmation that this was a bug and would be fixed with a revert of a feature that was pushed (https://github.com/basecamp/kamal/pull/845/files). Unfortunate not to get a contribution to the project but it will not work for others who are giving it a shot.. In the end the fix wasn’t terrible and I was able to get around it with the help from others who were stuck before me.</p>
+<p>I am now deploying danbradbury.net using Kamal and considering transitioning a few legacy projects that are still somehow running on Heroku to Kamal in the future.</p>
+<p>Overall I enjoy the goals of the project and will keep using it as it gets ready for the move to Rails 8.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

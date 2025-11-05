@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Into the Abyss with Turbolinks - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Into the Abyss with Turbolinks</h1>
+            <div class="post-meta">2016-05-04</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>Previous attempts to adopt <code>turbolinks</code> during upgrades or new projects led me to the conclusion that I have a burning hatred for everything the project stands for (rage hatred is the worst kind..). From conversations with other Rails folks + former CTOs it seemed like turbolinks was something I could avoid without batting an eyelash (see <a href="http://corlewsolutions.com/articles/article-9-remove-uninstall-delete-turbolinks-in-rails-4">comparisons to Windows 8 decision making</a> or just ask a local Rails expert what their experience with <code>turbolinks</code> has been like)</p>
+<p>As someone who previously ignored the efforts being made by DHH and the core team I would just start a new project with <code>--skip-turbolinks</code> to ensure my own sanity and continue with the hammering.</p>
+<p>Since I'm a bit late to this conversation it's nice to read posts like <a href="https://plus.google.com/+YehudaKatz/posts/A65agXRynUn">Yahuda Katz' problem with turbolinks</a> and <a href="http://cobwwweb.com/turbolinks-not-worth-the-effort">3 reasons why I shouldn't use Turbolinks</a> to get my hopes and dreams crushed.. Here is just the beginning of the headache that one can look forward to if they are to continue down through the thorns</p>
+<p>> ### Duplicate Bound Events<br>> Because JavaScript is not reloaded, events are not unbound when the body is replaced. So, if you're using generic selectors to bind events, and you're binding those events on every Turbolinks page load. [This] often leads to undesirable behavior.</p>
+<p>Alright so to be honest this isn't that bad. People can bitch about global state all they want but as someone who enjoys thinking in a "game loop" I don't mind this and feel like I can easily write my own code to these standards</p>
+<p>> ### Audit Third-Party code<br>> You audit all third-party code that you use to make sure that they do not rely on DOM Ready events, or if they do, that they DOM Ready events are idempotent.</p>
+<p>And this is where it starts to get fun.. I just stumbled upon a bug that reared its head beacuse of these two issues and I wanted to post a solution that I may find myself using more moving forward..</p>
+<p>Imagine we are using <a href="https://twitter.github.io/typeahead.js/"><code>typeahead.js</code></a> we want to go ahead and initialize our typeahead input on a given page. Here's what the JS might look like</p>
+<p>$('#searchBar .typeahead').typeahead({<br>      hint: true,<br>      highlight: true,<br>      minLength: 2<br>    },<br>    {<br>      name: 'estados',<br>      source: matcher(items)<br>    });</p>
+<p>A pretty harmless call that you are probably going to copy paste in to try the first time you mess with <code>typeahead.js</code>. It works and you move on.. But be careful because <code>turbolinks</code> will give you some intereseting behaviour if we navigate between the page that has this piece of JS and another page. .</p>
+<code>Turbolinks</code> will invoke this each time the page is "loaded". Because of this we will spawn a new instance of the typeahead input and the associated hint div.. For some reason (one I don't care to look into) <code>typeahead.js</code> will spawn a new instance and hide the others rather than truly cleaning up. No matter what we are left to fend for ourselves in the wilds of <code>turbolinks</code> so we search for a solution.
+<p>I figure we can just handle global state a little better than your typical inline JS would. To do this we simply wrap the initializer in a conditional to verify the number of typeahead divs that are present on the screen. With proper naming we should be able to expand this approach to multiple typeahead instances.</p>
+<p>if($('.typeahead.tt-input').size() < 1) {<br>      $('#searchBar .typeahead').typeahead({<br>        ...<br>      }<br>    }</p>
+<p>With that extra check we are able to handle the global state that turbolinks will create when natrually navigating and attempting to speed up our page.</p>
+<p>A recent webcast featuring DHH got me thinking about how simple the problem of a web application really is. The server demands are not a problem whatsoever (30ms response times are all you need to be perfect anything lower is not truly noticable or necessary). We have an issue when it comes to how the rest of the "page-load" occurs for the user.</p>
+<p>We all know the "hard refresh" links, the ones that clearly jump you to a new page with new content. Loading a new page is the same old same old that we've been doing since we could serve shit up. Of course the new way is the "one page app" that allows the user to navigate without ever having to disengage from the page they were on. IMO the trend is getting a bit insane (always felt the JS community was a bit heavy handed with trying new things..) and trying to keep up with the latest quarrels and trends is tiring. Where is the solution to the seamless application?</p>
+<p>It's clear that some will say Ember or React are the way forward to building beautiful apps that will take over the world but I'm not sure I believe a JS Framework is what will carry an application. So why learn all that unecessary complexity when HTML5 is here?</p>
+<p>If <code>Turbolinks</code> lives up to the into of the <code>README</code> I will be a happy Rails camper.</p>
+<p>> Turbolinks makes navigating your web application faster. Get the performance benefits of a single-page application without the added complexity of a client-side JavaScript framework. Use HTML to render your views on the server side and link to pages as usual. When you follow a link, Turbolinks automatically fetches the page, swaps in its <body>, and merges its <head>, all without incurring the cost of a full page load.</p>
+<p>C'mon Turbolinks don't let me down again..</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

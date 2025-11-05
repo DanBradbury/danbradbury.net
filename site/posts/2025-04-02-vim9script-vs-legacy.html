@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vim9 Script - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Vim9 Script</h1>
+            <div class="post-meta">2025-04-02</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>In my late night hours I've been doing some more digging into Vim internals and been lately interested in the performance gains and changes introduced by Vim9 script. I've been pleasently surprised by more and more features as I've gone through this journey of writing more Vim script for personal plugins (org mode port [pland.vim][], [copilot-chat.vim])</p>
+<p>Tonight I want to write-up a bit of an aha moment that I've had with modern Vim9 script and what we will call legacy vim script.. Might be a bit embarassing as an avid vim user who thought they knew things about how vim internals works but I had no idea that classes, interfaces, or new style functions is net new to Vim9 script. Time to sit down with some help docs and learn some things and leverage some of this goodness in my own projects</p>
+<h2>Legacy vs Vim9</h2>
+Why should people even care about Vim9 script when lua has seemingly become the defacto choice for anyone writing plugins?
+<p>Bram lays it out pretty nicely in the beginning of the docs.<br><pre><code class="language-">:help vim9<br>----<br>1. What is Vim9 script?					<em>Vim9-script</em></p>
+<p>Vim script has been growing over time, while preserving backwards<br>compatibility.  That means bad choices from the past often can&#039;t be changed<br>and compatibility with Vi restricts possible solutions.  Execution is quite<br>slow, each line is parsed every time it is executed.</p>
+<p>The main goal of Vim9 script is to drastically improve performance.  This is<br>accomplished by compiling commands into instructions that can be efficiently<br>executed.  An increase in execution speed of 10 to 100 times can be expected.</p>
+<p>A secondary goal is to avoid Vim-specific constructs and get closer to<br>commonly used programming languages, such as JavaScript, TypeScript and Java.</p>
+<p>The performance improvements can only be achieved by not being 100% backwards<br>compatible.  For example, making function arguments available in the &quot;a:&quot;<br>dictionary adds quite a lot of overhead.  In a Vim9 function this dictionary<br>is not available.  Other differences are more subtle, such as how errors are<br>handled.</p>
+<p>The Vim9 script syntax and semantics are used in:<br>- a function defined with the <code>:def</code> command<br>- a script file where the first command is <code>vim9script</code><br>- an autocommand defined in the context of the above<br>- a command prefixed with the <code>vim9cmd</code> command modifier</code></pre><br><h3>Takeaways</h3><br>- Legacy scripts won't automatically become faster<br>- Vim9 script syntax is an acknowledgement that legacy script was arcane<br>- Improved performance does not achieve 100% backwards compatability<br>- We have ways to introduce Vim9 script into existing plugins without requiring full rewrites</p>
+<p>Probably not enough to get everyone excited enough to drop lua but lets dig into some of these things</p>
+<h2>New function syntax</h2>
+<h3>The Old way</h3>
+<pre><code class="language-viml">function OldFoo(thing)
+  let a = 1
+  echo a
+  echo a:thing
+endfunction
+<p>OldFoo(&#039;test&#039;)</code></pre></p>
+<p>The main weirdness here being arguments requiring <code>a:</code> prefix to be accessed. Everyone who has written vim script before has not enjoyed this bit.. this is fixed with new functions + the syntax is shorter across the board</p>
+<h3>The Vim9 Way aka. <code>fast-functions</code></h3>
+Yes if you <code>:help fast-functions</code> you will get the new vim9 docs with a ton of goodies
+<pre><code class="language-viml">def NewFoo(thing)
+  var a = 1
+  echo a
+  echo thing
+enddef
+NewFoo(&#039;test&#039;)</code></pre>
+1. No more use of <code>let</code>
+<pre><code class="language-">- Assign values without <code>:let</code> <em>E1126</em> , declare variables with <code>:var</code>: &gt;
+	var count = 0
+	count += 3</code></pre>
+2. Say goodbye to the use of <code>a:</code> and the dictionary overhead that came with that
+<p>Also good to callout that this is the laziest port from <code>function</code> to <code>def</code> but we have additional abilities that should be leveraged by Vim9 script writers; arg and return types are a win.</p>
+<pre><code class="language-">def Foo(thing: string, count: number): bool
+  var a = 1 + count
+  return true
+enddef</code></pre>
+<h3>Disassembling Fast-functions</h3>
+<img src="https://github.com/user-attachments/assets/f3bad698-c81c-4c2e-93e4-b464c002db39" alt="image" />
+<p>Assume we have the following simple function<br><pre><code class="language-">def Thing()<br>  var a = 1<br>  echo a<br>enddef</code></pre></p>
+<p>Using <code>:disa Thing</code> after sourcing the file we get some pretty handy output. The focus / priority on providing profiling and debugging tools is a big improvement for how I like to work with a given language.</p>
+<img src="https://github.com/user-attachments/assets/56a3f7cd-74fb-436d-8fb6-1a7db03b12ca" alt="image" />
+<h3>Where to go from here?</h3>
+It might be time to rethink / do some digging into legacy scripts that have been historically problematic / not feature rich enough for our initial needs and wants as a dev community. I'm excited and find myself reading more and more vim internal c code + being excited by not having to reluctantly join the lua/nvim folks. Forever a gvim weirdo.
+<p>[pland.vim]: https://github.com/DanBradbury/pland.vim<br>[copilot-chat.vim]: https://github.com/DanBradbury/copilot-chat.vim</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Engineering &#039;Product Catalog - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Reverse Engineering &#039;Product Catalog</h1>
+            <div class="post-meta">2017-11-26</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>Recently I've been looking at an application that has some data that I'd like to scrape and use/format for my own selfish desires. The application we are targeting is on iOS + Android so I went through the usual flow on my iPhone<br>- mitmproxy - no good. traffic must be SSL / non-HTTP. Android cert-pinning stops app on init<br>- wireshark w/ rvictl on iOS device - SSL traffic pulling initial data catalog / no API fetches once app is initialized (sqlite init)</p>
+<p>After getting blocked and giving up for about a month I decided to root my OG Nvidia Shield and dig a little deeper..</p>
+<h2>Digging Deeper</h2>
+Prereqs
+> Root phone -> Install <a href="http://repo.xposed.info/module/de.robv.android.xposed.installer">Xposed Framework</a> -> Download [Inspeckage] Module -> Get Started
+<img src="https://houseofthegeeks.com/wp-content/uploads/2017/01/IndianaJones.gif" alt="" />
+<p>My initial hope was that Inspeckage would solve all my problems and I wouldnt have to dig too much into Xposed but in the ended up being the launching pad to the golden catalog.</p>
+<p>After turning on Inspeckage and letting the app boot up for the first time we can see a few things. (1) https traffic, (2) files created zip/certs/js+img assets. I was hoping the SQLite tab would light up and we could query against .db file immediately but that would be too easy<br><img src="https://i.imgur.com/VUac9vS.png" alt="" /></p>
+<h2>Ripping things apart</h2>
+Before getting into the .apk I figured it would be worthwhile to see what was stored on my device
+    adb shell && cd /data/data/com.package.name/
+and… explore!
+<p>The main thing I was looking for here was something in the databases/ or files/ directories. Luckily we were able to spot a <code>TARGET.db</code> within <code>files/databases</code> but it was definitely encrypted (dreaded “file is encrypted or not a database” when querying)<br>> Remember that if the app is not debuggable you won't be able to <code>adb pull /pathtoDBFile.db</code> instead you’ll have to <code>adb shell && su && mkdir /sdcard/data && cp /pathoDBFile /sdcard/data</code> and then pull that file</p>
+<p>Inspeckage has the handy download .apk so there’s a few things we can do here (starting with the most obvious)<br>- unzip it and take a look at what we’ve got</p>
+<p>dan@dan-MacBookPro:~/riperino$ unzip og.apk<br>    Archive:  og.apk<br>      inflating: META-INF/MANIFEST.MF<br>      inflating: META-INF/CATEXTKY.SF<br>      inflating: META-INF/CATEXTKY.RSA<br>      inflating: AndroidManifest.xml<br>      inflating: assets/_where-is-www.txt<br>      ...<br>     extracting: assets/icudt46l.zip<br>     extracting: assets/www/assets/<br>     .... a ton of assets (selected some potential highlights)<br>      inflating: assets/www/config/config.json<br>      inflating: assets/www/cordova.js<br>      inflating: assets/www/css/bootstrap/<br>      inflating: assets/www/js/<br>     extracting: res/drawable/icon.png<br>      inflating: res/xml/config.xml<br>     extracting: resources.arsc<br>      inflating: classes.dex<br>    ...<br>      inflating: lib/armeabi/libsqlcipher.so<br>      inflating: lib/armeabi-v7a/libsqlcipher.so<br>      inflating: lib/x86/libsqlcipher.so</p>
+<p>From looking at the contents we can tell the basic structure but we are mostly interested in a few files<br>- libsqlcipher.so & assets/icudt46l.zip (<a href="https://stackoverflow.com/questions/22024657/sqlcipher-for-android-icudt46l-zip-really-needed">interesting fallback zip for sqlcipher</a>..possible fun attack vector)<br>- classes.dex (exactly what it says)</p>
+<p>This confirms our hunch about SQLite and explains the missing contents from the SQLite tab while using Inspeckage. Now the hope is that classes.dex reveals something blatantly obvious..</p>
+<h3>Reading some code</h3>
+There are quite a few tools for digging into the contents of that .dex file but I’ll go over my comfortable flow (unnecessary .dex -> .jar step with tools like Bytecode Viewer but the extra step does provide some extra possibilities if we really need to build a custom apk)
+<p>Using the <a href="https://github.com/pxb1988/dex2jar">dex2jar</a> toolkit we can use the classic <code>d2j-dex2jar</code> to give us the handy .class files zipped to .jar (while not perfect this is almost always “good enough” for what we need)</p>
+<p>After creating the .jar its time to pop open <a href="http://jd.benow.ca/">Java Decompiler</a> and dig into the package in question.. And after a little while we run into this section of code (<code>masterKey</code> makes us happy and definitely worth hooking into?)<br><img src="https://i.imgur.com/a7oTmpu.png" alt="" /></p>
+<p>After reading the docs for <a href="https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper.html#getReadableDatabase("><code>getReadableDatabase</code></a>) it’s clear that’s indeed the SQLite password and if the developer also followed the documentation they would also have called <code>createAndGetDBPath</code> which would serve as the initialization.. Lo and behold the <code>DBHelper.class</code> implements that class and we can add a hook to ensure we catch the key when we reboot the app<br><h3>Hooking and Winning</h3><br>Without getting too tangential Xposed is great and the <a href="https://github.com/rovo89/XposedBridge/wiki/Development-tutorial">documentation is outstanding for anyone interesting in getting started</a>. If the development tutorial is not enough the content online was more than enough to clear up any potential blockers.</p>
+<p>public class Main implements IXposedHookLoadPackage {<br>        public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {<br>            findAndHookMethod("com.<em>*</em>*.core.db.DBHelper", lpparam.classLoader, "createAndGetDBPath", Context.class, String.class, new XC_MethodHook() {<br>                @Override<br>                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {<br>                    XposedBridge.log("Hooked em': DBHelper#createAndGetDBPath ");<br>                    XposedBridge.log("----------------------------------------");<br>                    XposedBridge.log(param.args[1].toString());<br>                    XposedBridge.log("----------------------------------------");<br>                }<br>            });<br>        }<br>    }</p>
+<p>We load our hook module, reboot our device and when we rerun the app we see something beautiful in the logs</p>
+<p>Hooked em': DBHelper#createAndGetDBPath<br>    ----------------------------------------<br>    base64masterKey== (totally legit..)<br>    ----------------------------------------</p>
+<p>Now I should be able to</p>
+<p>Sqlcipher rippedDB.db<br>    PRAGMA key=”base64masterKey==”<br>    .tables</p>
+<p>And get something other than <code>file is encrypted or not a database</code>. Unfortunately this didn’t work on my machine and I thought I was getting juked out and went to bed.</p>
+<img src="https://media.giphy.com/media/HzgfYh5H3MR0s/giphy.gif" alt="" />
+<p>After thinking about questions like these (<a href="http://sqlite.1065341.n5.nabble.com/Getting-error-quot-file-is-encrypted-or-is-not-a-database-quot-when-trying-simple-C-example-td75837.html">1</a>, <a href="https://stackoverflow.com/questions/44161713/sqlite-file-is-encrypted-or-is-not-a-database">2</a>, <a href="https://github.com/sqlcipher/sqlcipher/issues/205">3</a>) all night + the following day of family time it became clear versions must be the issue in my case. After figuring out the difference between <a href="https://www.zetetic.net/sqlcipher/buy/">Commercial and Community</a> it became clear this was just a time save and the same version was being used for both and the commercial folks were just given the latest binaries without having to work for them. Since we have some compatriots who dont like working much either I ran <code>brew install sqlcipher</code> and of course things just worked..</p>
+<p>Mac - 3.15.2<br>    Ubuntu 16.04 - 3.8.6</p>
+<p>As an additional aside there are some open source “sqlbrowser applications” that have sqlcipher as a feature but dont do a great job revealing the versioning. Just build community versions as they are released and things should be fine / bank on everyone being on commercial and brew updating at the same time :D</p>
+<p>Upon using the correct version we see a beautiful table list and can query to our heart's content.</p>
+<h3>Retro</h3>
+The entire sqlcipher seems incredibly trivial given the release strategy and knowing what we know about hooking. The fact that the key is going to be passed around no matter what makes things quite easy unless some additional precautions are taken but unfortunately it just moves the problem a step deeper. In the end the Android SQLDatabase methods are going to used and we can hook them no matter how many Proxys/Helpers are introduced to the codebase. After digging further into the Xposed modules <a href="https://github.com/jakev/SqlCipherHook">someone wrote a generalized hook</a> that looks for the specific sqlcipher native package to hook into.. This seems to reinforce my belief that it’s general uselessness but there must be a reason big companies are giving them money (other than the desire to avoid building it themselves)
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

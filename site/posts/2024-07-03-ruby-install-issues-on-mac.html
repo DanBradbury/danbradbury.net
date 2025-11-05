@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby Install Issues on Mac - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Ruby Install Issues on Mac</h1>
+            <div class="post-meta">2024-07-03</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>I love <code>rvm</code> but won't pretend that I don't have to fight with it to stay on the latest version of Ruby when using my mac.</p>
+<p>Here's an example that popped up when trying to work with the new <a href="https://once.com/writebook">WriteBooks codebase</a> that was released the past week by the Basecamp team.</p>
+<pre><code class="language-">danbradbury•Documents/Github/writebook» rvm install &quot;ruby-3.3.1&quot;                                                                                                                                                                     [16:36:02]
+ruby-3.3.1 - #removing src/ruby-3.3.1 - please wait
+Searching for binary rubies, this might take some time.
+No binary rubies available for: osx/14.4/arm64/ruby-3.3.1.
+Continuing with compilation. Please read &#039;rvm help mount&#039; to get more information on binary rubies.
+Checking requirements for osx.
+Certificates bundle &#039;/opt/homebrew/etc/openssl@1.1/cert.pem&#039; is already up to date.
+Requirements installation successful.
+Installing Ruby from source to: /Users/danbradbury/.rvm/rubies/ruby-3.3.1, this may take a while depending on your cpu(s)...
+ruby-3.3.1 - #downloading ruby-3.3.1, this may take a while depending on your connection...
+ruby-3.3.1 - #extracting ruby-3.3.1 to /Users/danbradbury/.rvm/src/ruby-3.3.1 - please wait
+ruby-3.3.1 - #configuring - please wait
+ruby-3.3.1 - #post-configuration - please wait
+ruby-3.3.1 - #compiling - please wait
+Error running &#039;__rvm_make -j8&#039;,
+please read /Users/danbradbury/.rvm/log/1720136164_ruby-3.3.1/make.log
+<p>There has been an error while running make. Halting the installation.</code></pre></p>
+<p>Looking at the log file that is referenced we see errors liks this..</p>
+<pre><code class="language-">compiling ossl_cipher.c
+compiling eventids1.c
+In file included from ossl_bio.c:10:
+In file included from ./ossl.h:175:
+./openssl_missing.h:195:11: warning: &#039;TS_VERIFY_CTS_set_certs&#039; macro redefined [-Wmacro-redefined]
+<h1> define TS_VERIFY_CTS_set_certs(ctx, crts) ((ctx)-&gt;certs=(crts))</h1>
+          ^
+/opt/homebrew/Cellar/openssl@3/3.3.0/include/openssl/ts.h:426:11: note: previous definition is here
+<h1> define TS_VERIFY_CTS_set_certs(ctx, cert) TS_VERIFY_CTX_set_certs(ctx,cert)</h1>
+          ^
+1 warning generated.
+In file included from ossl_bn.c:11:
+In file included from ./ossl.h:175:
+./openssl_missing.h:195:11: warning: &#039;TS_VERIFY_CTS_set_certs&#039; macro redefined [-Wmacro-redefined]
+<h1> define TS_VERIFY_CTS_set_certs(ctx, crts) ((ctx)-&gt;certs=(crts))</h1>
+          ^
+/opt/homebrew/Cellar/openssl@3/3.3.0/include/openssl/ts.h:426:11: note: previous definition is here
+<h1> define TS_VERIFY_CTS_set_certs(ctx, cert) TS_VERIFY_CTX_set_certs(ctx,cert)</h1>
+          ^</code></pre>
+<p>For those who know SSL is a pain in the ass on Mac and you will need to pass additional arguments to get the compilation to work correctly.. <code>TS_VERIFY_CTS_set_certs</code> was removed in the latest version of OpenSSL (3 is current). To combat this we need to run the following and use the 1.x version we have on our machine</p>
+<pre><code class="language-">rvm install &quot;ruby-3.3.1&quot; --with-openssl-dir=$(brew --prefix openssl@1.1)</code></pre>
+<p>For those curious and not familiar with the underlying <code>brew</code> usage all we are doing is using prefix to give us the path in which Homebrew installed the package (<code>man brew</code>)</p>
+<p>I'm sure there's other gotchas on machines that aren't setup with Ruby already but that's an annoying one that I almost always forget about.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

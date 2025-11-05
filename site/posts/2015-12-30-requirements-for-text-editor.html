@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requirements for a Text Editor - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Requirements for a Text Editor</h1>
+            <div class="post-meta">2015-12-30</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>> These are my minimum requirements for a competent text editor. The list is meant to serve as a quick litmus test for true understanding of tooling in the craft of writing software.</p>
+<p>1. Navigate with ease; jumping to line number, move to top/bottom of file, selection/deletion helpers (inside of quotes, block, function, etc)<br>2. Fuzzy file finder + jump to mentioned files / methods<br>    - I use <a href="https://github.com/ctrlpvim/ctrlp.vim"><code>ctrl-p</code></a> to fuzzy find in vim (one of my must have plugins)</p>
+<img src="https://camo.githubusercontent.com/0a0b4c0d24a44d381cbad420ecb285abc2aaa4cb/687474703a2f2f692e696d6775722e636f6d2f7949796e722e706e67" alt="" />
+    - For part of my day <code>rails.vim</code> provides handy helpers to jump from model to controller using custom commands like <code>:Emodel</code>, and <code>:Econtroller</code>. When not working with Rails I can typically rely on <code>ctags</code> to do the trick and allow me to <code>gf</code> around projects at will (hard to beat <code>Command+Click</code> inspection in RubyMine)
+3. Run spec(s) without having to Alt+Tab
+    - I use <code>vim-dispatch</code> to run tasks in the background and have the results returned in the vim quickfix window
+    - When running a single test or named context I can use a custom hotkey to select the test name under the cursor and create the dispatch command to run
+4. Find Regex pattern within file (replace, count, etc)
+    - I'm lucky enough that my editor has <code>%s</code>. Allows for a ton of options with the same simple DSL
+5. Search entire project (git grep or Ag inside the editor)
+    - Results should be returned in easy to parse format with jump-to-file capabilities
+6. Organize code into tabs / windows / panes
+    - This should come with all editors now but please know how to <code>vsplit</code> if you claim to be a <code>vi</code> user..
+7. View git changes within file (+/- on line numbers) and basic git workflow integration (git blame, commit/push without leaving editor)
+    - I use <a href="https://github.com/airblade/vim-gitgutter"><code>vim-gitgutter</code></a> to track changes to the file. This has become a staple of my vim config and I couldn't imagine working without it.
+<img src="https://camo.githubusercontent.com/f88161827e0cbb3144455b9e5c7582fdd5b5fc83/68747470733a2f2f7261772e6769746875622e636f6d2f616972626c6164652f76696d2d6769746775747465722f6d61737465722f73637265656e73686f742e706e67" alt="" />
+    - For the rest of my git functionatlity I use Tim Pope's <a href="https://github.com/tpope/vim-fugitive"><code>vim-fugitive'</a>, serves as a wonderful git wrapper for the majority of git commands.
+8. Customizability
+    - This is the whole reason I am a </code>vim<code> user. I love the ability to change almost all facets of the editor; from basic config options in </code>.vimrc<code> to adding </code>autocmds` to change functionality for events within the editor (file open, file save, etc). In my mind an editor should allow the user to tailor the tool exactly how they want it.
+<p>It's important for anyone writing software to respect the craft and maximize the effectiveness of the tools we use to create. Since the editor is such an important tool in our toolbelt we should always strive to optimize and improve our daily usage.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

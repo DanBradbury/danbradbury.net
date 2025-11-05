@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1></h1>
+            <div class="post-meta">2015-07-15</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>----<br>The target of this post is to clear up any confusion about the subtle differences between <code>matchadd</code> and <code>match</code>/<code>2match</code>/<code>3match</code>. This is not meant for the novice vim user but folks that have some experience with vimL. I'll try to keep it as simple as possible for anyone interested in some of vim's inner workings.</p>
+<p>From <code>:help match</code> we get the following information:</p>
+<p>:mat[ch] {group} /{pattern}/<br>    		Define a pattern to highlight in the current window.  It will<br>    		be highlighted with {group}.  Example:<br>    			:highlight MyGroup ctermbg=green guibg=green<br>    			:match MyGroup /TODO/<br>    		Instead of // any character can be used to mark the start and<br>    		end of the {pattern}.  Watch out for using special characters,<br>    		such as '"' and '|'.</p>
+<p>{group} must exist at the moment this command is executed.</p>
+<p>The {group} highlighting still applies when a character is<br>    		to be highlighted for 'hlsearch', as the highlighting for<br>    		matches is given higher priority than that of 'hlsearch'.<br>    		Syntax highlighting (see 'syntax') is also overruled by<br>    		matches.</p>
+<p>From the definition it should be pretty clear that match is responsible for applying defined highlights to the current window. The <code>{group}</code> argument is simply the name of the highlight group definition you would like to use on a given <code>{pattern}</code>.</p>
+<p>To visualize a list of all available highlight groups you can use <code>:highlight</code>. This is really handy when programatically trying to add hightlight groups for a plugin. As you can see from the screenshot below our colorscheme has redefined the majority of the groups and <code>:hi</code> does a great job showing all of the possibile combinations.</p>
+<img src="http://i.imgur.com/64zlIqN.png" alt="" />
+<p>Using that information we could use any one of the groups and apply a match in our current buffer. Let's take a look at using the <code>ErrorMsg</code> highlight group to match the entire contents of a line.</p>
+<p>:match ErrorMsg /\%13l/</p>
+<p>If you have not used <code>match</code> before take a moment now to play around with it in your own vim session and get a feel for how vim reacts to all different types of scenarios. Which match takes priority when running consecutive matches on the same pattern?</p>
+<p>One of the main limitations with using <code>match</code> is that you cannot continuously apply new matches and have the previous ones stick. Because of this it is not the most suitable option for creating any sort of full fledged highlighting plugin. If you read the help section below match you will encounter <code>:2match</code> and <code>:3match</code> which is meant to provide a way to manage 3 seperate highlight groups. Unfortunately these functions suffer from the same shortcoming we saw with the original match.</p>
+<p>In order to compensate for the limitation on match you can create more complex patterns to include multiple line selections (<code>/patern1\&pattern2/</code>) or whatever else you would normally do inside of the typical vim search regex (remember a touch of magic is only a <code>\M</code> away with this type of searching). If you'd like to see evidence of the hacks that are possible while using check out the <a href="https://github.com/DanBradbury/vim-poi/blob/29d7d5aec131595c0249f4a96cf5eee8af98cbde/plugin/poi.vim">first iteration of vim-poi</a> (<code>fresh-start</code> branch is ready for testing and this logic will all be replaced with the smarter and better <code>matchadd</code> pattern)</p>
+<pre><code class="language-vim">for i in b:poi_lines{a:group}
+    let c += 1
+    if c == 1
+      let s:build_string = s:build_string.&#039;/\%&#039;.string(i[&quot;line_num&quot;]).&#039;l\&amp;\M&#039;.i[&quot;content&quot;]
+    else
+      let s:build_string = s:build_string.&#039;\%&#039;.string(i[&quot;line_num&quot;]).&#039;l\&amp;\M&#039;.i[&quot;content&quot;]
+    endif
+    if c == len(b:poi_lines{a:group})
+      let s:build_string = s:build_string.&#039;/&#039;
+    else
+      let s:build_string = s:build_string.&#039;\|&#039;
+    endif
+  endfor</code></pre>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

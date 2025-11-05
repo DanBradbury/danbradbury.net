@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trying to make sense of PG&amp;E&#039;s Marketing Campaigns - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Trying to make sense of PG&amp;E&#039;s Marketing Campaigns</h1>
+            <div class="post-meta">2017-02-14</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>We are getting close to baseball season and since I try to catch the majority of games that means I get to watch a ton more local advertising!</p>
+<p>> yay ads!</p>
+<p>Last season I was lucky enough to return to Norcal and got to watch the Giants on CSN-Bay Area for the majority of televised games. While watching the the season I saw a ton of PG&E ads; ranging from <a href="https://www.youtube.com/watch?v=Mme4iBgTeO4">some lady telling I'm the reason my bill keeps going up and a PG&E rep will come out to help me buy more new enery effiencient appliances</a> to <a href="https://www.youtube.com/watch?v=kFz5kbPlaQY">3 latina high school girls who turned off lights to save the school money</a>. Meaning, they are spending money by the boatload to make a wide range of ads in hopes of propagating the message that <code>PG&E</code> cares about its customers (and employees<a href="https://www.youtube.com/watch?v=DvQL9rYWt5Q">Rich</a>, and <a href="https://www.youtube.com/watch?v=Jp1DskH37Ys">Jannis</a>).</p>
+<p>Coincidence that they did this ad push while they were in the final stages of the <a href="https://en.wikipedia.org/wiki/2010_San_Bruno_pipeline_explosion">2010 San Bruno pipe explosion</a>?</p>
+<img src="http://az616578.vo.msecnd.net/files/2016/04/03/635953127671072473-1598872041_bernie-sideeye.gif" alt="" />
+<p>So.. <strong>Why is PG&E spending so much(assumed) on marketing focused on employees and community?</strong> (we can't be about the exact budget without tricking someone for the information. But we can get a good sense that its somewhere under the earnings from selling stocks since all ads contain <code>This communication paid for by PG&E shareholders.</code>, but I’m no expert so maybe its all free..)</p>
+<p>The announcement of that <a href="http://www.mercurynews.com/2017/01/11/pge-chops-hundreds-jobs-restructuring/">they will be cutting ~450 IT jobs</a> was the big fuck you that explains it all. It may not seem too strange for a large, publically traded company to move jobs overseas to save money but let's take a look at exactly what PG&E is doing here to move the jobs over.</p>
+<p>They (PGE) has hired a consulting firm based out of India called <a href="http://www.tcs.com/Pages/default.aspx">Tata Consultancy Services</a> to manage the replacement of these workers. In order to replace these IT folks Tata is using H1B visas to bring folks over to the states to be trained on how to perform the tasks they will be doing within months. That should be alarming to you</p>
+<p>If you don't know too much about H1B Visas its ok not to be shocked. The idea is that we need a way to keep / allow skilled workers to enter the country and work legally to help push forward innovation where the current US workforce is inadequate. The issue with using these visas is that they are of limited supply and are given out based on lottery. With companies like Tata hoarding H1Bs to use for IT training and job relocation we are effectively removing work from the job pool while using a system designed to strengthen the job marketplace.</p>
+<p>PG&E knows what they are doing and calculated that they could do this and minimize the damage by running a PR campaign in the lead up to this event. Expect the $300 million a year in savings to be poured into more marketing campaigns to continue the monopoly that they have going.</p>
+<p>Bad actors like PG&E and Tata need to be dealt with before they ruin the entire system for deserving individuals who rely on the program</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

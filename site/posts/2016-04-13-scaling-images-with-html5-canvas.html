@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scaling Images with HTML5 Canvas - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Scaling Images with HTML5 Canvas</h1>
+            <div class="post-meta">2016-04-13</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>> Had intented to post this 8 months ago but it got lost in the sea of gists..</p>
+<p>This is old news by now for most but I had quite a bit of fun implementing it for myself and figured I'd share my code and some learnings that came along with it. The basic idea is to use <code>canvas</code> to render an uploaded image and then utilize the <code>toDataURL</code> method on canvas to retrieve a Base64 encoded version of the image. In the example included here we will just direct link to the newly scaled image but you could imagine that we kick off an ajax request and actually process the image (in PHP <code>base64_decode</code> FTW). Without any more tangential delay let's take a look at the code.</p>
+<input type="file" accept="image/*" id="imageFile" />
+    <table>
+      <tr>
+        <td>Width: <input type="text" id="width" value="200" style="width:30; margin-left: 20px;" /></td>
+      </tr>
+      <tr>
+        <td>Height: <input type="text" id="height" value="200" style="width:30; margin-left: 20px;" /></td>
+      </tr>
+    </table>
+    <canvas id="canvas" style="border: 1px solid black;" width="200" height="200"></canvas>
+    <button width="30" id="saveImage">Save Image</button>
+<p>The above HTML shouldn't need any explanation but if it does feel free to open the attached JSFiddle to get a feel for it..</p>
+<p>(function(){<br>      (function(){<br>          document.getElementById("imageFile").addEventListener("change", fileChanged, false);<br>        document.getElementById("width").addEventListener("keyup", sizeChanged, false);<br>        document.getElementById("height").addEventListener("keyup", sizeChanged, false);<br>        document.getElementById("saveImage").addEventListener("click", share, false);<br>      }());</p>
+<p>var currentImage,<br>        canvas = document.getElementById("canvas");</p>
+<p>function sizeChanged() {<br>        var dimension = this.id,<br>            value = this.value;<br>        canvas[dimension] = value;<br>        if(currentImage) { renderImage() }<br>      }</p>
+<p>function fileChanged() {<br>        var file = this.files[0],<br>            imageType = /^image\//;</p>
+<p>if (!imageType.test(file.type)) {<br>              console.error("not an image yo!");<br>            } else {<br>              var reader = new FileReader();<br>              reader.onload = function(e) {<br>                currentImage = e.target.result;<br>                renderImage();<br>              };<br>              reader.readAsDataURL(file);<br>            }<br>      }</p>
+<p>function renderImage() {<br>        var data = currentImage,<br>          image = document.createElement("img");<br>        image.src = data;<br>        image.onload = function() {<br>            context = canvas.getContext("2d");<br>          context.drawImage(this, 0, 0, canvas.width, canvas.height);<br>        }<br>      }<br>      function share() {<br>          document.location = canvas.toDataURL();<br>      }<br>    }());</p>
+<p>In order to bring the HTML to life we need to attach a few EventHandlers and define some basic functionality. The first things to tackle is the actual file upload.</p>
+<p>The File API has been added to the DOM since HTML5 and will be used here to open the uploaded file from <code><input type="file"></code> on the <code>"change"</code> event. Inside of the change event there are 2 things that we want to do; (1) confirm the file type, and (2) render the file onto the canvas. The confirm the file type we can use the MIME type given to use from <code>file.type</code> and do a simple regex test (<code>/^image\//</code>) before attempting to render the unknown file (Even though we've added <code>accept="image/*"</code> inside the input that can be easily modified to attempt to upload any file). Once we are convinced that the user has uploaded an image it's time to read the file and send it off to the canvas to render. <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader"><code>FileReader</code>'s</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL"><code>readDataAsURL</code></a> will allow us to process the file asyncronously and allows for an <code>onload</code> callback that gives us the ability to set the newly read image and ask the canvas to draw.</p>
+<h3>Additional Reading</h3>
+- <a href="https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications">Using files in Web Applications - Mozilla Dev</a>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

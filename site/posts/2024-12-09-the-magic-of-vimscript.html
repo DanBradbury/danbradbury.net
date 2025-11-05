@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The magic of Vim script - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>The magic of Vim script</h1>
+            <div class="post-meta">2024-12-09</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>I've pulled a random bit of documentation from <code>:help matchadd</code> to show off some of the magic thats referenced in the docs.</p>
+<p>> Matching is case sensitive and magic, unless case sensitivity or magicness are explicitly overridden in {pattern}</p>
+<p>This line makes me smile and think of a younger me writing simple plugins to highlight Points of Interest. <a href="https://github.com/DanBradbury/vim-poi">Vim-poi</a> was my first attempt to understand the innerworkings of colors and highlighting in vim. Back then I wrote about <a href="/post/matchadd-vs-match"><code>matchadd vs match</code> before</a> and mostly cover the nuanced difference that was important for the implementation of <code>vim-poi</code>. There was plenty of magic in there but that's not the point of this post.</p>
+<p>The true magic of Vim script is what Bram left us with in <code>vim9</code>; as most folks know Bram is no longer with us but vim will continue and be forever grateful for his fantastic contributions to software engineering. With his passing I think its more imporant than ever to pay attention to the suggestions he had for the future of Vim Script, luckily for us he left some fantastic notes in his <a href="https://github.com/brammool/vim9">fork for vim9</a>. There are 2 main things that I want to point to;</p>
+<h2>1. Vim Script is fast.</h2>
+<p>This was not always the case but since vim9 things have been pretty snappy. I've included the example from the README to demonstrate how much faster vim has become.</p>
+<pre><code class="language-vim">let sum = 0
+  for i in range(1, 2999999)
+    let sum += i
+  endfor</code></pre>
+<p>| how     | time in sec |<br>| --------| -------- |<br>| Vim old | 5.018541 |<br>| Python  | 0.369598 |<br>| Lua     | 0.078817 |<br>| Vim new | 0.073595 |</p>
+<h2>2. Removal of Interfaces</h2>
+<p>There was a period when vim functionatlity was handled with built-in script languages to make things easier. This was a cute idea but never caught on / is no longer necessary with the advancements of Vim 9. Bram encourages the phasing out the use of built-in language interfaces to help improve the maintenance of vim and allow for better backwards compatability. Since the introduction of channel/job into vim8 there is no reason to not write an external tool that just interfaces with vim as needed.</p>
+<p>From Bram himself..</p>
+<p>> All together this creates a clear situation: Vim with the +eval feature will be sufficient for most plugins, while some plugins require installing a tool that can be written in any language. No confusion about having Vim but the plugin not working because some specific language is missing. This is a good long term goal.</p>
+<p>I am in full agreement with his assesment and am hoping that we can kill interfaces and make vim even better. There are plenty of plugins around that massively leverage these interfaces and it will not be easy to get the community to embrace the removal of interfaces entirely, however I think it would be short-sighted of us to not think about the long-term success and ability for new vim users to write plugins and make vim the exact editor that they want and need.</p>
+<h2>Vim script needs love</h2>
+Compared to a modern programming language it is quite obvious that Vim script is missing a few things. The strange function arguments being prefixed with <code>a:</code>, local script variables with <code>s:</code>. Vim script does things that no other language that I know of does and it needs to stop. The obvious hurdle is going to be moving existing code to Vim script; think of type checking, classes, etc that do not exist in the language currently. Bram believes that a conversion script could be written to help facilitate that transition to Vim script.
+<p>Bram clearly had goals and ideas with where he wanted Vim script to go; more like Javascript/Typescript to make writing it more digestable for folks. At this current moment writing Vim script still feels like an academic exercise and not as expressive as a Ruby/Python. It's unreasonable to expect a developer experience like Ruby but I really think folks that love vim and want to see it succeed into the future should take a real hard look at how we can make improvements to the fantastic foundation laid out the creator himself.</p>
+<p>I'll try to do my part and start contributing to the project in any way that I can. At this point I'm looking directly at <code>vim9script.c</code> and dreaming of a world where we can bring some of Bram's ideas to reality.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

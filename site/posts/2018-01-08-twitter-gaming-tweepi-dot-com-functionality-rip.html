@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Gaming: Tweepi.com Functionality Rip - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Twitter Gaming: Tweepi.com Functionality Rip</h1>
+            <div class="post-meta">2018-01-08</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>There are plenty of twitter management tools out that will help automate / manage your twitter account for a few bucks a month.</p>
+<p>While most products don't add too much value I've found some particular features on Tweepi.com that have been pretty helpful. In particular there's a stat called <code>Follower Ratio</code> which lets you know how likely a user is to follow you back; > 80% is a user thats probably worth following (and unfollowing later once we have a healthy count..will lose some followers from bot automation but majority of real users won't unfollow back)</p>
+<img src="https://i.imgur.com/Q2niRPJ.png" alt="" />
+<p>When using the free version of the site there is a tool that allows us to search up to 25 users using a comma seperated list. This definitely looks like a tasty target and upon checking the network tab we can see a clean <code>POST</code> with easily understood params and response. A test response is shown below</p>
+<p>We can see from the response below that calculating <code>Follower Ratio</code> is as easy as <code>followers_count/friends_count</code> is all we need to process a user object in our script.</p>
+<p>POST https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json<br>    ....</p>
+<p>RESPONSE:<br>    {<br>       "total":1,<br>       "page_size":20,<br>       "users":[<br>          {<br>             "user_id":"<strong>*</strong>",<br>             "screen_name":"<strong><em></strong><strong></em></strong><em>*</em>",<br>             "location":"",<br>             "full_name":"<strong><em></strong><strong></em></strong><em>*</em>",<br>             "last_tweet_time":"1969-12-31 16:00:00 -0800", // cute<br>             "followers_count":1,<br>             "friends_count":89,<br>             "statuses_count":0,<br>             "profile_img_url":"\/\/abs.twimg.com\/sticky\/default_profile_images\/default_profile_normal.png",<br>             "is_verified":false,<br>             "utc_offset":null,<br>             "bio":"it's hi astonishing ocean blue eyes that iadore the most but it's his contagious bright smile that transforms my orrowful frown into something joyous",<br>             "url":"",<br>             "lang":"en",<br>             "is_protected":false,<br>             "member_since":"2017-09-06 05:02:47 -0700",<br>             "listed_count":0,<br>             "favourites_count":0,<br>             "default_profile":true,<br>             "default_profile_image":true,<br>             "geo_enabled":false,<br>             "ui_last_updated":"2018-01-01 12:36:23 -0800",<br>             "is_follower":false,<br>             "is_friend":false,<br>             "follower_or_following":" ",<br>             "history_date":"2000-01-01 00:00:00 +0000",<br>             "is_safelisted":false,<br>             "tag_names":[</p>
+<p>],<br>             "tag_dates":[</p>
+<p>]<br>          }<br>       ]<br>    }</p>
+<p>As long as we can replay this request then we should be able to come up with a clever way to "smart follow" with a handy javascript snippet...</p>
+<h2>Building the Request for Replay</h2>
+And a little bit of request fiddling as we figure out what headers are necessary we go from..
+<p>import requests<br>    response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList":"foo","offset":0,"limit":25},<br>    headers={<br>    "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",<br>    "X-Requested-With": "angular",<br>    "X-Tab-Id": "7166",<br>    "Content-Type": "application/json;charset=utf-8",<br>    "Accept-Language": "en-US,en;q=0.5",<br>    "Accept": "application/json, text/plain, <em>/</em>",<br>    "Accept-Encoding": "gzip, deflate, br",<br>    "Cookie": "c111990290-79992ic=c232338-43784-319745; c111990290-280953ic=c232338-43784-574953; tr2=1; tweepiapp=slqi3ldt8upm8oitf17eke44k2; kvcd=1514838972500; km_ai=G8OrOVIF0YFYftSnBsF7Qgi8aoM%3D; km_lv=x; km_vs=1"<br>    })<br>    response.content</p>
+<p>to</p>
+<p>import requests<br>    response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList":"tonishabusch281","offset":0,"limit":20},<br>    headers={<br>    "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",<br>    "Cookie": "tr2=1; tweepiapp=slqi3ldt8upm8oitf17eke44k2;"<br>    })<br>    response.content</p>
+<img src="https://i.imgur.com/xWaTOXU.gif" alt="" />
+and we now can have some fun
+<h2>Creating Twitter User Check List</h2>
+The first thing is to get a list of potential users that we would want to follow. We can use the follower page from accounts that are well established. Since we don't want to scroll for days let's use a simple scroll function that we can turn off / control with the conditional. Once we have all the user nodes loaded we can run the second chunk of code to build a comma seperated user list that we will use in our python script; you'll notice a <code>copyToClipboard</code> function at the end which allows us to easily select the entire list since <code>console.log</code> is disabled on Twitter and returns will be truncated.
+<p>// scroll until we see all users<br>    var count = 0;<br>    function st(){<br>      $("html, body").animate({ scrollTop: $(document).height() }, "fast");<br>      if(count < 2000) {<br>        count += 1;<br>        setTimeout(st, 500);<br>      }<br>    }<br>    st()<br>    // then set count=999999</p>
+<p>// XXX: done since console.log is taken over.. cute but not going to stop us<br>    // create a div element and append twitter names to it (formatted for copy pasta in script above)<br>    document.body.innerHTML += '<div id="userlist"></div>';<br>    var eles = document.querySelectorAll('b.u-linkComplex-target');<br>    for(var i=4; i<eles.length-5;i++) {<br>      document.getElementById('userlist').innerHTML += eles[i].innerHTML+',';<br>    }</p>
+<p>// console should print out the goodies when exiting the for loop but just in case<br>    // never occured to me that something so simple would do the trick :D<br>    // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript<br>    function copyToClipboard(text) {<br>      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);<br>    }<br>    copyToClipboard(document.getElementById('userlist').innerHTML)</p>
+<p>and it works like a charm! 🎉<br><img src="https://i.imgur.com/36OKK6H.png" alt="" /></p>
+<p>From there it's time to use that user list inside a python script that will allow us to slam that endpoint as a free user. Since I don't have a premium account there's a limit of 25 users per bulk update, 500 for premium users.. maybe we can get around this somehow... but for now the script does the trick. In addition to updating the list we will most likely need to get a new valid tweepi session which will require us to change the <code>tweepiapp</code> value in the <code>Cookie</code> header.</p>
+<p>import requests<br>    import time<br>    import json</p>
+<p>def chunks(l, n):<br>        for i in range(0, len(l), n):<br>            yield l[i:i + n]</p>
+<p>n = "INSERT_COPY_HERE"<br>    names = n.split(',')<br>    split_names = list(chunks(names, 25))</p>
+<p>count = 0<br>    high_prop_users = [] # will use this to store "valuable" users<br>    # XXX: why manage valid array index when you can try catch all the things... terrible terrible terrible but whatever im tired<br>    try:<br>      while True:<br>        name_list = ','.join(str(x) for x in split_names[count])<br>        response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList": name_list,"offset":0,"limit":25},<br>        headers={<br>          "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",<br>          "Cookie": "tr2=1; tweepiapp=7tk8us7lj933i743l4mos51q10;"<br>        })<br>        if '!doctype html' in str(response.content):<br>          print('TRY AGAIN')<br>        else:<br>          parsed_response = json.loads(response.content)<br>          users_info = parsed_response['users']<br>          for user in users_info:<br>            follow_ratio = user['followers_count']/user['friends_count']<br>            if follow_ratio > 0.8:<br>              high_prop_users.append(user['screen_name'])<br>              print('INSERTED')<br>          time.sleep(2)<br>        print('-----------------------------------------')<br>    except:<br>      print(high_prop_users)<br>      exit(0)</p>
+<p>Now that we have our final list of users we want to follow we just need another Javascript snippet to properly follow all those users.</p>
+<p>> Im sure there's a better way to manage the parent search with jquery but it's good enough for me / twitter since this is unlikely to change during the usefullness of this script (if it does it wont work and it'll be an obvious fix). You may notice a strange <code>id</code> assignment at the beginning, this is to ensure that our simple for look can do something like lookup with <code>getElementById</code> and go from that base element to get anything else we might need..</p>
+<img src="https://i.imgur.com/mSFhONe.png" alt="" />
+<p>// assign id to twitter handle for easy access using the list we built up<br>    var names = document.querySelectorAll('.u-linkComplex-target')<br>    for(var i=4;i<names.length-5;i++) {<br>      names[i].id = names[i].innerHTML.trimLeft(); // important to trim the random spacing in the div..<br>    }</p>
+<p>// follow everyone in our magic list<br>    st = ['<strong>', ..., '</strong>']<br>    for(var i=0;i<st.length-1;i++) {<br>      // sitting in console with a beer is definitely the best way to do this..<br>      $($(document.getElementById(st[i])).parent().parent().parent().parent().siblings()[1]).find('.user-actions-follow-button').click();<br>    }</p>
+<p>Using those 2 Javascript snipped and the hacky Python script we can succssfully re-create the functionality that Tweepi wants us to pay $9.99 a month for.</p>
+<img src="https://media3.giphy.com/media/qTj9yXt1njjdm/giphy.gif" alt="" />
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

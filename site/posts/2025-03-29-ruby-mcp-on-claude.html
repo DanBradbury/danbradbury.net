@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple&quot; Ruby MCP Setup - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Simple&quot; Ruby MCP Setup</h1>
+            <div class="post-meta">2025-03-29</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>After seeing the <a href="https://github.com/ahujasid/blender-mcp">Blender MCP</a> I was curious enough to get a pro subscription to Claude and try hooking it up and start to get my hands dirty with what MCPs are / what implementation looked like.</p>
+<p>Javascript, Python, Go, C# all have officially supported SDKs but of course no such love for Ruby. Because the spec is controlled by Anthropic it makes sense but we are left to figure things out as a second class citizen.</p>
+<h2>Ruby implementation </h2>
+<a href="https://github.com/funwarioisii/mcp-rb"><code>mcp-rb</code></a> has a simple enough DSL and is close enough to <code>fast-mcp</code> that it was worth going down that rabbit hole
+<pre><code class="language-ruby">require &#039;mcp&#039;
+<p>name &quot;hello-world&quot;</p>
+<p>version &quot;1.0.0&quot;</p>
+<h1>Define a resource</h1>
+resource &quot;hello://world&quot; do
+  name &quot;Hello World&quot;
+  description &quot;A simple hello world message&quot;
+  call { &quot;Hello, World!&quot; }
+end
+<h1>Define a resource template</h1>
+resource_template &quot;hello://{user_name}&quot; do
+  name &quot;Hello User&quot;
+  description &quot;A simple hello user message&quot;
+  call { |args| &quot;Hello, #{args[:user_name]}!&quot; }
+end
+<h1>Define a tool</h1>
+tool &quot;greet&quot; do
+  description &quot;Greet someone by name&quot;
+  argument :name, String, required: true, description: &quot;Name to greet&quot;
+  call do |args|
+    &quot;Hello, #{args[:name]}!&quot;
+  end
+end</code></pre>
+<p>I also found a post within the week of writing this showing off a <a href="https://mariochavez.io/desarrollo/2025/03/21/rails-mcp-server-enhancing-ai-assisted-development/">Rails MCP server that Mario Chavez has built for his own personal workflow</a> that served as good inspiration + more code to review.</p>
+<h3>Troubleshooting Claude Desktop MCP Configuration</h3>
+There's a good note that I thought would fully get me going on my Mac/Linux setup.. Windows just worked out of the box because installing Ruby is as simple as RubyInstaller + not having to fight with system installed version.
+<p>> Claude Desktop launches the MCP server using my system’s default Ruby environment, bypassing version manager initialization (e.g., rbenv, RVM). The MCP server needs to use the same Ruby version where it was installed, as MCP server startup failures can occur when using an incompatible Ruby version.</p>
+<p>#### rbenv Users<br>For rbenv users, creating a symlink to the rbenv shim works well:<br><pre><code class="language-bash">sudo ln -s ~/.rbenv/shims/ruby /usr/local/bin/ruby</code></pre><br>This works because rbenv's shim system determines the correct Ruby version at execution time, dynamically configuring the environment regardless of how the command was invoked.</p>
+<p>#### RVM Users<br>RVM handles environment variables and gem paths differently than <code>rbenv</code>, which is why a simple symlink doesn't work. When you create a symlink to the RVM Ruby binary, you're bypassing RVM's environment setup. In order to get around this <code>rvm</code> offers wrapper script creation to handle this.</p>
+<p>Most installs will have a wrapper script that should be used to properly create the system level symlink:<br><pre><code class="language-bash">rvm wrapper show ruby<br>sudo ln -s /Users/danbradbury/.rvm/gems/ruby-3.3.4/wrappers/ruby /usr/local/bin/ruby</code></pre></p>
+<h3>Debugging Server Issues</h3>
+All you are looking for it the system specific Claude desktop install (same location where configuration is changed) and tail the <code>mcp.log</code>
+<pre><code class="language-">tail -f c:\Users\YOU\AppData\Roaming\Claude\logs\mcp.log</code></pre>
+<p>The majority of server errors you are going to run into are things being printed to stdout so be careful as you bring in dependencies that might be loud for no reason. (e.g <code>ActiveRecord::Schema.verbose = false</code> to hae AR fun with sqlite)</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playing the Twitter-game - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Playing the Twitter-game</h1>
+            <div class="post-meta">2016-04-09</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>> I am not a marketer not do I have any real prior experience managing PR/social media for a company of any size. This is just a write-up of some of my learnings while out in the wild</p>
+<p>By all accounts I am a Twitter novice; I joined a few years ago but don't really keep up with it (rage tweet a politician or media personality from time to time but not much more). From other business ventures I've learned that having a strong presence on Twitter+Facebook can be a great way to drive traffic to your site and keep folks updated with any updates but I had never invested any time in growing the profiles (outside of word of mouth and the usual social links in the footer of a site). For my most recent project I decided to take an active role in the growth of my Twitter account and to attempt to use a few of these automation tools / API to make my life a little easier.</p>
+<p>I started the journey by trying out a product called <code>ManageFlitter.com</code>; I had gone all in and decided to buy the smallest plan they offered to maximize my "strategic follows". After about 2 days of bulk requesting it becamse obvious that the "snazzy dashboard" views were nothing more than a facade.. I was hitting rate limits and unable to process a single follow / request with the access grant I had enabled for the site.</p>
+<p>At this point I started angrily emailing support to figure out why I was being blocked without hitting any of the actual API / request limits listed in the <a href="https://support.twitter.com/articles/18311">twitter guidelines</a>. Here is the initial diagnosis I recieved (steps to fix are omitted since they were useless..)</p>
+<p>> Thank you for writing into ManageFlitter support on this. Unfortunately Twitter seems to have revoked some 3rd party app tokens over the last few weeks. This causes "invalid or expired token" in the notifications page and keeps your account from being able to process actions, post tweets into Twitter, or from allowing your ManageFlitter account to properly sync with Twitter.</p>
+<p>Hmm so at this point I was frustrated because there is no way my token should have been revoked! Obviously they were using keys so that they could make these "analytic queries" on the twitter user base and had messed something up on their end that had made it impossible to proceed. I pressed along that line of thinking and received the following "helpful" response.</p>
+<p>>I am sorry to hear this. There seem to be a small group of Twitter users currently having this issue with ManageFlitter and some have noted that once their account is revoked, it is far easier for their account to continue to be revoked afterwards.<br>><br>> Some users have suggested that waiting 24 hours helps reset the account. Others have noted that the amount of actions they perform in sequence also matters greatly to avoid the revoked access. Some have noted that after they perform 100 clicks, if they wait 20-30 seconds (usually enough time to go to the Notifications page and see if Twitter is revoking access), then continuing to perform more clicks.<br>><br>> There is no particular reason why some accounts are being affected and other are not. We have been in touch with Twitter and unfortunately Twitter haven't offered much in the way of remedy for us or our users.</p>
+<p>TLDR; I was told to wait for the problem to fix itself..</p>
+<p>This threw a massive wrench in my plans to bulk follow people inside the industry and hope that some percentage of them would follow me back. After a few more angry emails I was told to just wait it out.. At that moment I pulled out the classic <code>"I will have to proceed with a claim to Paypal / the better business bureau"</code> argument to get my money back and move on with another option.</p>
+<p>After getting my money back I decided to ride the free train with <code>Tweepi</code> which had no problems for the first week of usage so I decided to buy a month of the lowest tier to use some of the analytics / follow tools that were being offered. With 2 weeks on the platform I can say that I'm very happy with what I paid for and will continue to use it in the future (until my follower count levels out a bit)</p>
+<p>So why am I writing this article if I am just using a service to accomplish the task for me? While Tweepi does a lot for me it still imposes artificial limits on follow / unfollow in a 24 hour period. (see pic below)</p>
+<img src="http://i.imgur.com/lxGicMA.png" alt="" />
+<p>You can see that the service has some limitations. The main one being that I can follow more people than I can unfollow in a given day. While that makes sense with Twitter's policies my goal is a raw numbers game where I'd like to follow as many people as possible in hopes they follow me back. Whether they follow me back or not I am content to unfollow and continue with my following numbers game.</p>
+<p>Through this process I was able to drive my followed count up quite a bit (considering my actual follower count)<br><img src="http://i.imgur.com/7lMskhe.png" alt="" /> <img src="http://i.imgur.com/xgFbtwG.png" alt="" /></p>
+<p>but still had this problem of the unblanaced <code>follow:followers</code> that I wanted to correct. If I was active on Tweepi there was no way for me to drive this down without having to completely stop following people for a period while I unfollowed the max every day.</p>
+<p>So today I decided to have a little fun inside the browser and see what I could do. :grin:</p>
+<p>Since twitter has a web + mobile application I could obviously sit and click through each of the people I was following to reduce the number but..</p>
+<img src="http://colsblog.com/wp-content/uploads/2014/07/notime.jpg" alt="" />
+<p>So let's see how well formatted the twitter follower page is (and since it's Twitter we know its going to be well organized). When arriving at the page we see the trusty un/follow button for each of the followers<br><img src="http://i.imgur.com/WVI23gR.png" alt="" /></p>
+<p>we also notice that twitter has some infinite scroll magic going on to continuous load the 1000s of people we follow. With that knowledge in our hands it's time to craft some Jquery flavored code to do the clicking for us</p>
+<p>$.each($('.user-actions-follow-button'), function(value,index) {<br>      $(index).click();<br>    });</p>
+<p>Pretty easy to click through each of the buttons on the page but that's only going to account for the ones we have manually scrolled through.. Not sufficient since we have >4000 but <20 buttons on the page. So let's handle that damned auto-scrolling</p>
+<p>var count = 0;<br>    function st(){<br>      $("html, body").animate({ scrollTop: $(document).height() }, "fast");<br>      if(count < 2000) {<br>        count += 1;<br>        setTimeout(st, 500);<br>      }<br>    }<br>    st()</p>
+<p>You might be thinking; why not just for loop this shit?! The scroll animation needs a bit of time to allow for the page load; if you call it too fast the entire page will bug out and the "click button" code wont work as expected. So we just use <code>setTimeout</code> and let that sucker run (good time to take a stretch or make some coffee). When you come back you should hopefully be at the bottom of the screen (wait for <code>GridTimeline-footer</code> to show up and you know you are done) :D</p>
+<p>Run the click code and patiently wait for your browser to slow down drastically and eventually unfollow your entire list. The result should look something like this</p>
+<img src="http://i.imgur.com/qTz4KtF.png" alt="" />
+<p>The 1 follower there through me off since when I clicked on the link for my followers there wasn't anyone listed. At this point I was suspicious that I may have set off one of the limits that would have deactivated my accounts. I checked my emails and didn't see any warnings or notifications from Twitter but did start seeing this whenever I tried to follow someone on their website. (Learn more <a href="https://support.twitter.com/articles/66885">here</a>)</p>
+<img src="http://i.imgur.com/ot7Ouon.png" alt="" />
+<p>At this point I was thinking I just fucked myself and got my account banned or locked in some way. During this time of panic I decided to refresh my browser and saw some funky behavior on my profile page....</p>
+<img src="http://i.imgur.com/3IUBOXT.png" alt="" />
+<p>No "Following" count at all?! And I cant follow anyone because of some unknown policy breach..</p>
+<p>After writing a short sob story to Twitter about how I had "accidentally unfollowed everyone"(cover my ass) I thought about the locking problem a bit more..Hmmm what about that Tweepi token I was using before? Who would have guessed that it would work and allow me to follow people again!</p>
+<img src="http://i.imgur.com/TGpVV06.png" alt="" />
+<p>So with a little bit of crafted Javascript I was able to drop that Following count down without having to fight any artificial limits imposed on me by some third party. I'm incredibly happy with the results (as I am not banned and my account is working as expected) and plan to reproduce with another client in  the future.</p>
+<p>It's always a good feeling when adding a new tool to the utility belt.</p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

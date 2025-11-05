@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploying Jekyll Site on Ubuntu VPS - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Deploying Jekyll Site on Ubuntu VPS</h1>
+            <div class="post-meta">2015-08-10</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <p>Over the past few months Heroku has become an increasingly expensive option for projects that are starting to scale in any way (<a href="https://addons.heroku.com/mongolab">Addon price hikes</a>, <a href="https://devcenter.heroku.com/articles/dyno-sleeping">Dyno Sleeping and Charging</a>, etc.). For ease of use and speed to spin-up up a prototype and have it running Heroku is still the leader and will continue to be my goto in times of need. But as soon as <em>Dyno Charging</em> becomes an issue I think it's time to <code>capify</code> that app and use one of the many VPS hosting options out there.</p>
+<p>For this project I wanted to migrate my simple static site to a $5 droplet on DigitalOcean. I'm sure you could get a better price on AWS but am fine paying the little bit extra for ease of use on DO.. After going through the initial server setup (groups, perms) it's time to go though the actual server preperation.</p>
+<h3>Server Preperation</h3>
+<p>sudo apt-get update<br>    sudo apt-get install nginx</p>
+<p>Ensure that nginx is properly installed by visiting the public ip from the following command</p>
+<p>ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'</p>
+<p>If everything went correctly you should see the following nginx welcome screen (nginx will automatically start when installing on Ubuntu so there is no need to start the service before running the test):</p>
+<img src="http://www.unixmen.com/wp-content/uploads/2015/05/Welcome-to-nginx-on-Ubuntu-Mozilla-Firefox_001.jpg" alt="" />
+<p>For basic nginx service management use the following commands:</p>
+<p>sudo service nginx restart<br>    sudo service nginx stop<br>    sudo service nginx start</p>
+<p>Now that we have nginx ready to go on our server let's install the final pieces to bring our Jekyll site to life.</p>
+<p>sudo apt-get install git-core<br>    curl -L https://get.rvm.io | bash -s stable --ruby=2.1.2</p>
+<p>After installing <code>rvm</code> there will be some information about the install process and some next steps that may be required to start developing. If you do not have access to <code>rvm</code> on the command line after install you may have to run the following or add to your <code>~/bash_profile</code>:</p>
+<p>source /usr/local/rvm/scripts/rvm</p>
+<p>Once Ruby is running correctly go ahead and install jekyll and all it's glorious dependencies.</p>
+<p>gem install jekyll</p>
+<h3>Server Setup Compete</h3>
+<p>Now it's time to set up your jekyll site for deploy. For this example we are going to use Capistrano 2.x</p>
+<p>gem install capistrano<br>    capify .</p>
+<p>This will create a few config files but the one we want to concern ourselves with is <code>config/deploy.rb</code></p>
+<p>set :application, "blog"<br>    set :repository, 'public'<br>    set :scm, :none<br>    set :deploy_via, :copy<br>    set :copy_compression, :gzip<br>    set :use_sudo, false</p>
+<p>set :user, "deployer"</p>
+<p># the path to deploy to on your VPS<br>    set :deploy_to, "/home/#{user}/blog"</p>
+<p># the ip address of your VPS<br>    role :web, "XX.XX.XX.XXX"</p>
+<p>before 'deploy:update', 'deploy:update_jekyll'</p>
+<p>namespace :deploy do<br>      [:start, :stop, :restart, :finalize_update].each do |t|<br>        desc "#{t} task is a no-op with jekyll"<br>        task t, :roles => :app do ; end<br>      end</p>
+<p>desc 'Run jekyll to update site before uploading'<br>      task :update_jekyll do<br>        # clear existing _site<br>        # build site using jekyll<br>        # remove Capistrano stuff from build<br>         %x(rm -rf public/* && rake generate)<br>      end<br>    end</p>
+<p>Modify a few lines to suit your needs and you should be ready to <code>cap deploy</code>. To verify your new Capistrano deploy run the following; if both commands succeed without Warnings or Errors you will ready to deploy.</p>
+<p>cap deploy:setup<br>    cap deploy:check</p>
+<h3>Enjoy your Jekyll VPS</h3>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

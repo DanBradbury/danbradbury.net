@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ixalan Draft #1 - ~/dev/docs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: '← ';
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: normal;
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+        }
+
+        .post-content h3 {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 25px 0 10px 0;
+        }
+
+        .post-content p {
+            margin: 15px 0;
+            color: var(--text-primary);
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .post-content code {
+            background: var(--bg-secondary);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content strong {
+            color: var(--text-secondary);
+        }
+
+        .post-content em {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--text-secondary);
+            padding-left: 15px;
+            margin: 20px 0;
+            color: var(--text-dim);
+        }
+
+        .separator {
+            color: var(--text-dim);
+            margin: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .post-content h2 {
+                font-size: 16px;
+            }
+
+            .post-content h3 {
+                font-size: 14px;
+            }
+
+            .post-content pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">Back to home</a>
+            <h1>Ixalan Draft #1</h1>
+            <div class="post-meta">2017-11-21</div>
+        </header>
+
+        <div class="separator">
+            ================================================================================
+        </div>
+
+        <article class="post-content">
+            <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<h3>Black/Blue/White Deck</h3>
+<strong>Didnt realize I messed up mana until I got home.. would have preferred a 664</strong>
+<p>- 7 Swamp<br>- 6 Island<br>- 3 Plains<br>- Ixalans Binding<br>- Slash of Talons<br>- Cancel<br>- Spell Pierce<br>- 3 One With the Wind<br>- 2 Run Aground<br>- 2 Depths of Desire<br>- Duress<br>- 2 Call to the Feast<br>- Deadeye Plunderers<br>- Anointed Deacon<br>- Desperate Castaways<br>- Wanted Scoundrels<br>- Seekers Squire<br>- Kinjallis Caller<br>- Shining Aerosaur<br>- Paladin of the Bloodstained<br>- Prosperous Pirates<br>- Sailor of Means<br>- Shipwreck Looter</p>
+<h3>sideboard</h3>
+- Charging Monstrosaur
+- Dire Fleet Captain
+- Kinjallis Caller
+- Gilded Sentinel
+- Lookouts Dispersal
+- Queens Commission
+<p>This is the deck that I boxed up when I headed home.. Looking at it now I can see why I lost my last 2 matches</p>
+<p>In my first game I ran Charging Monstrosaur (swapped after game for another One With the Wind since it won my the first game..not the best idea to run 3) and the second Kinjallis Caller which was played on turn 1 and proved to be an annoyance for my opponent (swapped for a second Call to the Feast.. not a bad card but wasnt necessary)</p>
+<p>I ended up winning both games with a timely Ixalans Binding and One With the Wind which led me into a false sense of security for my next 2 matches (both of which I think I should have won)</p>
+<script>
+/<em> Ixalan hover </em>/
+var cards = {"Adanto Vanguard":"https://media.wizards.com/2017/xln/en_yIHG7SYDro.png","Ashes of the Abhorrent":"https://media.wizards.com/2017/xln/en_8BuR5T4kqb.png","Axis of Mortality":"https://media.wizards.com/2017/xln/en_sXHUoH5YAf.png","Bellowing Aegisaur":"https://media.wizards.com/2017/xln/en_5mZiqEekER.png","Bishop of Rebirth":"https://media.wizards.com/2017/xln/en_uDtRbs8m1P.png","Bishop's Soldier":"https://media.wizards.com/2017/xln/en_xPs6OcVhrM.png","Bishops Soldier":"https://media.wizards.com/2017/xln/en_xPs6OcVhrM.png","Bright Reprisal":"https://media.wizards.com/2017/xln/en_tINodtCBVd.png","Demystify":"https://media.wizards.com/2017/xln/en_fNO43jDbQg.png","Duskborne Skymarcher":"https://media.wizards.com/2017/xln/en_a2cndcEDnY.png","Emissary of Sunrise":"https://media.wizards.com/2017/xln/en_dAdhUGwy7d.png","Encampment Keeper":"https://media.wizards.com/2017/xln/en_ovfNbVxPbh.png","Glorifier of Dusk":"https://media.wizards.com/2017/xln/en_b7uK1u0txN.png","Goring Ceratops":"https://media.wizards.com/2017/xln/en_mE5iPDdxrO.png","Imperial Aerosaur":"https://media.wizards.com/2017/xln/en_wqE7gNntgC.png","Imperial Lancer":"https://media.wizards.com/2017/xln/en_rXoEuzjgbw.png","Inspiring Cleric":"https://media.wizards.com/2017/xln/en_yeX1wyGxk4.png","Ixalan's Binding":"https://media.wizards.com/2017/xln/en_u9Gm7DRdGS.png","Ixalans Binding":"https://media.wizards.com/2017/xln/en_u9Gm7DRdGS.png","Kinjalli's Caller":"https://media.wizards.com/2017/xln/en_eWnx2KRQWO.png","Kinjallis Caller":"https://media.wizards.com/2017/xln/en_eWnx2KRQWO.png","Kinjalli's Sunwing":"https://media.wizards.com/2017/xln/en_NPS8WefIOD.png","Kinjallis Sunwing":"https://media.wizards.com/2017/xln/en_NPS8WefIOD.png","Legion Conquistador":"https://media.wizards.com/2017/xln/en_ftxkh1zJPl.png","Legion's Judgment":"https://media.wizards.com/2017/xln/en_kBlyfsxEWL.png","Legions Judgment":"https://media.wizards.com/2017/xln/en_kBlyfsxEWL.png","Looming Altisaur":"https://media.wizards.com/2017/xln/en_vaOUmgBOdr.png","Mavren Fein, Dusk Apostle":"https://media.wizards.com/2017/xln/en_yhA7T9YOrv.png","Paladin of the Bloodstained":"https://media.wizards.com/2017/xln/en_3E5t0NuERb.png","Pious Interdiction":"https://media.wizards.com/2017/xln/en_fwjvkJ6DeV.png","Priest of the Wakening Sun":"https://media.wizards.com/2017/xln/en_4zqXWg6oS5.png","Pterodon Knight":"https://media.wizards.com/2017/xln/en_JB0lDoCGgA.png","Queen's Commission":"https://media.wizards.com/2017/xln/en_HYqMlHv7I3.png","Queens Commission":"https://media.wizards.com/2017/xln/en_HYqMlHv7I3.png","Rallying Roar":"https://media.wizards.com/2017/xln/en_CrhqxNfbZ3.png","Raptor Companion":"https://media.wizards.com/2017/xln/en_1Q4SCT62ZB.png","Ritual of Rejuvenation":"https://media.wizards.com/2017/xln/en_2NtgKIsQyk.png","Sanguine Sacrament":"https://media.wizards.com/2017/xln/en_HGxEL3mMy8.png","Settle the Wreckage":"https://media.wizards.com/2017/xln/en_om3PkZGo5v.png","Sheltering Light":"https://media.wizards.com/2017/xln/en_CMjwNkDznY.png","Shining Aerosaur":"https://media.wizards.com/2017/xln/en_lXgNtoTbou.png","Skyblade of the Legion":"https://media.wizards.com/2017/xln/en_obgw0foQAb.png","Slash of Talons":"https://media.wizards.com/2017/xln/en_HpMGfOujxK.png","Steadfast Armasaur":"https://media.wizards.com/2017/xln/en_dXTxJENSpe.png","Sunrise Seeker":"https://media.wizards.com/2017/xln/en_fBuKAHKZXB.png","Territorial Hammerskull":"https://media.wizards.com/2017/xln/en_adePU5jrbD.png","Tocatli Honor Guard":"https://media.wizards.com/2017/xln/en_pNabNC2JRu.png","Vampire's Zeal":"https://media.wizards.com/2017/xln/en_iQvb4J1GOT.png","Vampires Zeal":"https://media.wizards.com/2017/xln/en_iQvb4J1GOT.png","Wakening Sun's Avatar":"https://media.wizards.com/2017/xln/en_tY8FsI3P30.png","Wakening Suns Avatar":"https://media.wizards.com/2017/xln/en_tY8FsI3P30.png","Air Elemental":"https://media.wizards.com/2017/xln/en_xAELLEcURJ.png","Arcane Adaptation":"https://media.wizards.com/2017/xln/en_uRA1svXM1W.png","Cancel":"https://media.wizards.com/2017/xln/en_v5rI5KhCQx.png","Chart a Course":"https://media.wizards.com/2017/xln/en_TTtrIXG1Mp.png","Daring Saboteur":"https://media.wizards.com/2017/xln/en_Z9vnrlQdDI.png","Deadeye Quartermaster":"https://media.wizards.com/2017/xln/en_tvLGVePEQs.png","Deeproot Waters":"https://media.wizards.com/2017/xln/en_mH5Nja9ImK.png","Depths of Desire":"https://media.wizards.com/2017/xln/en_wKsgqjiT6g.png","Dive Down":"https://media.wizards.com/2017/xln/en_1MOcDHsRnk.png","Dreamcaller Siren":"https://media.wizards.com/2017/xln/en_EAsB1HfXSz.png","Entrancing Melody":"https://media.wizards.com/2017/xln/en_bIRJ8UVJvW.png","Favorable Winds":"https://media.wizards.com/2017/xln/en_Euk41DLocr.png","Fleet Swallower":"https://media.wizards.com/2017/xln/en_dEquoVXWFQ.png","Headwater Sentries":"https://media.wizards.com/2017/xln/en_IWOsZZfT5d.png","Herald of Secret Streams":"https://media.wizards.com/2017/xln/en_J87EyxwFSn.png","Jace, Cunning Castaway":"https://media.wizards.com/2017/xln/en_TEfbSu9pam.png","Kopala, Warden of Waves":"https://media.wizards.com/2017/xln/en_64ZmfLZVZL.png","Lookout's Dispersal":"https://media.wizards.com/2017/xln/en_4wUpGt2QHo.png","Lookouts Dispersal":"https://media.wizards.com/2017/xln/en_4wUpGt2QHo.png","Navigator's Ruin":"https://media.wizards.com/2017/xln/en_bdvjuQZBF3.png","Navigators Ruin":"https://media.wizards.com/2017/xln/en_bdvjuQZBF3.png","One With the Wind":"https://media.wizards.com/2017/xln/en_AfgXgQUJ3p.png","Opt":"https://media.wizards.com/2017/xln/en_BmfrsaYAaP.png","Overflowing Insight":"https://media.wizards.com/2017/xln/en_IFhaOeKWyJ.png","Perilous Voyage":"https://media.wizards.com/2017/xln/en_5rdcvyq3pX.png","Pirate's Prize":"https://media.wizards.com/2017/xln/en_BLKANqUD00.png","Pirates Prize":"https://media.wizards.com/2017/xln/en_BLKANqUD00.png","Prosperous Pirates":"https://media.wizards.com/2017/xln/en_vAYcL44vjW.png","River Sneak":"https://media.wizards.com/2017/xln/en_xlSb1TC2Sw.png","River's Rebuke":"https://media.wizards.com/2017/xln/en_q5ePSq2ZwS.png","Rivers Rebuke":"https://media.wizards.com/2017/xln/en_q5ePSq2ZwS.png","Run Aground":"https://media.wizards.com/2017/xln/en_gBenZhCfhJ.png","Sailor of Means":"https://media.wizards.com/2017/xln/en_vDz1QI0mnl.png","Shaper Apprentice":"https://media.wizards.com/2017/xln/en_MVAbp7zWhX.png","Shipwreck Looter":"https://media.wizards.com/2017/xln/en_96n1CQiLmT.png","Shore Keeper":"https://media.wizards.com/2017/xln/en_tUQqISo9hz.png","Siren Lookout":"https://media.wizards.com/2017/xln/en_MtsYj2PFH1.png","Siren Stormtamer":"https://media.wizards.com/2017/xln/en_D41oqXU9Rw.png","Siren's Ruse":"https://media.wizards.com/2017/xln/en_jvCAf4qnKI.png","Sirens Ruse":"https://media.wizards.com/2017/xln/en_jvCAf4qnKI.png","Spell Pierce":"https://media.wizards.com/2017/xln/en_Pjp1monN0l.png","Spell Swindle":"https://media.wizards.com/2017/xln/en_BTyfarI7Xt.png","Storm Fleet Aerialist":"https://media.wizards.com/2017/xln/en_JuJBlUbdre.png","Storm Fleet Spy":"https://media.wizards.com/2017/xln/en_ihJrpuHbfm.png","Storm Sculptor":"https://media.wizards.com/2017/xln/en_VdWIGLwN7K.png","Tempest Caller":"https://media.wizards.com/2017/xln/en_qMFe2MsMZS.png","Watertrap Weaver":"https://media.wizards.com/2017/xln/en_JESJUwm86X.png","Wind Strider":"https://media.wizards.com/2017/xln/en_f6SySDBpt7.png","Anointed Deacon":"https://media.wizards.com/2017/xln/en_g56N9ZoWZy.png","Bishop of the Bloodstained":"https://media.wizards.com/2017/xln/en_JWL97OP2Uu.png","Blight Keeper":"https://media.wizards.com/2017/xln/en_ySN6YD9m9O.png","Bloodcrazed Paladin":"https://media.wizards.com/2017/xln/en_lvIrNYtCaH.png","Boneyard Parley":"https://media.wizards.com/2017/xln/en_1Qg0ZyNjGJ.png","Contract Killing":"https://media.wizards.com/2017/xln/en_G2Bt8GEcNQ.png","Costly Plunder":"https://media.wizards.com/2017/xln/en_jU8FiF81jH.png","Dark Nourishment":"https://media.wizards.com/2017/xln/en_jWvyPdmUFP.png","Deadeye Tormentor":"https://media.wizards.com/2017/xln/en_vdHw0swbOR.png","Deadeye Tracker":"https://media.wizards.com/2017/xln/en_QK2Sa8vzUh.png","Deathless Ancient":"https://media.wizards.com/2017/xln/en_hJ0SvTEDiP.png","Desperate Castaways":"https://media.wizards.com/2017/xln/en_ugc7TQMVpj.png","Dire Fleet Hoarder":"https://media.wizards.com/2017/xln/en_S4occP6buy.png","Dire Fleet Interloper":"https://media.wizards.com/2017/xln/en_bF818wkyp7.png","Dire Fleet Ravager":"https://media.wizards.com/2017/xln/en_m0kMO8TGWS.png","Duress":"https://media.wizards.com/2017/xln/en_erLx9hJWdu.png","Fathom Fleet Captain":"https://media.wizards.com/2017/xln/en_8YZqEihIrj.png","Fathom Fleet Cutthroat":"https://media.wizards.com/2017/xln/en_b23sQB45Sr.png","Grim Captain's Call":"https://media.wizards.com/2017/xln/en_dz4uDxN2j5.png","Grim Captains Call":"https://media.wizards.com/2017/xln/en_dz4uDxN2j5.png","Heartless Pillage":"https://media.wizards.com/2017/xln/en_o6LPTjzOik.png","Kitesail Freebooter":"https://media.wizards.com/2017/xln/en_AUl9VbPXTg.png","Lurking Chupacabra":"https://media.wizards.com/2017/xln/en_DWRMnr1iaG.png","March of the Drowned":"https://media.wizards.com/2017/xln/en_kQreNok5VK.png","Mark of the Vampire":"https://media.wizards.com/2017/xln/en_aCs28rmzzU.png","Queen's Agent":"https://media.wizards.com/2017/xln/en_aISfJX85BC.png","Queens Agent":"https://media.wizards.com/2017/xln/en_aISfJX85BC.png","Queen's Bay Soldier":"https://media.wizards.com/2017/xln/en_nPCMAHUMBl.png","Queens Bay Soldier":"https://media.wizards.com/2017/xln/en_nPCMAHUMBl.png","Raiders' Wake":"https://media.wizards.com/2017/xln/en_eZimmFDXXe.png","Raiders Wake":"https://media.wizards.com/2017/xln/en_eZimmFDXXe.png","Revel in Riches":"https://media.wizards.com/2017/xln/en_APATUYl9Wm.png","Ruin Raider":"https://media.wizards.com/2017/xln/en_Okd58Nyuhd.png","Ruthless Knave":"https://media.wizards.com/2017/xln/en_LI6kQHOGIC.png","Sanctum Seeker":"https://media.wizards.com/2017/xln/en_wetBr8S7zS.png","Seekers' Squire":"https://media.wizards.com/2017/xln/en_dO2JxhALws.png","Seekers Squire":"https://media.wizards.com/2017/xln/en_dO2JxhALws.png","Skittering Heartstopper":"https://media.wizards.com/2017/xln/en_CKyq0ICHIH.png","Skulduggery":"https://media.wizards.com/2017/xln/en_qmvbJ2LQkK.png","Skymarch Bloodletter":"https://media.wizards.com/2017/xln/en_5xYYEyCZi5.png","Spreading Rot":"https://media.wizards.com/2017/xln/en_Ls4pRv3egu.png","Sword-Point Diplomacy":"https://media.wizards.com/2017/xln/en_2C253byaSh.png","Vanquish the Weak":"https://media.wizards.com/2017/xln/en_WXYozFMCa7.png","Vicious Conquistador":"https://media.wizards.com/2017/xln/en_mKVmSqQzLF.png","Vraska's Contempt":"https://media.wizards.com/2017/xln/en_lrdJDXzb6a.png","Vraskas Contempt":"https://media.wizards.com/2017/xln/en_lrdJDXzb6a.png","Walk the Plank":"https://media.wizards.com/2017/xln/en_WBcn4m7YSm.png","Wanted Scoundrels":"https://media.wizards.com/2017/xln/en_pBMChCwLLC.png","Angrath's Marauders":"https://media.wizards.com/2017/xln/en_2S0d70qzYk.png","Angraths Marauders":"https://media.wizards.com/2017/xln/en_2S0d70qzYk.png","Bonded Horncrest":"https://media.wizards.com/2017/xln/en_1hSnD5Ppzr.png","Brazen Buccaneers":"https://media.wizards.com/2017/xln/en_z4rtliWary.png","Burning Sun's Avatar":"https://media.wizards.com/2017/xln/en_C1oC1OiTqv.png","Burning Suns Avatar":"https://media.wizards.com/2017/xln/en_C1oC1OiTqv.png","Captain Lannery Storm":"https://media.wizards.com/2017/xln/en_P9FMMTi6df.png","Captivating Crew":"https://media.wizards.com/2017/xln/en_jqsSv2hJil.png","Charging Monstrosaur":"https://media.wizards.com/2017/xln/en_RU2Vwi6ABm.png","Demolish":"https://media.wizards.com/2017/xln/en_5FxgxGM62t.png","Dinosaur Stampede":"https://media.wizards.com/2017/xln/en_Ee7YrmKo5j.png","Dual Shot":"https://media.wizards.com/2017/xln/en_sDHqEyVZRu.png","Fathom Fleet Firebrand":"https://media.wizards.com/2017/xln/en_VvAvbFhwR0.png","Fiery Cannonade":"https://media.wizards.com/2017/xln/en_KkAuXIepxD.png","Fire Shrine Keeper":"https://media.wizards.com/2017/xln/en_nNu4AGKopL.png","Firecannon Blast":"https://media.wizards.com/2017/xln/en_UPGTYar5K5.png","Frenzied Raptor":"https://media.wizards.com/2017/xln/en_eC4YiJB5M4.png","Headstrong Brute":"https://media.wizards.com/2017/xln/en_YkkxweYQVR.png","Hijack":"https://media.wizards.com/2017/xln/en_28vminrxJz.png","Lightning Strike":"https://media.wizards.com/2017/xln/en_UrQRvOPtYz.png","Lightning-Rig Crew":"https://media.wizards.com/2017/xln/en_iJZHsnuzaL.png","Makeshift Munitions":"https://media.wizards.com/2017/xln/en_2NCmehnIjg.png","Nest Robber":"https://media.wizards.com/2017/xln/en_WeG0QrD2An.png","Otepec Huntmaster":"https://media.wizards.com/2017/xln/en_halxu6YFDg.png","Rampaging Ferocidon":"https://media.wizards.com/2017/xln/en_iBuUrYKxrz.png","Raptor Hatchling":"https://media.wizards.com/2017/xln/en_5xDCCj6rkP.png","Repeating Barrage":"https://media.wizards.com/2017/xln/en_5NhGLNtay1.png","Rigging Runner":"https://media.wizards.com/2017/xln/en_s24kW8k4je.png","Rile":"https://media.wizards.com/2017/xln/en_jW7miymqTQ.png","Rowdy Crew":"https://media.wizards.com/2017/xln/en_N6hDAxf5ku.png","Rummaging Goblin":"https://media.wizards.com/2017/xln/en_MSUC0Meg5c.png","Star of Extinction":"https://media.wizards.com/2017/xln/en_iq9N1Q3Q1z.png","Storm Fleet Arsonist":"https://media.wizards.com/2017/xln/en_uztvewpkp2.png","Storm Fleet Pyromancer":"https://media.wizards.com/2017/xln/en_MJDrcTtitf.png","Sun-Crowned Hunters":"https://media.wizards.com/2017/xln/en_wO9xGNUMhW.png","Sunbird's Invocation":"https://media.wizards.com/2017/xln/en_wZkZ5jvNGp.png","Sunbirds Invocation":"https://media.wizards.com/2017/xln/en_wZkZ5jvNGp.png","Sure Strike":"https://media.wizards.com/2017/xln/en_vwkOHacDOw.png","Swashbuckling":"https://media.wizards.com/2017/xln/en_A9YryGGnzO.png","Thrash of Raptors":"https://media.wizards.com/2017/xln/en_eyNmrnSPHZ.png","Tilonalli's Knight":"https://media.wizards.com/2017/xln/en_rkztaqCAq3.png","Tilonallis Knight":"https://media.wizards.com/2017/xln/en_rkztaqCAq3.png","Tilonalli's Skinshifter":"https://media.wizards.com/2017/xln/en_Vpp3G9u49p.png","Tilonallis Skinshifter":"https://media.wizards.com/2017/xln/en_Vpp3G9u49p.png","Trove of Temptation":"https://media.wizards.com/2017/xln/en_ykMZj6wCcj.png","Unfriendly Fire":"https://media.wizards.com/2017/xln/en_mY2MakspZu.png","Wily Goblin":"https://media.wizards.com/2017/xln/en_uQjlD0CjMj.png","Ancient Brontodon":"https://media.wizards.com/2017/xln/en_JExOVIXOsB.png","Atzocan Archer":"https://media.wizards.com/2017/xln/en_xQgJtSbG5q.png","Blinding Fog":"https://media.wizards.com/2017/xln/en_0PPdNFGGoi.png","Blossom Dryad":"https://media.wizards.com/2017/xln/en_tjZUvLfVN2.png","Carnage Tyrant":"https://media.wizards.com/2017/xln/en_KvaL61GJr1.png","Colossal Dreadmaw":"https://media.wizards.com/2017/xln/en_1RNIDOPt7I.png","Commune with Dinosaurs":"https://media.wizards.com/2017/xln/en_uGuZKWBvaH.png","Crash the Ramparts":"https://media.wizards.com/2017/xln/en_xKQIm8JZpN.png","Crushing Canopy":"https://media.wizards.com/2017/xln/en_3xybN8AEO5.png","Deathgorge Scavenger":"https://media.wizards.com/2017/xln/en_LZaFbMCTHB.png","Deeproot Champion":"https://media.wizards.com/2017/xln/en_Cu9bETMyt6.png","Deeproot Warrior":"https://media.wizards.com/2017/xln/en_qUFwFkjWxt.png","Drover of the Mighty":"https://media.wizards.com/2017/xln/en_4b8OyOmodU.png","Emergent Growth":"https://media.wizards.com/2017/xln/en_VOf4twHy3J.png","Emperor's Vanguard":"https://media.wizards.com/2017/xln/en_iMFkwLZJc2.png","Emperors Vanguard":"https://media.wizards.com/2017/xln/en_iMFkwLZJc2.png","Grazing Whiptail":"https://media.wizards.com/2017/xln/en_McKfX4KS2x.png","Ixalli's Diviner":"https://media.wizards.com/2017/xln/en_ICJspZtQqc.png","Ixallis Diviner":"https://media.wizards.com/2017/xln/en_ICJspZtQqc.png","Ixalli's Keeper":"https://media.wizards.com/2017/xln/en_01GBxYoDeH.png","Ixallis Keeper":"https://media.wizards.com/2017/xln/en_01GBxYoDeH.png","Jade Guardian":"https://media.wizards.com/2017/xln/en_RuaG3NhYTq.png","Jungle Delver":"https://media.wizards.com/2017/xln/en_pTKJc6wRal.png","Kumena's Speaker":"https://media.wizards.com/2017/xln/en_tjpm9lUw0o.png","Kumenas Speaker":"https://media.wizards.com/2017/xln/en_tjpm9lUw0o.png","Merfolk Branchwalker":"https://media.wizards.com/2017/xln/en_y2GmUGpgYq.png","New Horizons":"https://media.wizards.com/2017/xln/en_59sKsxfRnY.png","Old-Growth Dryads":"https://media.wizards.com/2017/xln/en_0u9FM4XR6l.png","Pounce":"https://media.wizards.com/2017/xln/en_2BqpFFb286.png","Ranging Raptors":"https://media.wizards.com/2017/xln/en_0zIZLRuzt1.png","Ravenous Daggertooth":"https://media.wizards.com/2017/xln/en_8FRtkHLbi2.png","Ripjaw Raptor":"https://media.wizards.com/2017/xln/en_oUjuu5E2th.png","River Heralds' Boon":"https://media.wizards.com/2017/xln/en_DhuQjPqsMp.png","River Heralds Boon":"https://media.wizards.com/2017/xln/en_DhuQjPqsMp.png","Savage Stomp":"https://media.wizards.com/2017/xln/en_UK76KUgUYf.png","Shapers' Sanctuary":"https://media.wizards.com/2017/xln/en_bGeHXD0yU0.png","Shapers Sanctuary":"https://media.wizards.com/2017/xln/en_bGeHXD0yU0.png","Slice in Twain":"https://media.wizards.com/2017/xln/en_CO1f3VzmMN.png","Snapping Sailback":"https://media.wizards.com/2017/xln/en_fUKB4qdgtJ.png","Spike-Tailed Ceratops":"https://media.wizards.com/2017/xln/en_FZq9fhQZGg.png","Thundering Spineback":"https://media.wizards.com/2017/xln/en_DSiEwZIJzv.png","Tishana's Wayfinder":"https://media.wizards.com/2017/xln/en_gohG04WiSz.png","Tishanas Wayfinder":"https://media.wizards.com/2017/xln/en_gohG04WiSz.png","Verdant Rebirth":"https://media.wizards.com/2017/xln/en_ulU2Wn4lKk.png","Verdant Sun's Avatar":"https://media.wizards.com/2017/xln/en_meUgsDytXJ.png","Verdant Suns Avatar":"https://media.wizards.com/2017/xln/en_meUgsDytXJ.png","Vineshaper Mystic":"https://media.wizards.com/2017/xln/en_HiifuSCplb.png","Waker of the Wilds":"https://media.wizards.com/2017/xln/en_UBMBPNXl7u.png","Wildgrowth Walker":"https://media.wizards.com/2017/xln/en_nQgXIAveib.png","Admiral Beckett Brass":"https://media.wizards.com/2017/xln/en_dXpvfRNxUN.png","Belligerent Brontodon":"https://media.wizards.com/2017/xln/en_kym9E6V1Vd.png","Call to the Feast":"https://media.wizards.com/2017/xln/en_VLM0EzE4GV.png","Deadeye Plunderers":"https://media.wizards.com/2017/xln/en_5BlOFj41dP.png","Dire Fleet Captain":"https://media.wizards.com/2017/xln/en_t7RdWftJtL.png","Gishath, Sun's Avatar":"https://media.wizards.com/2017/xln/en_ulChNTz1mz.png","Gishath, Suns Avatar":"https://media.wizards.com/2017/xln/en_ulChNTz1mz.png","Hostage Taker":"https://media.wizards.com/2017/xln/en_PxlYqa3ZQJ.png","Huatli, Warrior Poet":"https://media.wizards.com/2017/xln/en_5FTmAhfoQp.png","Marauding Looter":"https://media.wizards.com/2017/xln/en_fxCYVuVKth.png","Raging Swordtooth":"https://media.wizards.com/2017/xln/en_dOEsObctKc.png","Regisaur Alpha":"https://media.wizards.com/2017/xln/en_lhJCu0xjCy.png","Shapers of Nature":"https://media.wizards.com/2017/xln/en_dih805xL65.png","Sky Terror":"https://media.wizards.com/2017/xln/en_09k0BzXgyg.png","Tishana, Voice of Thunder":"https://media.wizards.com/2017/xln/en_C47hkllAv1.png","Vona, Butcher of Magan":"https://media.wizards.com/2017/xln/en_s5gSLJdQiN.png","Vraska, Relic Seeker":"https://media.wizards.com/2017/xln/en_jTImWTGW8L.png","Cobbled Wings":"https://media.wizards.com/2017/xln/en_UEEqkKo5AI.png","Dusk Legion Dreadnought":"https://media.wizards.com/2017/xln/en_Y4K8dqFzi4.png","Elaborate Firecannon":"https://media.wizards.com/2017/xln/en_wJYGu9sQeO.png","Fell Flagship":"https://media.wizards.com/2017/xln/en_Gfm8W9lmuq.png","Gilded Sentinel":"https://media.wizards.com/2017/xln/en_jh2Qn5apHj.png","Hierophant's Chalice":"https://media.wizards.com/2017/xln/en_kp9MfskDHG.png","Hierophants Chalice":"https://media.wizards.com/2017/xln/en_kp9MfskDHG.png","Pillar of Origins":"https://media.wizards.com/2017/xln/en_OLHsjTy1UL.png","Pirate's Cutlass":"https://media.wizards.com/2017/xln/en_4RR0xWZ9Qt.png","Pirates Cutlass":"https://media.wizards.com/2017/xln/en_4RR0xWZ9Qt.png","Prying Blade":"https://media.wizards.com/2017/xln/en_nlGnU7QSsw.png","Sentinel Totem":"https://media.wizards.com/2017/xln/en_xT0UfeLCs1.png","Shadowed Caravel":"https://media.wizards.com/2017/xln/en_VKVipr3utp.png","Sleek Schooner":"https://media.wizards.com/2017/xln/en_gfDHwBBPHF.png","Sorcerous Spyglass":"https://media.wizards.com/2017/xln/en_SCFDEAyX2B.png","Vanquisher's Banner":"https://media.wizards.com/2017/xln/en_g5JIX0IwbO.png","Vanquishers Banner":"https://media.wizards.com/2017/xln/en_g5JIX0IwbO.png","Dragonskull Summit":"https://media.wizards.com/2017/xln/en_x87NZsf14I.png","Drowned Catacomb":"https://media.wizards.com/2017/xln/en_3UcGoidOjU.png","Field of Ruin":"https://media.wizards.com/2017/xln/en_KIg33hX81z.png","Glacial Fortress":"https://media.wizards.com/2017/xln/en_gW91ZN4eBi.png","Rootbound Crag":"https://media.wizards.com/2017/xln/en_Jt9yurxL7m.png","Sunpetal Grove":"https://media.wizards.com/2017/xln/en_cydtngAy9E.png","Unclaimed Territory":"https://media.wizards.com/2017/xln/en_pELrMZ7YoA_b.png","Unknown Shores":"https://media.wizards.com/2017/xln/en_B5O3SgRoAK.png","Plains":"https://media.wizards.com/2017/xln/en_vUX614xnZ2.png","Island":"https://media.wizards.com/2017/xln/en_1lCCz6IKRQ.png","Swamp":"https://media.wizards.com/2017/xln/en_fJnpbuY4rR.png","Mountain":"https://media.wizards.com/2017/xln/en_21dvhqsltr.png","Forest":"https://media.wizards.com/2017/xln/en_3FIwHRSgan.png"}
+var body_element = document.getElementsByTagName("body")[0];
+var original = body_element.innerHTML;
+<p>function showImage(card_name) {<br>    var safe_name = card_name.replace(/\s/g, "-").replace("'", "")<br>    $(document).bind('mousemove', function(e) {<br>       $('#'+safe_name) .css({<br>           left: e.pageX + 20,<br>           top: e.pageY<br>       });<br>    });<br>    var img = document.createElement('img');<br>    img.src = cards[card_name];<br>    img.id = safe_name;<br>    img.className = "mtg-card";<br>    console.log(img)<br>    document.body.appendChild(img)<br>}<br>function hideImage(card_name) {<br>    // ALTERNATIVE<br>    // document.getElementsByClassName('mtg-card').forEach(function(e){<br>    //    e.remove();<br>    // });<br>    var safe_name = card_name.replace(/\s/g, "-").replace("'", "")<br>    document.getElementById(safe_name).remove();<br>}<br>Object.keys(cards).forEach(function(e) {<br>    if (original.includes(e)) {<br>        var safe_string = e.replace("'", "")<br>        var new_link = "<a href='#' onmouseout=\"hideImage('"+safe_string+"')\" onmouseover=\"showImage('"+safe_string+"')\">"+e+"</a>";<br>        body_element.innerHTML = body_element.innerHTML.replace(new RegExp(e, "g"), new_link)<br>    }<br>})<br></script></p>
+        </article>
+
+        <div class="separator">
+            --------------------------------------------------------------------------------
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

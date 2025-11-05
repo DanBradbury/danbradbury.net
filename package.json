@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "generate": "node generate-static-pages.js"
+  },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@rails/actiontext": "^7.2.200",
