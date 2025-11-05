@@ -1,0 +1,65 @@
+name: Deploy site
+
+on:
+  push:
+    #branches:
+      #- main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy site
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SUBDOMAIN: danbradbury.net
+        run: |
+          # Setup SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Add server to known hosts
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+
+          # Check if site2 directory exists
+          if [ ! -d "site2" ]; then
+            echo "❌ Error: site2 directory not found!"
+            exit 1
+          fi
+
+          # Deploy frontend (site2/ directory contents)
+          echo "🌐 Deploying money site frontend..."
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            site/ deploy@$SERVER_IP:/var/www/$SUBDOMAIN/
+
+          # Verify deployment
+          echo "🔍 Verifying deployment..."
+          ssh -i ~/.ssh/deploy_key deploy@$SERVER_IP "
+            # Check if index.html exists
+            if [ -f /var/www/$SUBDOMAIN/index.html ]; then
+              echo '✅ index.html deployed successfully'
+
+              # Check file permissions
+              ls -la /var/www/$SUBDOMAIN/
+
+              # Test nginx configuration
+              echo '🧪 Testing nginx configuration...'
+              sudo nginx -t
+
+              # Reload nginx to ensure changes are active
+              echo '🔄 Reloading nginx...'
+              sudo systemctl reload nginx
+
+              echo '✅ Deployment verification completed successfully'
+            else
+              echo '❌ Error: index.html not found after deployment!'
+              exit 1
+            fi
+          "
+
