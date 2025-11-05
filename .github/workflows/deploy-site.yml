@@ -28,13 +28,13 @@ jobs:
           # Add server to known hosts
           ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
-          # Check if site2 directory exists
-          if [ ! -d "site2" ]; then
-            echo "❌ Error: site2 directory not found!"
+          # Check if site directory exists
+          if [ ! -d "site" ]; then
+            echo "❌ Error: site directory not found!"
             exit 1
           fi
 
-          # Deploy frontend (site2/ directory contents)
+          # Deploy frontend (site/ directory contents)
           echo "🌐 Deploying money site frontend..."
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
