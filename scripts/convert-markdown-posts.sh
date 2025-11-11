@@ -14,9 +14,17 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
     # Extract the date from the filename (e.g., 2025-01-15-my-post.md -> 2025-01-15)
     date=$(echo "$filename" | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}')
 
+    tags=$(sed -n '/^tags:/,/^.../p' "$md_file" | sed '1d;$d' | sed 's/^- //g' | tr '\n' ',' | sed 's/,$//')
+
     # Append to the recent posts HTML
     recent_posts_html+="<div style=\"margin: 10px 0;\">\n"
     recent_posts_html+="    <a href=\"$filename.html\">$date</a> $title\n"
+    recent_posts_html+="    <div class=\"tags\">\n"
+    IFS=','
+    for tag in $tags; do
+      recent_posts_html+="      <span class=\"tag\">$tag</span>\n"
+    done
+    recent_posts_html+="    </div>\n"
     recent_posts_html+="</div>\n"
 
     # Convert to HTML
