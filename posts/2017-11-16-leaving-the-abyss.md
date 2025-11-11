@@ -1,5 +1,5 @@
 ---
-title: Turbolinks: Leaving the Abyss
+title: "Turbolinks: Leaving the Abyss"
 tags:
 - 'turbolinks'
 - 'rails5'

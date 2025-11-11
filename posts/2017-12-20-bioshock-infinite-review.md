@@ -1,5 +1,5 @@
 ---
-title: Bioshock: Infinite Review
+title: "Bioshock: Infinite Review"
 tags:
 - gaming
 ...
