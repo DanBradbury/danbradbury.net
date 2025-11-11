@@ -30,7 +30,9 @@
                 Navigate: <span class="vim-keys">h</span> left, 
                 <span class="vim-keys">j</span> down, 
                 <span class="vim-keys">k</span> up, 
-                <span class="vim-keys">l</span> right
+                <span class="vim-keys">l</span> right, 
+                <span class="vim-keys">gg</span> top, 
+                <span class="vim-keys">G</span> bottom
             </div>
         </header>
 
@@ -195,10 +197,7 @@ dev@example.com
                     break;
                 case 'g':
                     if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
-                        if (e.shiftKey) { // G - go to bottom
-                            e.preventDefault();
-                            window.scrollTo(0, document.body.scrollHeight);
-                        } else if (lastKeyWasG) { // gg - go to top
+                        if (lastKeyWasG) { // gg - go to top
                             e.preventDefault();
                             window.scrollTo(0, 0);
                             lastKeyWasG = false;
@@ -206,6 +205,12 @@ dev@example.com
                             lastKeyWasG = true;
                             setTimeout(() => { lastKeyWasG = false; }, 500);
                         }
+                    }
+                    break;
+                case 'G':
+                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
+                        e.preventDefault();
+                        window.scrollTo(0, document.body.scrollHeight);
                     }
                     break;
                 case 'd':
