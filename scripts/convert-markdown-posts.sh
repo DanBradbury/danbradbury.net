@@ -31,8 +31,7 @@ done
 # Replace the "RECENT POSTS" section in index.html
 sed -i '/<h2 id="blog">RECENT POSTS<\/h2>/,/<\/div>/c\
 <h2 id="blog">RECENT POSTS</h2>\
-<div class="section">\
 '"$recent_posts_html"'\
-</div>' site/index.html
+' site/index.html
 
 echo "Updated RECENT POSTS section in site/index.html"
