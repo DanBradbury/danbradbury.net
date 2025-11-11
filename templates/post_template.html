@@ -601,6 +601,94 @@
         font-size: 14px;
     }
 }
+
+/* Image containment and modal styles */
+.content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.content img:hover {
+    border-color: var(--text-secondary);
+    box-shadow: 0 0 10px rgba(135, 255, 135, 0.3);
+}
+
+.content figure {
+    margin: 20px 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.content figure img {
+    margin: 0 auto;
+}
+
+/* Image modal */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    cursor: pointer;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.image-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    border: 2px solid var(--text-secondary);
+    box-shadow: 0 0 30px rgba(135, 255, 135, 0.5);
+}
+
+.image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: var(--text-primary);
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.image-modal-close:hover,
+.image-modal-close:focus {
+    color: var(--link-hover);
+}
+
+.image-modal-info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-dim);
+    background: var(--bg-primary);
+    padding: 10px 20px;
+    border: 1px solid var(--border-color);
+    font-size: 12px;
+}
     </style>
 </head>
 <body>
@@ -632,5 +720,48 @@
             </div>
         </footer>
     </div>
+
+    <!-- Image modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close">&times;</span>
+        <img class="image-modal-content" id="modalImage" alt="Expanded image">
+        <div class="image-modal-info">Click anywhere or press ESC to close</div>
+    </div>
+
+    <script>
+        // Image modal functionality
+        (function() {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const contentImages = document.querySelectorAll('.content img');
+            
+            // Add click handler to all content images
+            contentImages.forEach(function(img) {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                    modalImg.alt = this.alt || 'Expanded image';
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                });
+            });
+            
+            // Close modal on click
+            modal.addEventListener('click', function() {
+                closeModal();
+            });
+            
+            // Close modal on ESC key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    closeModal();
+                }
+            });
+            
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+        })();
+    </script>
 </body>
 </html>
