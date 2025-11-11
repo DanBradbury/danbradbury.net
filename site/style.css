@@ -334,3 +334,29 @@ h2 {
         padding: 8px;
     }
 }
+
+/* Search highlighting */
+.search-highlight {
+    background-color: #ffff00;
+    color: #000000;
+    padding: 0;
+}
+
+.search-highlight-current {
+    background-color: #ff8800;
+    color: #000000;
+    padding: 0;
+}
+
+/* Search input in status bar */
+.search-input {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: none;
+    outline: none;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    padding: 2px 5px;
+    width: auto;
+    min-width: 200px;
+}

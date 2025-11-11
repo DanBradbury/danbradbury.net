@@ -32,7 +32,8 @@
                 <span class="vim-keys">k</span> up, 
                 <span class="vim-keys">l</span> right, 
                 <span class="vim-keys">gg</span> top, 
-                <span class="vim-keys">G</span> bottom
+                <span class="vim-keys">G</span> bottom, 
+                <span class="vim-keys">/</span> search
             </div>
         </header>
 
@@ -179,8 +180,50 @@ dev@example.com
     </div>
 
     <script>
+        // Search state
+        let searchMode = false;
+        let searchQuery = '';
+        let searchMatches = [];
+        let currentMatchIndex = -1;
+        let originalContent = null;
+
         // Optional: Add vim-style keyboard navigation
         document.addEventListener('keydown', function(e) {
+            // Handle search mode
+            if (searchMode) {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    exitSearchMode();
+                    return;
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    jumpToNextMatch();
+                    return;
+                } else if (e.key === 'Backspace') {
+                    e.preventDefault();
+                    if (searchQuery.length > 0) {
+                        searchQuery = searchQuery.slice(0, -1);
+                        updateSearchInput();
+                        performSearch();
+                    }
+                    return;
+                } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    searchQuery += e.key;
+                    updateSearchInput();
+                    performSearch();
+                    return;
+                }
+                return;
+            }
+
+            // Enter search mode with /
+            if (e.key === '/' && !isInputFocused()) {
+                e.preventDefault();
+                enterSearchMode();
+                return;
+            }
+
             // Basic vim navigation keys
             switch(e.key) {
                 case 'j':
@@ -237,6 +280,181 @@ dev@example.com
                 activeElement.tagName === 'TEXTAREA' ||
                 activeElement.contentEditable === 'true'
             );
+        }
+
+        // Search functionality
+        function enterSearchMode() {
+            searchMode = true;
+            searchQuery = '';
+            searchMatches = [];
+            currentMatchIndex = -1;
+            
+            // Store original content
+            const container = document.querySelector('.container');
+            if (!originalContent) {
+                originalContent = container.innerHTML;
+            }
+            
+            updateStatusBar('/');
+        }
+
+        function exitSearchMode() {
+            searchMode = false;
+            searchQuery = '';
+            
+            // Clear highlights
+            if (originalContent) {
+                const container = document.querySelector('.container');
+                container.innerHTML = originalContent;
+                
+                // Reattach event listeners for smooth scrolling
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+                });
+            }
+            
+            // Reset status bar
+            updateStatusBar('NORMAL');
+        }
+
+        function updateSearchInput() {
+            updateStatusBar('/' + searchQuery);
+        }
+
+        function performSearch() {
+            if (searchQuery.length === 0) {
+                // Restore original content
+                if (originalContent) {
+                    const container = document.querySelector('.container');
+                    container.innerHTML = originalContent;
+                    
+                    // Reattach event listeners
+                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            const target = document.querySelector(this.getAttribute('href'));
+                            if (target) {
+                                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        });
+                    });
+                }
+                searchMatches = [];
+                currentMatchIndex = -1;
+                return;
+            }
+
+            const container = document.querySelector('.container');
+            
+            // Restore original content before searching
+            if (originalContent) {
+                container.innerHTML = originalContent;
+            }
+            
+            // Find and highlight all matches
+            searchMatches = [];
+            highlightSearchResults(container, searchQuery);
+            
+            // Reattach event listeners for smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+            
+            currentMatchIndex = -1;
+        }
+
+        function highlightSearchResults(element, query) {
+            const excludeTags = ['SCRIPT', 'STYLE', 'NOSCRIPT'];
+            
+            function traverse(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent;
+                    const lowerText = text.toLowerCase();
+                    const lowerQuery = query.toLowerCase();
+                    
+                    if (lowerText.includes(lowerQuery)) {
+                        const fragment = document.createDocumentFragment();
+                        let lastIndex = 0;
+                        let index = lowerText.indexOf(lowerQuery, lastIndex);
+                        
+                        while (index !== -1) {
+                            // Add text before match
+                            if (index > lastIndex) {
+                                fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+                            }
+                            
+                            // Add highlighted match
+                            const span = document.createElement('span');
+                            span.className = 'search-highlight';
+                            span.textContent = text.substring(index, index + query.length);
+                            fragment.appendChild(span);
+                            searchMatches.push(span);
+                            
+                            lastIndex = index + query.length;
+                            index = lowerText.indexOf(lowerQuery, lastIndex);
+                        }
+                        
+                        // Add remaining text
+                        if (lastIndex < text.length) {
+                            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                        }
+                        
+                        node.parentNode.replaceChild(fragment, node);
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE && !excludeTags.includes(node.tagName)) {
+                    const children = Array.from(node.childNodes);
+                    children.forEach(child => traverse(child));
+                }
+            }
+            
+            traverse(element);
+        }
+
+        function jumpToNextMatch() {
+            if (searchMatches.length === 0) {
+                return;
+            }
+            
+            // Remove current highlight
+            if (currentMatchIndex >= 0) {
+                searchMatches[currentMatchIndex].className = 'search-highlight';
+            }
+            
+            // Move to next match (wrap around)
+            currentMatchIndex = (currentMatchIndex + 1) % searchMatches.length;
+            
+            // Highlight current match
+            const currentMatch = searchMatches[currentMatchIndex];
+            currentMatch.className = 'search-highlight-current';
+            
+            // Scroll to current match
+            currentMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Update status bar with match count
+            updateStatusBar('/' + searchQuery + ' [' + (currentMatchIndex + 1) + '/' + searchMatches.length + ']');
+        }
+
+        function updateStatusBar(text) {
+            const statusLine = document.querySelector('.status-line');
+            const leftDiv = statusLine.querySelector('div:first-child');
+            
+            if (text.startsWith('/')) {
+                leftDiv.innerHTML = '<span class="mode-indicator">SEARCH</span><span style="margin-left: 10px;">' + text + '</span>';
+            } else {
+                leftDiv.innerHTML = '<span class="mode-indicator">' + text + '</span><span style="margin-left: 10px;">index.html</span>';
+            }
         }
 
         // Update status line position indicator
