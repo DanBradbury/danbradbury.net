@@ -96,7 +96,7 @@ h1 {
 }
 
 /* Links */
-a {
+a:not(.title-link) {
     color: var(--link-color);
     text-decoration: none;
     transition: all 0.2s ease;
@@ -108,12 +108,12 @@ a:hover {
     text-decoration: underline;
 }
 
-a:before {
+a:not(.title-link):before {
     content: '[';
     color: var(--text-dim);
 }
 
-a:after {
+a:not(.title):after {
     content: ']';
     color: var(--text-dim);
 }

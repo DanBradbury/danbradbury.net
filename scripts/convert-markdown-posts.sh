@@ -18,7 +18,7 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
 
     # Append to the recent posts HTML
     recent_posts_html+="<div style=\"margin: 10px 0;\">\n"
-    recent_posts_html+="    <a href=\"$filename.html\">$date</a> $title\n"
+    recent_posts_html+="    <a href=\"$filename.html\">$date</a> <a href=\"$filename.html\" class=\"title-link\">$title</a>\n"
     IFS=','
     for tag in $tags; do
       recent_posts_html+="  <span class=\"tag\">$tag</span>\n"
