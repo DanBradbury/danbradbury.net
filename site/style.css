@@ -95,6 +95,14 @@ h1 {
     gap: 5px;
 }
 
+.title-link {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+.title-link:hover {
+    font-weight: bold;
+}
+
 /* Links */
 a:not(.title-link) {
     color: var(--link-color);
@@ -102,7 +110,7 @@ a:not(.title-link) {
     transition: all 0.2s ease;
 }
 
-a:hover {
+a:not(.title-link):hover {
     color: var(--link-hover);
     background: var(--highlight-bg);
     text-decoration: underline;
@@ -113,7 +121,7 @@ a:not(.title-link):before {
     color: var(--text-dim);
 }
 
-a:not(.title):after {
+a:not(.title-link):after {
     content: ']';
     color: var(--text-dim);
 }
