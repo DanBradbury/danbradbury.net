@@ -1,6 +1,7 @@
+---
 title: Vimscript isn't bad. You are just dumb.
-----
-
+tags:
+...
 Today I'm here to talk about folks complaining without knowing anything. The topic for today will be vimscript / vimL.
 
 First let me share with you some of the stupidity I've been seeing lately on the internet.

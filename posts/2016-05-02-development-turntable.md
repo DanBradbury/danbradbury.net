@@ -1,8 +1,11 @@
-title: Development Turntable
-date: 2016-05-02 00:16:05 -0700
-comments: true
-categories: rants scrum development teams
 ---
+title: Development Turntable
+tags:
+- rants
+- scrum
+- development
+- teams
+...
 > And the turntable keeps on turnin' and turnin'
 > Nothing can fuck with the way it goes around
 > - Slug

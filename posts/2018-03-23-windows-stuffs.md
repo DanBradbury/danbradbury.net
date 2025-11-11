@@ -1,8 +1,9 @@
-title: Git Auth when Windows Credentials are Locked
-date: 2018-03-23 15:12:00 -0500
-comments: true
-categories: ['windows', 'git']
 ---
+title: Git Auth when Windows Credentials are Locked
+tags:
+- 'windows'
+- 'git'
+...
 Most Windows users won’t run into this problem because they don’t have a system administrator controlling their machine but for anyone who is experiencing weirdness while using `wincred` here’s a brief explanation of the problem + an easy fix to get things back up and running.
 
 The wincred issue that I was facing was anytime I ran powershell as a non-administrator I would be prompted for my Username/Password and rather than it being persisted I would get a fun CredWrite failed error and would be prompted again on each subsequent git related call. At first I was at a total loss and was running everything as an admin just to avoid that annoying prompt when trying to pull/push/etc. I finally decided enough is enough and started doing some digging on how windows creds were being persisted on my machine.

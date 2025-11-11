@@ -1,8 +1,13 @@
-title: Vim Tricks - Googling with keywordprg
-date: 2016-05-29 14:06:50 -0700
-comments: true
-categories: [ "vim", "keywordprogram", "various.txt", "workflow", "utility-belt", "vim-tricks"]
 ---
+title: Vim Tricks - Googling with keywordprg
+tags:
+- vim
+- keywordprogram
+- various.txt
+- workflow
+- utility-belt
+- vim-tricks
+...
 Most vim users are familiar with the man page lookup; `K` under the cursor or on visual selection. For anyone who needs a quick refrersher lets take a look at the help docs (`help :K`)
 
     K     Run a program to lookup the keyword under the

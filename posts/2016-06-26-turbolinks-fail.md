@@ -1,8 +1,10 @@
-title: Turbolinks and anchors
-date: 2016-06-26 14:11:09 -0700
-comments: true
-categories: ["turbolinks", "rails", "html"]
 ---
+title: Turbolinks and anchors
+tags:
+- turbolinks
+- rails
+- html
+...
 So far my journey with `turbolinks` hasn't been too bad; I write my slop and things work as I'd expect them to. I knew this streak of good luck was bound to come to an end at some point and today is the day.
 
 I had the misfortune of attempting to implement simple anchor tags. At first I thought I had made a typo but upon checking my code everything was fine. Another test and I noticed the damned `.turbolinks-progress-bar` appearing onclick. It was clear `turbolinks` had mistook my anchor link and was intercepting the click like it should be doing with other links. Things got strange when adding `data-no-turbolinks` yielded the same results..

@@ -1,8 +1,9 @@
-title: Unnecessary Noise in the Programming community
-date: 2016-12-04 23:22:32 -0800
-comments: true
-categories: internet, programming
 ---
+title: Unnecessary Noise in the Programming community
+tags:
+- internet
+- programming
+...
 Growing up on the internet I've always been aware of trolling and general BM that are associated with competetive gaming and message boards. Unfortunately I've been noticing similar behavior in more and more projects & programming community sites. It seems too common to run into a SO post with a comment section like this
 
 ![](http://i.imgur.com/4Lb3cSj.png)

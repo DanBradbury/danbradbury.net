@@ -1,3 +1,13 @@
+---
+title: Playing the Twitter-game
+tags:
+- browser-tricks
+- twitter
+- stingysmoker.com
+- utility belt
+- javascript
+- jquery
+...
 title: Playing the Twitter-game
 comments: true
 categories: [browser-tricks, twitter, stingysmoker.com, utility belt, javascript, jquery]

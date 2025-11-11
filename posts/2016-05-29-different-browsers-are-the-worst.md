@@ -1,8 +1,15 @@
-title: Different browsers are the worst
-date: 2016-05-23 14:16:23 -0700
-comments: true
-categories: ["web", "bootstrap", "css", "javascript", "FE", "browsers", "safari", "browser bugs"]
 ---
+title: Different browsers are the worst
+tags:
+- web
+- bootstrap
+- css
+- javascript
+- FE
+- browsers
+- safari
+- browser bugs
+...
 While working on a personal project I ran into an issue with a bootstrap navbar collapse. In my local testing everything went fine and I decided to push and hoped everything would behave properly.. I grab my iPhone 5 and take a look only to see that the dropdown is not working at all.
 
 After doing some googling I came across a [SO post](http://stackoverflow.com/questions/20960405/bootstrap-3-dropdown-on-ipad-not-working) that accurately described the shitty situation I found myself in (the dropdown working in all browsers (including IE) and failing on all iOS devices)

@@ -1,8 +1,8 @@
-title: Bioshock: Infinite Review
-date: 2017-12-01 01:00:30 -0800
-comments: true
-categories: ["gaming"]
 ---
+title: Bioshock: Infinite Review
+tags:
+- gaming
+...
 ![](https://images.greenmangaming.com/447e2620f77a42b1837bbda3b5db51d4/c05d3cc72e604469a613e59603deb590.jpg)
 The initial introduction to the underwater dystopian society of Rapture in the original Bioshock was something that I recommend every real gamer experience (even if you aren’t an FPS kind of person). The familiar themes of authoritarian rule and dark despair from the previous 2 installments make a return and should be a pleasant reminder of the previous roller coaster rides we’ve taken before.. **Nostalgically remembering Atlas**… if you don’t get that you should seriously sit down and play the first game (wait for Steam sale and buy all 3 games w/ remastered versions for < $15)
 

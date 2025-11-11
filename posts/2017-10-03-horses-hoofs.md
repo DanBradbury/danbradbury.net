@@ -1,8 +1,10 @@
-title: Horse's Hoofs - Sagely Errors
-date: 2017-10-03 00:27:14 -0700
-comments: true
-categories: ['daoism', 'zhangzi', 'philosophy']
 ---
+title: Horse's Hoofs - Sagely Errors
+tags:
+- 'daoism'
+- 'zhangzi'
+- 'philosophy'
+...
 Associated reading: [Zhuangzi - Horse's hoofs](http://ctext.org/zhuangzi/horsess-hoofs)
 
 **TLDRBWPIKWG;** The natural order is pretty chill but some "sagely dudes" threw a wrench in that real quick
