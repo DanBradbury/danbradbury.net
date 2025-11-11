@@ -15,6 +15,7 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
     date=$(echo "$filename" | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}')
 
     tags=$(sed -n '/^tags:/,/^.../p' "$md_file" | sed '1d;$d' | sed 's/^- //g' | tr '\n' ',' | sed 's/,$//')
+    echo "$tags"
 
     # Append to the recent posts HTML
     recent_posts_html+="<div style=\"margin: 10px 0;\">\n"
