@@ -8,7 +8,7 @@ for md_file in posts/*.md; do
     filename=$(basename "$md_file" .md)
 
     # Extract the first line of the Markdown file as the title
-    title=$(head -n 1 "$md_file" | sed 's/^# //') # Assumes the title is the first line starting with '# '
+    title=$(sed -n '2s/^title: //p' "$md_file")
 
     # Extract the date from the filename (e.g., 2025-01-15-my-post.md -> 2025-01-15)
     date=$(echo "$filename" | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}')
