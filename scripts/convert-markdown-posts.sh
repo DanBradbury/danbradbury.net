@@ -3,7 +3,8 @@
 # Convert all markdown files in /posts to HTML in /site
 recent_posts_html=""
 
-for md_file in posts/*.md; do
+# Sort markdown files in reverse order (newest to oldest)
+for md_file in $(ls -1 posts/*.md | sort -r); do
     # Get filename without path and extension
     filename=$(basename "$md_file" .md)
 
