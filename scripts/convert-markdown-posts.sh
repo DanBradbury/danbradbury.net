@@ -34,7 +34,10 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
     echo "Converted: $md_file -> site/${filename}.html"
 done
 
+# Escape special sed characters in the replacement string
+recent_posts_html_escaped=$(echo "$recent_posts_html" | sed 's/&/\\&/g')
+
 # Replace the "RECENT POSTS" section in index.html
-sed -i 's|PLACEHOLDER_FOR_POSTS|'"$recent_posts_html"'|' site/index.html
+sed -i 's|^        PLACEHOLDER_FOR_POSTS\r*$|'"$recent_posts_html_escaped"'|' site/index.html
 
 echo "Updated RECENT POSTS section in site/index.html"
