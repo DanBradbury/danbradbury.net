@@ -20,8 +20,6 @@ for md_file in posts/*.md; do
 
     # Convert to HTML
     pandoc "$md_file" \
-        --standalone \
-        --metadata title="$title" \
         --template=templates/post_template.html \
         --lua-filter=scripts/wrap_codeblocks.lua \
         -o "site/${filename}.html"

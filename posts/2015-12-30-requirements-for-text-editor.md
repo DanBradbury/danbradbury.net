@@ -1,6 +1,11 @@
-title: "Requirements for a Text Editor"
-categories: editors craftsmanship tooling
 ---
+title: "Requirements for a Text Editor"
+tags:
+- editors
+- craftsmanship
+- tooling
+...
+
 > These are my minimum requirements for a competent text editor. The list is meant to serve as a quick litmus test for true understanding of tooling in the craft of writing software.
 
 
