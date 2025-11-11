@@ -197,10 +197,7 @@ dev@example.com
                     break;
                 case 'g':
                     if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
-                        if (e.shiftKey) { // G - go to bottom
-                            e.preventDefault();
-                            window.scrollTo(0, document.body.scrollHeight);
-                        } else if (lastKeyWasG) { // gg - go to top
+                        if (lastKeyWasG) { // gg - go to top
                             e.preventDefault();
                             window.scrollTo(0, 0);
                             lastKeyWasG = false;
@@ -208,6 +205,12 @@ dev@example.com
                             lastKeyWasG = true;
                             setTimeout(() => { lastKeyWasG = false; }, 500);
                         }
+                    }
+                    break;
+                case 'G':
+                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
+                        e.preventDefault();
+                        window.scrollTo(0, document.body.scrollHeight);
                     }
                     break;
                 case 'd':
