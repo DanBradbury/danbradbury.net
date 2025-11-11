@@ -35,9 +35,6 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
 done
 
 # Replace the "RECENT POSTS" section in index.html
-sed -i '/<h2 id="blog">RECENT POSTS<\/h2>/,/<\/div>/c\
-<h2 id="blog">RECENT POSTS</h2>\
-'"$recent_posts_html"'\
-' site/index.html
+sed -i 's|PLACEHOLDER_FOR_POSTS|'"$recent_posts_html"'|' site/index.html
 
 echo "Updated RECENT POSTS section in site/index.html"
