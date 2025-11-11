@@ -1,5 +1,7 @@
+---
 title: The magic of Vim script
-----
+tags:
+...
 I've pulled a random bit of documentation from `:help matchadd` to show off some of the magic thats referenced in the docs.
 
 > Matching is case sensitive and magic, unless case sensitivity or magicness are explicitly overridden in {pattern}

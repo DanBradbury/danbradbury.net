@@ -1,3 +1,12 @@
+---
+title: Replacing Heroku
+tags:
+- heroku
+- digitalocean
+- droplet
+- graphite
+- statsD
+...
 categories: heroku digitalocean droplet graphite statsD
 ---
 For anyone still on Heroku and throwing addons at your application please stop and seriously reconsider what you are doing. Across the board things are getting a bit ridiculous for the average hobbyist / fincially conscious company. I used to be quite the Heroku fanboy but after my recent experience with Hosted Graphite I have changed my tone completely.

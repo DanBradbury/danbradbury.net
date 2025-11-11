@@ -1,4 +1,7 @@
-----
+---
+title: Stop Being Lazy And Learn Haml
+tags:
+...
 The desire to write familiar view code, similar to the same `html` you were writing to support your shitty LAMP apps is completely understandable but it's time to move on from the glory days..
 
 There seems to be this idea that using `erb` is "good enough" in all scenarios because so many of web devs are accustomed to seeing their old friend html.. As someone who knowingly opted out of using Haml because HTML always felt like option that would give me the most flexibility. Since the actual engine driving the browser has a simple set of responsibilites (*MASSIVE OVERSIMPLIFICATION*: fetch a document from a URL and render the contents of that document onto the page) the document that we are going to be providing to the browser's engine must adhere to standards that allow many browsers to function with their various implementations. Because of this fact debugging/learning a templating engine is actually a walk in the park if your HTML skills are as sharp as they should be..

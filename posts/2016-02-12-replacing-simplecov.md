@@ -1,3 +1,13 @@
+---
+title: Replacing SimpleCov
+tags:
+- ruby
+- testing
+- tdd
+- goliath
+- simplecov
+- coverage
+...
 title: Replacing SimpleCov
 categories: ruby, testing, tdd, goliath, simplecov, coverage
 ---

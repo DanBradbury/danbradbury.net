@@ -1,8 +1,10 @@
-title: Intercepting iOS Network Traffic on Mac
-date: 2017-09-11 14:13:18 -0700
-comments: true
-categories: wireshark, sniffing, recon
 ---
+title: Intercepting iOS Network Traffic on Mac
+tags:
+- wireshark
+- sniffing
+- recon
+...
 For the most part you are probably fine just using a solution like `mitmproxy` ([shown here](http://jasdev.me/intercepting-ios-traffic)) and sniffing HTTP/S traffic but sometimes there's a need to go deeper.. 
 
 When testing an application you may notice something like an in-game chat server "not sending any requests" (w/ mitmproxy) when we are posting a new message to the server / getting messages from other players. Luckily for us we have some better tools to dig into all network activity on the device!

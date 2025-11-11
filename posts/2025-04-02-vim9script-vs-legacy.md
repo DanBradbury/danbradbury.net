@@ -1,5 +1,7 @@
+---
 title: Vim9 Script
-----
+tags:
+...
 In my late night hours I've been doing some more digging into Vim internals and been lately interested in the performance gains and changes introduced by Vim9 script. I've been pleasently surprised by more and more features as I've gone through this journey of writing more Vim script for personal plugins (org mode port [pland.vim][], [copilot-chat.vim])
 
 Tonight I want to write-up a bit of an aha moment that I've had with modern Vim9 script and what we will call legacy vim script.. Might be a bit embarassing as an avid vim user who thought they knew things about how vim internals works but I had no idea that classes, interfaces, or new style functions is net new to Vim9 script. Time to sit down with some help docs and learn some things and leverage some of this goodness in my own projects
@@ -10,7 +12,6 @@ Why should people even care about Vim9 script when lua has seemingly become the 
 Bram lays it out pretty nicely in the beginning of the docs.
 ```
 :help vim9
-----
 1. What is Vim9 script?					*Vim9-script*
 
 Vim script has been growing over time, while preserving backwards

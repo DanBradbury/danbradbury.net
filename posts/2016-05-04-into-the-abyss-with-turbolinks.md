@@ -1,3 +1,9 @@
+---
+title: Into the Abyss with Turbolinks
+tags:
+- 'turbolinks'
+- 'rails'
+...
 title: Into the Abyss with Turbolinks
 comments: true
 categories: ['turbolinks', 'rails']

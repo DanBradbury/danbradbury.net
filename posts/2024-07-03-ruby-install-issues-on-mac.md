@@ -1,5 +1,7 @@
+---
 title: Ruby Install Issues on Mac
-----
+tags:
+...
 I love `rvm` but won't pretend that I don't have to fight with it to stay on the latest version of Ruby when using my mac.
 
 Here's an example that popped up when trying to work with the new [WriteBooks codebase](https://once.com/writebook) that was released the past week by the Basecamp team.

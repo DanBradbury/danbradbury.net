@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Convert all markdown files in /posts to HTML in /site
+recent_posts_html=""
+
+# Sort markdown files in reverse order (newest to oldest)
+for md_file in $(ls -1 posts/*.md | sort -r); do
+    # Get filename without path and extension
+    filename=$(basename "$md_file" .md)
+
+    # Extract the first line of the Markdown file as the title
+    title=$(sed -n '2s/^title: //p' "$md_file" | sed 's/^["'\'']\(.*\)["'\'']$/\1/')
+
+    # Extract the date from the filename (e.g., 2025-01-15-my-post.md -> 2025-01-15)
+    date=$(echo "$filename" | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}')
+
+    tags=$(awk '/^tags:/{flag=1; next} /^ *- /{if(flag) {gsub(/^- /,""); printf "%s,", $0}} /^ *[^- ]/{if(flag) {flag=0}} END{if(flag) printf "\b\n"}' "$md_file" | sed 's/,$//' | sed 's/["'\'']//g')
+
+    # Append to the recent posts HTML
+    recent_posts_html+="<div style=\"margin: 10px 0;\">\n"
+    recent_posts_html+="    <a href=\"$filename.html\">$date</a> <a href=\"$filename.html\" class=\"title-link\">$title</a>\n"
+    IFS=','
+    for tag in $tags; do
+      recent_posts_html+="  <span class=\"tag\">$tag</span>\n"
+    done
+    recent_posts_html+="</div>\n"
+
+    # Convert to HTML
+    pandoc "$md_file" \
+        --template=templates/post_template.html \
+        --lua-filter=scripts/wrap_codeblocks.lua \
+        -o "site/${filename}.html"
+
+    echo "Converted: $md_file -> site/${filename}.html"
+done
+
+# Replace the "RECENT POSTS" section in index.html
+sed -i 's|PLACEHOLDER_FOR_POSTS|'"$recent_posts_html"'|' site/index.html
+
+echo "Updated RECENT POSTS section in site/index.html"

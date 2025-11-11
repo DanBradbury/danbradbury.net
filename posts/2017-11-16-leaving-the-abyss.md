@@ -1,8 +1,9 @@
-title: Turbolinks: Leaving the Abyss
-date: 2017-11-16 18:45:13 -0800
-comments: true
-categories: ['turbolinks', 'rails5']
 ---
+title: "Turbolinks: Leaving the Abyss"
+tags:
+- 'turbolinks'
+- 'rails5'
+...
 Just trying to do things like
 
     <a href=”#” onclick=”alert(1)”>ZZZ</a>

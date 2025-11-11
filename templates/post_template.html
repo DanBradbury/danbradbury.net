@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$title$</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #262626;
+            --text-primary: #87ff87;
+            --text-secondary: #5fd75f;
+            --text-dim: #5f875f;
+            --link-color: #87afff;
+            --link-hover: #afd7ff;
+            --border-color: #444444;
+            --highlight-bg: #3a3a3a;
+            --code-bg: #0c0c0c;
+            --string-color: #ff87ff;
+            --comment-color: #7f7f7f;
+            --keyword-color: #ffaf5f;
+            --number-color: #ff5f87;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80ch;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Header Section */
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .breadcrumb a {
+            color: var(--link-color);
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: normal;
+            text-align: center;
+            margin: 15px 0;
+            text-transform: uppercase;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: var(--text-dim);
+            font-size: 12px;
+            margin: 10px 0;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .meta-label {
+            color: var(--text-dim);
+        }
+
+        .meta-value {
+            color: var(--text-secondary);
+        }
+
+        /* Separator */
+        .separator {
+            color: var(--text-dim);
+            margin: 15px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .toc-title {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .toc-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc-list li {
+            margin: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .toc-list li:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--text-dim);
+        }
+
+        .toc-list li.subsection {
+            padding-left: 40px;
+        }
+
+        .toc-list li.subsection:before {
+            left: 20px;
+        }
+
+        /* Links */
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--link-hover);
+            background: var(--highlight-bg);
+            text-decoration: underline;
+        }
+
+        a:before {
+            content: '[';
+            color: var(--text-dim);
+        }
+
+        a:after {
+            content: ']';
+            color: var(--text-dim);
+        }
+
+        /* Content Styling */
+        .content {
+            margin: 30px 0;
+            padding-bottom: 30px;
+        }
+
+        .content h2 {
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: normal;
+            margin: 30px 0 15px 0;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .content h3 {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: normal;
+            margin: 20px 0 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .content h3:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--text-dim);
+        }
+
+        .content p {
+            margin: 15px 0;
+            text-align: justify;
+            padding-left: 20px;
+        }
+
+        .content blockquote {
+            border-left: 2px solid var(--text-dim);
+            margin: 20px 0;
+            padding-left: 20px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .content ul, .content ol {
+            margin: 15px 0;
+            padding-left: 40px;
+        }
+
+        .content li {
+            margin: 8px 0;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .code-block:before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            color: var(--text-dim);
+            padding: 2px 8px;
+            font-size: 11px;
+            border-left: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Syntax highlighting */
+        .keyword { color: var(--keyword-color); }
+        .string { color: var(--string-color); }
+        .comment { color: var(--comment-color); }
+        .number { color: var(--number-color); }
+        .function { color: var(--link-color); }
+
+        /* Inline code */
+        code {
+            background: var(--bg-secondary);
+            padding: 2px 4px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .tag {
+            background: var(--bg-primary);
+            color: var(--text-dim);
+            padding: 3px 8px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tag:before,
+        .tag:after {
+            content: '';
+        }
+
+        /* Navigation */
+        .post-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-prev, .nav-next {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-label {
+            color: var(--text-dim);
+            font-size: 11px;
+        }
+
+        /* Related posts */
+        .related {
+            margin: 30px 0;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .related-title {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .related-list {
+            list-style: none;
+        }
+
+        .related-list li {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .related-date {
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        /* Status line */
+        .status-line {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--text-secondary);
+            color: var(--bg-primary);
+            padding: 5px 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mode-indicator {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2px 5px;
+        }
+
+        /* Line numbers for code blocks */
+        .line-numbers {
+            display: inline-block;
+            color: var(--text-dim);
+            margin-right: 10px;
+            user-select: none;
+            text-align: right;
+            min-width: 30px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+                padding: 10px;
+                padding-bottom: 40px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 16px;
+            }
+
+            .content h2 {
+                font-size: 14px;
+                padding: 6px;
+            }
+
+            .content h3 {
+                font-size: 13px;
+            }
+
+            .content p {
+                padding-left: 10px;
+                text-align: left;
+            }
+
+            .code-block {
+                font-size: 11px;
+                padding: 10px;
+            }
+
+            .toc-list li {
+                padding-left: 15px;
+            }
+
+            .toc-list li.subsection {
+                padding-left: 30px;
+            }
+
+            .toc-list li.subsection:before {
+                left: 15px;
+            }
+
+            .post-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .status-line {
+                font-size: 11px;
+                padding: 3px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+
+            h1 {
+                font-size: 14px;
+            }
+
+            .content h2 {
+                font-size: 13px;
+            }
+
+            code {
+                font-size: 11px;
+            }
+
+            .code-block {
+                font-size: 10px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .status-line, .post-nav, .toc {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+        }
+/* Enhanced ordered list styling */
+.content ol {
+    margin: 20px 0;
+    padding-left: 0;
+    counter-reset: vim-counter;
+    list-style: none;
+    padding: 15px 20px;
+}
+
+.content ol > li {
+    counter-increment: vim-counter;
+    margin: 15px 0;
+    padding-left: 40px;
+    position: relative;
+}
+
+.content ol > li:before {
+    content: counter(vim-counter) ".";
+    position: absolute;
+    left: 0;
+    color: var(--text-secondary);
+    font-weight: bold;
+    font-size: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+}
+
+/* Nested unordered lists within ordered lists */
+.content ol ul {
+    margin: 10px 0;
+    padding-left: 20px;
+    background: var(--code-bg);
+    border-left: 2px solid var(--border-color);
+    padding: 10px 20px;
+    margin-left: -20px;
+}
+
+.content ol ul li {
+    color: var(--text-primary);
+    margin: 8px 0;
+    position: relative;
+    list-style: none;
+}
+
+.content ol ul li:before {
+    content: "▪";
+    position: absolute;
+    left: -15px;
+    color: var(--text-dim);
+}
+
+/* Images within lists */
+.content ol img,
+.content ul img {
+    display: block;
+    margin: 15px auto;
+    max-width: 100%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    padding: 5px;
+}
+
+/* Code elements within lists */
+.content ol code,
+.content ul code {
+    background: var(--bg-primary);
+    padding: 2px 6px;
+    color: var(--link-color);
+    border: 1px solid var(--border-color);
+    font-size: 13px;
+}
+
+/* Alternative style option - "Terminal Output" style */
+.content ol.terminal-style {
+    background: var(--code-bg);
+    font-family: 'Courier New', monospace;
+    padding: 20px;
+    border: 1px solid var(--text-secondary);
+}
+
+.content ol.terminal-style > li:before {
+    content: "[" counter(vim-counter) "]";
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    width: auto;
+    height: auto;
+    font-size: 14px;
+}
+
+/* Highlight on hover for better interactivity */
+.content ol > li:hover {
+    background: rgba(135, 255, 135, 0.05);
+    transition: background 0.2s ease;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .content ol {
+        padding: 10px 15px;
+    }
+
+    .content ol > li {
+        padding-left: 35px;
+    }
+
+    .content ol > li:before {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="title-bar">
+                <span>post.txt</span>
+                <span>For version 2025.1</span>
+                <span>Last change: 2025 Jan</span>
+            </div>
+
+            <h1>$title$</h1>
+
+        </header>
+
+        <article class="content">
+          $body$
+        </article>
+
+        <div class="tags">
+          $for(tags)$
+            <span class="tag">$tags$</span>
+          $endfor$
+        </div>
+
+        <footer class="footer">
+            <div>
+                vim:tw=78:ts=8:ft=help:norl: | <a href="/">Home</a> | <a href="/posts">All Posts</a> | <a href="/feed.xml">RSS</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

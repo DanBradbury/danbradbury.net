@@ -1,8 +1,11 @@
-title: Twitter Gaming: Tweepi.com Functionality Rip
-date: 2018-01-05 21:15:15 -0800
-comments: true
-categories: ['twitter', 'tweepi', 'javascript', 'python']
 ---
+title: "Twitter Gaming: Tweepi.com Functionality Rip"
+tags:
+- 'twitter'
+- 'tweepi'
+- 'javascript'
+- 'python'
+...
 There are plenty of twitter management tools out that will help automate / manage your twitter account for a few bucks a month.
 
 While most products don't add too much value I've found some particular features on Tweepi.com that have been pretty helpful. In particular there's a stat called `Follower Ratio` which lets you know how likely a user is to follow you back; > 80% is a user thats probably worth following (and unfollowing later once we have a healthy count..will lose some followers from bot automation but majority of real users won't unfollow back)

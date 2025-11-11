@@ -1,5 +1,7 @@
+---
 title: Deploying with Kamal
-----
+tags:
+...
 After seeing the costs from 2 months of ECS running on my personal AWS account it was time to tryout something that doesn’t cost more than $15 a month to get a minimalist website up and running (this personal site)
 
 I had listened to a podcast from DHH where he was talking about the simplicity of something like Kamal to become the out-of-box way for Rails 8 to provide deploy capabilities. The high-level sell goes as follows;
