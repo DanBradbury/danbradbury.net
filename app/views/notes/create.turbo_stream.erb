@@ -1,4 +1,0 @@
-<%= turbo_stream.prepend "note_list", partial: "notes/note", locals: { note: @note } %>
-<%= turbo_stream.update Note.new, "" %>
-
-<%= turbo_stream.update "new_note_section", ""  %>

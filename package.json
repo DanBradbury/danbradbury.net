@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@hotwired/stimulus": "^3.2.2",
-    "@rails/actiontext": "^7.2.200",
-    "trix": "^2.1.8"
-  }
-}
