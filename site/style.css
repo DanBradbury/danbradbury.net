@@ -369,3 +369,7 @@ h2 {
     width: auto;
     min-width: 200px;
 }
+
+.project-link {
+  text-decoration: none;
+}
