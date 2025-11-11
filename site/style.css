@@ -200,6 +200,7 @@ h2 {
 /* Footer */
 .footer {
     margin-top: 40px;
+    padding-bottom: 20px;
     padding-top: 20px;
     border-top: 1px solid var(--border-color);
     text-align: center;
