@@ -1,8 +1,15 @@
+---
+title: Connecting to Wifi on Amtrak
+tags:
+- 'travel'
+- 'wifi'
+- 'browser'
+- 'wev'
+...
 title: Connecting to Wifi on Amtrak
 date: 2017-11-17 13:01:18 -0800
 comments: true
 categories: ['travel', 'wifi', 'browser', 'wev']
-----
 > I wrote this post a few months ago when I was stuck on a train and figured I'd publish it before it gets lost forever.
 
 Today I bring you the pain in the ass process I went through to get a really shitty connection on my Amtrak ride

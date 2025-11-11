@@ -1,8 +1,9 @@
-title: Ixalan Draft #1
-date: 2017-11-21 14:12:27 -0800
-comments: true
-categories: ["MTG", "Friday Night Magic"]
 ---
+title: Ixalan Draft #1
+tags:
+- MTG
+- Friday Night Magic
+...
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
 ### Black/Blue/White Deck

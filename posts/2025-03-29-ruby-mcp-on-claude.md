@@ -1,5 +1,7 @@
+---
 title: "Simple" Ruby MCP Setup
-----
+tags:
+...
 After seeing the [Blender MCP](https://github.com/ahujasid/blender-mcp) I was curious enough to get a pro subscription to Claude and try hooking it up and start to get my hands dirty with what MCPs are / what implementation looked like.
 
 Javascript, Python, Go, C# all have officially supported SDKs but of course no such love for Ruby. Because the spec is controlled by Anthropic it makes sense but we are left to figure things out as a second class citizen.

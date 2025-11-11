@@ -1,4 +1,7 @@
-----
+---
+title: Thoughts On Heroku
+tags:
+...
 After deploying over 10 applications with Heroku I think that I can finally make a fair assessment on the general developer / Heroku relationship.
 
 After watching an excellent talk by Matz at Waza (link at the bottom) I was taken aback by how much he seemed to respect Heroku's ability to support the developer that wants to build. Heroku's use of  AWS to anyone to standup a system to run their code at no cost is an absolutely stunning accomplishment .
