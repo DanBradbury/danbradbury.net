@@ -13,6 +13,62 @@
     }
 
     :root {
+        /* Solarized color scheme from vim config */
+        --base03: #002b36;
+        --base02: #073642;
+        --base01: #586e75;
+        --base00: #657b83;
+        --base0: #839496;
+        --base1: #93a1a1;
+        --base2: #eee8d5;
+        --base3: #fdf6e3;
+        --yellow: #b58900;
+        --orange: #cb4b16;
+        --red: #dc322f;
+        --magenta: #d33682;
+        --violet: #6c71c4;
+        --blue: #268bd2;
+        --cyan: #2aa198;
+        --green: #719e07;
+        
+        /* Semantic color mappings - Default: Solarized Dark */
+        --bg-primary: var(--base03);
+        --bg-secondary: var(--base02);
+        --text-primary: var(--base0);
+        --text-secondary: var(--base1);
+        --text-dim: var(--base01);
+        --link-color: var(--blue);
+        --link-hover: var(--cyan);
+        --border-color: var(--base01);
+        --highlight-bg: var(--base02);
+    }
+
+    /* Theme variations */
+    [data-theme="solarized-dark"] {
+        --bg-primary: #002b36;
+        --bg-secondary: #073642;
+        --text-primary: #839496;
+        --text-secondary: #93a1a1;
+        --text-dim: #586e75;
+        --link-color: #268bd2;
+        --link-hover: #2aa198;
+        --border-color: #586e75;
+        --highlight-bg: #073642;
+    }
+
+    [data-theme="solarized-light"] {
+        --bg-primary: #fdf6e3;
+        --bg-secondary: #eee8d5;
+        --text-primary: #657b83;
+        --text-secondary: #586e75;
+        --text-dim: #93a1a1;
+        --link-color: #268bd2;
+        --link-hover: #2aa198;
+        --border-color: #93a1a1;
+        --highlight-bg: #eee8d5;
+    }
+
+    [data-theme="terminal-green"] {
         --bg-primary: #1c1c1c;
         --bg-secondary: #262626;
         --text-primary: #87ff87;
@@ -239,8 +295,8 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: var(--text-secondary);
-        color: var(--bg-primary);
+        background: var(--green);
+        color: var(--base03);
         padding: 5px 20px;
         font-size: 12px;
         display: flex;
@@ -249,8 +305,8 @@
     }
 
     .mode-indicator {
-        background: var(--bg-primary);
-        color: var(--text-primary);
+        background: var(--base03);
+        color: var(--base0);
         padding: 2px 5px;
     }
 
@@ -354,14 +410,14 @@
 
     /* Search highlighting */
     .search-highlight {
-        background-color: #ffff00;
-        color: #000000;
+        background-color: var(--yellow);
+        color: var(--base03);
         padding: 0;
     }
 
     .search-highlight-current {
-        background-color: #ff8800;
-        color: #000000;
+        background-color: var(--orange);
+        color: var(--base03);
         padding: 0;
     }
 
@@ -381,9 +437,120 @@
     .project-link {
       text-decoration: none;
     }
+
+    /* Theme Switcher */
+    .theme-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        cursor: pointer;
+    }
+
+    .theme-dot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--border-color);
+        background: linear-gradient(135deg, var(--bg-primary) 50%, var(--text-primary) 50%);
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-dot:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .theme-menu {
+        position: absolute;
+        top: 35px;
+        right: 0;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 160px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-menu.active {
+        display: flex;
+    }
+
+    .theme-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 8px;
+        cursor: pointer;
+        border-radius: 3px;
+        transition: background 0.2s ease;
+    }
+
+    .theme-option:hover {
+        background: var(--highlight-bg);
+    }
+
+    .theme-option-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1px solid var(--border-color);
+        flex-shrink: 0;
+    }
+
+    .theme-option-name {
+        color: var(--text-primary);
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .theme-option.active .theme-option-name {
+        color: var(--link-color);
+        font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+        .theme-switcher {
+            top: 10px;
+            right: 10px;
+        }
+        
+        .theme-dot {
+            width: 20px;
+            height: 20px;
+        }
+
+        .theme-menu {
+            min-width: 140px;
+        }
+    }
     </style>
 </head>
 <body>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <div class="theme-dot" id="themeDot"></div>
+        <div class="theme-menu" id="themeMenu">
+            <div class="theme-option" data-theme="solarized-dark">
+                <div class="theme-option-dot" style="background: linear-gradient(135deg, #002b36 50%, #839496 50%);"></div>
+                <span class="theme-option-name">Solarized Dark</span>
+            </div>
+            <div class="theme-option" data-theme="solarized-light">
+                <div class="theme-option-dot" style="background: linear-gradient(135deg, #fdf6e3 50%, #657b83 50%);"></div>
+                <span class="theme-option-name">Solarized Light</span>
+            </div>
+            <div class="theme-option" data-theme="terminal-green">
+                <div class="theme-option-dot" style="background: linear-gradient(135deg, #1c1c1c 50%, #87ff87 50%);"></div>
+                <span class="theme-option-name">Terminal Green</span>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <header class="header">
             <div class="title-bar">
@@ -529,6 +696,62 @@
     </div>
 
     <script>
+        // Theme Switcher
+        const themes = {
+            'solarized-dark': {
+                bg: '#002b36',
+                text: '#839496'
+            },
+            'solarized-light': {
+                bg: '#fdf6e3',
+                text: '#657b83'
+            },
+            'terminal-green': {
+                bg: '#1c1c1c',
+                text: '#87ff87'
+            }
+        };
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'solarized-dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update active theme option
+        function updateActiveTheme(themeName) {
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.toggle('active', option.dataset.theme === themeName);
+            });
+        }
+        
+        updateActiveTheme(savedTheme);
+
+        // Theme switcher toggle
+        const themeDot = document.getElementById('themeDot');
+        const themeMenu = document.getElementById('themeMenu');
+        
+        themeDot.addEventListener('click', function(e) {
+            e.stopPropagation();
+            themeMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!themeMenu.contains(e.target) && e.target !== themeDot) {
+                themeMenu.classList.remove('active');
+            }
+        });
+
+        // Theme selection
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const theme = this.dataset.theme;
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateActiveTheme(theme);
+                themeMenu.classList.remove('active');
+            });
+        });
+
         // Search state
         let searchMode = false;
         let searchQuery = '';
