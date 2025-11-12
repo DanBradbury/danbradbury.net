@@ -23,7 +23,7 @@
     --cyan: #2aa198;
     --green: #719e07;
     
-    /* Semantic color mappings */
+    /* Semantic color mappings - Default: Solarized Dark */
     --bg-primary: var(--base03);
     --bg-secondary: var(--base02);
     --text-primary: var(--base0);
@@ -33,6 +33,43 @@
     --link-hover: var(--cyan);
     --border-color: var(--base01);
     --highlight-bg: var(--base02);
+}
+
+/* Theme variations */
+[data-theme="solarized-dark"] {
+    --bg-primary: #002b36;
+    --bg-secondary: #073642;
+    --text-primary: #839496;
+    --text-secondary: #93a1a1;
+    --text-dim: #586e75;
+    --link-color: #268bd2;
+    --link-hover: #2aa198;
+    --border-color: #586e75;
+    --highlight-bg: #073642;
+}
+
+[data-theme="solarized-light"] {
+    --bg-primary: #fdf6e3;
+    --bg-secondary: #eee8d5;
+    --text-primary: #657b83;
+    --text-secondary: #586e75;
+    --text-dim: #93a1a1;
+    --link-color: #268bd2;
+    --link-hover: #2aa198;
+    --border-color: #93a1a1;
+    --highlight-bg: #eee8d5;
+}
+
+[data-theme="terminal-green"] {
+    --bg-primary: #1c1c1c;
+    --bg-secondary: #262626;
+    --text-primary: #87ff87;
+    --text-secondary: #5fd75f;
+    --text-dim: #5f875f;
+    --link-color: #87afff;
+    --link-hover: #afd7ff;
+    --border-color: #444444;
+    --highlight-bg: #3a3a3a;
 }
 
 body {
