@@ -5,15 +5,34 @@
 }
 
 :root {
-    --bg-primary: #1c1c1c;
-    --bg-secondary: #262626;
-    --text-primary: #87ff87;
-    --text-secondary: #5fd75f;
-    --text-dim: #5f875f;
-    --link-color: #87afff;
-    --link-hover: #afd7ff;
-    --border-color: #444444;
-    --highlight-bg: #3a3a3a;
+    /* Solarized color scheme from vim config */
+    --base03: #002b36;
+    --base02: #073642;
+    --base01: #586e75;
+    --base00: #657b83;
+    --base0: #839496;
+    --base1: #93a1a1;
+    --base2: #eee8d5;
+    --base3: #fdf6e3;
+    --yellow: #b58900;
+    --orange: #cb4b16;
+    --red: #dc322f;
+    --magenta: #d33682;
+    --violet: #6c71c4;
+    --blue: #268bd2;
+    --cyan: #2aa198;
+    --green: #719e07;
+    
+    /* Semantic color mappings */
+    --bg-primary: var(--base03);
+    --bg-secondary: var(--base02);
+    --text-primary: var(--base0);
+    --text-secondary: var(--base1);
+    --text-dim: var(--base01);
+    --link-color: var(--blue);
+    --link-hover: var(--cyan);
+    --border-color: var(--base01);
+    --highlight-bg: var(--base02);
 }
 
 body {
@@ -231,8 +250,8 @@ h2 {
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--text-secondary);
-    color: var(--bg-primary);
+    background: var(--green);
+    color: var(--base03);
     padding: 5px 20px;
     font-size: 12px;
     display: flex;
@@ -241,8 +260,8 @@ h2 {
 }
 
 .mode-indicator {
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: var(--base03);
+    color: var(--base0);
     padding: 2px 5px;
 }
 
@@ -346,14 +365,14 @@ h2 {
 
 /* Search highlighting */
 .search-highlight {
-    background-color: #ffff00;
-    color: #000000;
+    background-color: var(--yellow);
+    color: var(--base03);
     padding: 0;
 }
 
 .search-highlight-current {
-    background-color: #ff8800;
-    color: #000000;
+    background-color: var(--orange);
+    color: var(--base03);
     padding: 0;
 }
 
