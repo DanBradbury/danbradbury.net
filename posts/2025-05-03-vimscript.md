@@ -10,7 +10,7 @@ I want to talk about folks complaining without knowing anything. The topic for t
 
 There has been a lot of stupidity around vimscript lately and I wanted to just share one that triggered this post.
 
-![image](https://github.com/user-attachments/assets/1aec4e6c-d662-44bc-b484-3952b49159ea)
+![](https://github.com/user-attachments/assets/1aec4e6c-d662-44bc-b484-3952b49159ea)
 
 He is right that vimscript (pre vim8 / right around the `nvim` fork) was not in a great place. At the time Bram was not working full-time on Vim but was clear about his goals and direction for the language for vim8 and beyond. If you haven't read the plans for vim8/9 my last post covered the vision that Bram had for the language and addressing the legitimate concerns with the state of the language and modernizing it for a new generation of developers.
 
