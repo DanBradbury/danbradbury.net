@@ -1,19 +1,22 @@
 ---
 title: Vimscript isn't bad. You are just dumb.
 tags:
+    - vim
+    - vimscript
+    - viml
+    - vim9script
 ...
-Today I'm here to talk about folks complaining without knowing anything. The topic for today will be vimscript / vimL.
+I want to talk about folks complaining without knowing anything. The topic for today will be vimscript / vimL and particularly vim9script.
 
-First let me share with you some of the stupidity I've been seeing lately on the internet.
+There has been a lot of stupidity around vimscript lately and I wanted to just share one that triggered this post.
 
 ![image](https://github.com/user-attachments/assets/1aec4e6c-d662-44bc-b484-3952b49159ea)
 
-He is right that vimscript did become a mess (pre vim8) and right around the time of the `nvim` fork. At the time Bram was not working full-time on Vim and was very clear about his goals and direction for the language. Unfortunately the nvim wave was already in full-swing and it became vogue to bash vim users while claiming LUA was the future of plugin writing.
+He is right that vimscript (pre vim8 / right around the `nvim` fork) was not in a great place. At the time Bram was not working full-time on Vim but was clear about his goals and direction for the language for vim8 and beyond. If you haven't read the plans for vim8/9 my last post covered the vision that Bram had for the language and addressing the legitimate concerns with the state of the language and modernizing it for a new generation of developers.
 
-Unfortunately I think nvim folks have never taken a step back and think about what they are doing / all the things they are ignoring with the advancements in vim8 & 9.
+Unfortunately the `nvim` wave was already in full-swing and it became vogue to bash vim users while claiming LUA was the future of plugin writing. Nvim folks have been living in their bubble without much consideration for where Bram left the original project that started this all. Rather than having constructive conversations on the future of vim/nvim we have decided that the split is too far gone; vim9 features never made it into nvim and many never will.
 
-The reason I write this is a lot of the "tech influencers" are jobbers. They write JS and vimscript scares them. These people's opinions should not be trusted + is further invalidated by their lack of knowledge and relentless desire to dunk on classic vim folks.
 
-As someone who's written vimscript for 10+ years I'd like to think I am far more qualified to have this conversation then the tech influencer community who starts to shake when they see `a:args`.. people love dunking on variable scoping in vim but seem to forget vim9 got rid of all the headaches you faced before. Chances are these folks have never written in vimscript and are the folks who are too scared to learn new languages/
+The desire to dunk on classic vim users and continue the lie that vimscript is terrible is just lame. I'd be surprisded if the folks who are bashing vimscript have written compliant vim9script, used vim8-popups, or any features introduced nearly 10 years ago in vim 8.0 (async, jobs, lambdas)
 
-[MORE COMING]
+As someone who's written vimscript for 10+ years I'd like to think I am far more qualified to have this conversation then the tech influencer community who starts to shake when they see `a:args`.. people love dunking on variable scoping in vim but don't know vim9 got rid of all that. When you are writing plugin code there is an expectation that you have to understand quite a bit of the underworkings to effectively make things happen. Vimscript is not `python` or `javascript` where you use whatever library will magically solve your problem with a clean DSL; it is a specific language for a very specific purpose and it does it well.
