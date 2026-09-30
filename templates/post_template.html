@@ -29,12 +29,11 @@
         <header class="post-header">
             <div class="breadcrumb"><a href="./">~</a>/<a href="./#posts">posts</a>/<span class="file">$if(file)$$file$$else$post$endif$.md</span></div>
             <h1>$title$</h1>
-            <div class="post-meta">
 $if(date)$
+            <div class="post-meta">
                 <span><span class="label">date:</span> <time datetime="$date$">$date$</time></span>
-$endif$
-                <span><span class="label">author:</span> Dan Bradbury</span>
             </div>
+$endif$
         </header>
 
         <article class="content">
