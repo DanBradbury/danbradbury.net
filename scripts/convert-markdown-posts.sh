@@ -32,6 +32,8 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
     pandoc "$md_file" \
         --template=templates/post_template.html \
         --lua-filter=scripts/wrap_codeblocks.lua \
+        --syntax-definition=scripts/syntax/vim.xml \
+        --syntax-definition=scripts/syntax/haml.xml \
         --metadata date="$date" \
         --variable file="$filename" \
         -o "site/${filename}.html"

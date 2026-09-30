@@ -35,56 +35,60 @@ As a note Coverage will pickup **any** file that has been required after `do ::s
 
 Since we don't have any intention of supporting `JRuby` we should be able to use `Coverage` as is for our `CrudeCov` example. Let's start off with the `#start` and `#print_result`(used after our test suite finishes)
 
-    module CrudeCov
-      class << self
-        def start
-          @filelist = []
-          Coverage.start
-        end
-
-        def print_result
-          cov_results = Coverage.result
-
-          root = File.dirname(__FILE__)[0..-6]
-          filelist = [
-            "./app/apis/untested_endpoint.rb",
-            "./app/apis/covered_endpoint.rb"
-          ]
-
-          filelist.each do |file|
-            # process file results
-            # coverage results returns Array([1,0,..,nil,3] where val = # of times line was hit & size = # of lines)
-            # this makes for easy matching when creating the pretty html result file
-            file_results = cov_results[file]
-            results = file_results.compact.sort # remove all nil entries & sort to help with calculations
-
-            puts "Results for: #{file}"
-            total_lines = (results.length*1.00).to_f
-            covered_lines = total_lines-results.find_index(1)
-            percentage = (covered_lines/total_lines).round(2)*100
-            puts "#{percentage}% Covered (#{covered_lines} of #{total_lines} Lines Covered)"
-          end
-
-          # create html for easy viewing outside of shell
-        end
-      end
+```ruby
+module CrudeCov
+  class << self
+    def start
+      @filelist = []
+      Coverage.start
     end
+
+    def print_result
+      cov_results = Coverage.result
+
+      root = File.dirname(__FILE__)[0..-6]
+      filelist = [
+        "./app/apis/untested_endpoint.rb",
+        "./app/apis/covered_endpoint.rb"
+      ]
+
+      filelist.each do |file|
+        # process file results
+        # coverage results returns Array([1,0,..,nil,3] where val = # of times line was hit & size = # of lines)
+        # this makes for easy matching when creating the pretty html result file
+        file_results = cov_results[file]
+        results = file_results.compact.sort # remove all nil entries & sort to help with calculations
+
+        puts "Results for: #{file}"
+        total_lines = (results.length*1.00).to_f
+        covered_lines = total_lines-results.find_index(1)
+        percentage = (covered_lines/total_lines).round(2)*100
+        puts "#{percentage}% Covered (#{covered_lines} of #{total_lines} Lines Covered)"
+      end
+
+      # create html for easy viewing outside of shell
+    end
+  end
+end
+```
 
 Our `CrudeCov` module above is pretty straightforward and covers our basic needs of (1)Having a one-line call to add to our `spec_helper`, and (2) a print method that we can call after our suite is finished running (ideally the module would figure out which test framework is being used and ensure that the hook is made to print results at the end of the suite). With the example above we will have to explicityly ensure that the `print_result` method is called.
 
 Assuming that we are testing with `RSpec` our `spec_helper` will look something like this
 
-    require 'crudecov'
+```ruby
+require 'crudecov'
 
-    CrudeCov.start
-    # require project files..
+CrudeCov.start
+# require project files..
 
-    Rspec.configure do |config|
-      # your other config..
-      config.after(:suite) do
-        CrudeCov.print_result
-      end
-    end
+Rspec.configure do |config|
+  # your other config..
+  config.after(:suite) do
+    CrudeCov.print_result
+  end
+end
+```
 
 With that basic setup you will get a print out of the coverage percentages for all files that have been included in the `filelist`. In less than 30 lines of code we were able to have an incredibly simple coverage module that we could use in a project to sanity check a file that may potentially lacking coverage or confirm proper testing. From that simple example you can start to see how a project like `simplecov` would come into being and how something as simple as `CrudeCov` could become a full ruby coverage suite.
 

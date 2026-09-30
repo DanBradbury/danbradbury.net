@@ -67,29 +67,33 @@ As long as we can replay this request then we should be able to come up with a c
 ## Building the Request for Replay
 And a little bit of request fiddling as we figure out what headers are necessary we go from..
 
-    import requests
-    response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList":"foo","offset":0,"limit":25},
-    headers={
-    "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",
-    "X-Requested-With": "angular",
-    "X-Tab-Id": "7166",
-    "Content-Type": "application/json;charset=utf-8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Cookie": "c111990290-79992ic=c232338-43784-319745; c111990290-280953ic=c232338-43784-574953; tr2=1; tweepiapp=slqi3ldt8upm8oitf17eke44k2; kvcd=1514838972500; km_ai=G8OrOVIF0YFYftSnBsF7Qgi8aoM%3D; km_lv=x; km_vs=1"
-    })
-    response.content
+```python
+import requests
+response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList":"foo","offset":0,"limit":25},
+headers={
+"X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",
+"X-Requested-With": "angular",
+"X-Tab-Id": "7166",
+"Content-Type": "application/json;charset=utf-8",
+"Accept-Language": "en-US,en;q=0.5",
+"Accept": "application/json, text/plain, */*",
+"Accept-Encoding": "gzip, deflate, br",
+"Cookie": "c111990290-79992ic=c232338-43784-319745; c111990290-280953ic=c232338-43784-574953; tr2=1; tweepiapp=slqi3ldt8upm8oitf17eke44k2; kvcd=1514838972500; km_ai=G8OrOVIF0YFYftSnBsF7Qgi8aoM%3D; km_lv=x; km_vs=1"
+})
+response.content
+```
 
 to
 
-    import requests
-    response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList":"tonishabusch281","offset":0,"limit":20},
-    headers={
-    "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",
-    "Cookie": "tr2=1; tweepiapp=slqi3ldt8upm8oitf17eke44k2;"
-    })
-    response.content
+```python
+import requests
+response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList":"tonishabusch281","offset":0,"limit":20},
+headers={
+"X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",
+"Cookie": "tr2=1; tweepiapp=slqi3ldt8upm8oitf17eke44k2;"
+})
+response.content
+```
 
 ![](https://i.imgur.com/xWaTOXU.gif)
 and we now can have some fun
@@ -97,77 +101,81 @@ and we now can have some fun
 ## Creating Twitter User Check List
 The first thing is to get a list of potential users that we would want to follow. We can use the follower page from accounts that are well established. Since we don't want to scroll for days let's use a simple scroll function that we can turn off / control with the conditional. Once we have all the user nodes loaded we can run the second chunk of code to build a comma seperated user list that we will use in our python script; you'll notice a `copyToClipboard` function at the end which allows us to easily select the entire list since `console.log` is disabled on Twitter and returns will be truncated.
 
-    // scroll until we see all users
-    var count = 0;
-    function st(){
-      $("html, body").animate({ scrollTop: $(document).height() }, "fast");
-      if(count < 2000) {
-        count += 1;
-        setTimeout(st, 500);
-      }
-    }
-    st()
-    // then set count=999999
+```javascript
+// scroll until we see all users
+var count = 0;
+function st(){
+  $("html, body").animate({ scrollTop: $(document).height() }, "fast");
+  if(count < 2000) {
+    count += 1;
+    setTimeout(st, 500);
+  }
+}
+st()
+// then set count=999999
 
-    // XXX: done since console.log is taken over.. cute but not going to stop us
-    // create a div element and append twitter names to it (formatted for copy pasta in script above)
-    document.body.innerHTML += '<div id="userlist"></div>';
-    var eles = document.querySelectorAll('b.u-linkComplex-target');
-    for(var i=4; i<eles.length-5;i++) {
-      document.getElementById('userlist').innerHTML += eles[i].innerHTML+',';
-    }
+// XXX: done since console.log is taken over.. cute but not going to stop us
+// create a div element and append twitter names to it (formatted for copy pasta in script above)
+document.body.innerHTML += '<div id="userlist"></div>';
+var eles = document.querySelectorAll('b.u-linkComplex-target');
+for(var i=4; i<eles.length-5;i++) {
+  document.getElementById('userlist').innerHTML += eles[i].innerHTML+',';
+}
 
-    // console should print out the goodies when exiting the for loop but just in case
-    // never occured to me that something so simple would do the trick :D
-    // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
-    function copyToClipboard(text) {
-      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
-    }
-    copyToClipboard(document.getElementById('userlist').innerHTML)
+// console should print out the goodies when exiting the for loop but just in case
+// never occured to me that something so simple would do the trick :D
+// https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+function copyToClipboard(text) {
+  window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+}
+copyToClipboard(document.getElementById('userlist').innerHTML)
+```
 
 and it works like a charm! 🎉
 ![](https://i.imgur.com/36OKK6H.png)
 
 From there it's time to use that user list inside a python script that will allow us to slam that endpoint as a free user. Since I don't have a premium account there's a limit of 25 users per bulk update, 500 for premium users.. maybe we can get around this somehow... but for now the script does the trick. In addition to updating the list we will most likely need to get a new valid tweepi session which will require us to change the `tweepiapp` value in the `Cookie` header.
 
-    import requests
-    import time
-    import json
+```python
+import requests
+import time
+import json
 
-    def chunks(l, n):
-        for i in range(0, len(l), n):
-            yield l[i:i + n]
+def chunks(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 
-    n = "INSERT_COPY_HERE"
-    names = n.split(',')
-    split_names = list(chunks(names, 25))
+n = "INSERT_COPY_HERE"
+names = n.split(',')
+split_names = list(chunks(names, 25))
 
-    count = 0
-    high_prop_users = [] # will use this to store "valuable" users
-    # XXX: why manage valid array index when you can try catch all the things... terrible terrible terrible but whatever im tired
-    try:
-      while True:
-        name_list = ','.join(str(x) for x in split_names[count])
-        response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList": name_list,"offset":0,"limit":25},
-        headers={
-          "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",
-          "Cookie": "tr2=1; tweepiapp=7tk8us7lj933i743l4mos51q10;"
-        })
-        if '!doctype html' in str(response.content):
-          print('TRY AGAIN')
-        else:
-          parsed_response = json.loads(response.content)
-          users_info = parsed_response['users']
-          for user in users_info:
-            follow_ratio = user['followers_count']/user['friends_count']
-            if follow_ratio > 0.8:
-              high_prop_users.append(user['screen_name'])
-              print('INSERTED')
-          time.sleep(2)
-        print('-----------------------------------------')
-    except:
-      print(high_prop_users)
-      exit(0)
+count = 0
+high_prop_users = [] # will use this to store "valuable" users
+# XXX: why manage valid array index when you can try catch all the things... terrible terrible terrible but whatever im tired
+try:
+  while True:
+    name_list = ','.join(str(x) for x in split_names[count])
+    response = requests.post("https://tweepi.com/data/get_users_pp/follow_by_copy_paste.json",params={"userSnList": name_list,"offset":0,"limit":25},
+    headers={
+      "X-Authorization": "ZnJlZTpncmlkLmZvbGxvd0J5Q29weVBhc3RlOjk0NjM0Mjg0MzYwMTI0ODI2MQ==",
+      "Cookie": "tr2=1; tweepiapp=7tk8us7lj933i743l4mos51q10;"
+    })
+    if '!doctype html' in str(response.content):
+      print('TRY AGAIN')
+    else:
+      parsed_response = json.loads(response.content)
+      users_info = parsed_response['users']
+      for user in users_info:
+        follow_ratio = user['followers_count']/user['friends_count']
+        if follow_ratio > 0.8:
+          high_prop_users.append(user['screen_name'])
+          print('INSERTED')
+      time.sleep(2)
+    print('-----------------------------------------')
+except:
+  print(high_prop_users)
+  exit(0)
+```
 
 Now that we have our final list of users we want to follow we just need another Javascript snippet to properly follow all those users.
 
@@ -175,18 +183,20 @@ Now that we have our final list of users we want to follow we just need another 
 
 ![](https://i.imgur.com/mSFhONe.png)
 
-    // assign id to twitter handle for easy access using the list we built up
-    var names = document.querySelectorAll('.u-linkComplex-target')
-    for(var i=4;i<names.length-5;i++) {
-      names[i].id = names[i].innerHTML.trimLeft(); // important to trim the random spacing in the div..
-    }
+```javascript
+// assign id to twitter handle for easy access using the list we built up
+var names = document.querySelectorAll('.u-linkComplex-target')
+for(var i=4;i<names.length-5;i++) {
+  names[i].id = names[i].innerHTML.trimLeft(); // important to trim the random spacing in the div..
+}
 
-    // follow everyone in our magic list
-    st = ['**', ..., '**']
-    for(var i=0;i<st.length-1;i++) {
-      // sitting in console with a beer is definitely the best way to do this..
-      $($(document.getElementById(st[i])).parent().parent().parent().parent().siblings()[1]).find('.user-actions-follow-button').click();
-    }
+// follow everyone in our magic list
+st = ['**', ..., '**']
+for(var i=0;i<st.length-1;i++) {
+  // sitting in console with a beer is definitely the best way to do this..
+  $($(document.getElementById(st[i])).parent().parent().parent().parent().siblings()[1]).find('.user-actions-follow-button').click();
+}
+```
 
 Using those 2 Javascript snipped and the hacky Python script we can succssfully re-create the functionality that Tweepi wants us to pay $9.99 a month for.
 

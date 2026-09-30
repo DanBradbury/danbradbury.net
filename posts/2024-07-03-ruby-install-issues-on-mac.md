@@ -53,7 +53,7 @@ In file included from ./ossl.h:175:
 
 For those who know SSL is a pain in the ass on Mac and you will need to pass additional arguments to get the compilation to work correctly.. `TS_VERIFY_CTS_set_certs` was removed in the latest version of OpenSSL (3 is current). To combat this we need to run the following and use the 1.x version we have on our machine
 
-```
+```bash
 rvm install "ruby-3.3.1" --with-openssl-dir=$(brew --prefix openssl@1.1)
 ```
 

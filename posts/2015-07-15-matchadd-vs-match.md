@@ -32,7 +32,9 @@ To visualize a list of all available highlight groups you can use `:highlight`. 
 
 Using that information we could use any one of the groups and apply a match in our current buffer. Let's take a look at using the `ErrorMsg` highlight group to match the entire contents of a line.
 
-    :match ErrorMsg /\%13l/
+```vim
+:match ErrorMsg /\%13l/
+```
 
 If you have not used `match` before take a moment now to play around with it in your own vim session and get a feel for how vim reacts to all different types of scenarios. Which match takes priority when running consecutive matches on the same pattern?
 

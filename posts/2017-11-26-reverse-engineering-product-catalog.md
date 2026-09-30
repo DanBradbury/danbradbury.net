@@ -74,19 +74,21 @@ After reading the docs for [`getReadableDatabase`](https://developer.android.com
 ### Hooking and Winning
 Without getting too tangential Xposed is great and the [documentation is outstanding for anyone interesting in getting started](https://github.com/rovo89/XposedBridge/wiki/Development-tutorial). If the development tutorial is not enough the content online was more than enough to clear up any potential blockers.
 
-    public class Main implements IXposedHookLoadPackage {
-        public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
-            findAndHookMethod("com.****.core.db.DBHelper", lpparam.classLoader, "createAndGetDBPath", Context.class, String.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    XposedBridge.log("Hooked em': DBHelper#createAndGetDBPath ");
-                    XposedBridge.log("----------------------------------------");
-                    XposedBridge.log(param.args[1].toString());
-                    XposedBridge.log("----------------------------------------");
-                }
-            });
-        }
+```java
+public class Main implements IXposedHookLoadPackage {
+    public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+        findAndHookMethod("com.****.core.db.DBHelper", lpparam.classLoader, "createAndGetDBPath", Context.class, String.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("Hooked em': DBHelper#createAndGetDBPath ");
+                XposedBridge.log("----------------------------------------");
+                XposedBridge.log(param.args[1].toString());
+                XposedBridge.log("----------------------------------------");
+            }
+        });
     }
+}
+```
 
 We load our hook module, reboot our device and when we rerun the app we see something beautiful in the logs
 
@@ -97,9 +99,11 @@ We load our hook module, reboot our device and when we rerun the app we see some
 
 Now I should be able to
 
-    Sqlcipher rippedDB.db
-    PRAGMA key=”base64masterKey==”
-    .tables
+```sql
+Sqlcipher rippedDB.db
+PRAGMA key=”base64masterKey==”
+.tables
+```
 
 And get something other than `file is encrypted or not a database`. Unfortunately this didn’t work on my machine and I thought I was getting juked out and went to bed.
 

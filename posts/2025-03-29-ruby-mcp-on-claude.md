@@ -65,7 +65,7 @@ sudo ln -s /Users/danbradbury/.rvm/gems/ruby-3.3.4/wrappers/ruby /usr/local/bin/
 
 ### Debugging Server Issues
 All you are looking for it the system specific Claude desktop install (same location where configuration is changed) and tail the `mcp.log`
-```
+```bash
 tail -f c:\Users\YOU\AppData\Roaming\Claude\logs\mcp.log
 ```
 

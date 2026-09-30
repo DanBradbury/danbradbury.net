@@ -6,7 +6,9 @@ tags:
 ...
 Just trying to do things like
 
-    <a href=”#” onclick=”alert(1)”>ZZZ</a>
+```html
+<a href=”#” onclick=”alert(1)”>ZZZ</a>
+```
 
 Expected behavior here?.. Scroll to top of the page right? Not if turbolinks is doing its thang.
 

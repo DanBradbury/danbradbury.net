@@ -5,7 +5,8 @@ function CodeBlock(el)
   if #classes > 0 then lang = classes[1] end
 
   local attrs = {}
-  if lang then attrs["data-lang"] = lang end
+  local labels = { rhtml = "erb", viml = "vim" }
+  if lang then attrs["data-lang"] = labels[lang] or lang end
 
   return pandoc.Div({el}, pandoc.Attr("", {"code-block"}, attrs))
 end

@@ -16,7 +16,9 @@ Connect your device
 Open up iTunes, select the device, and copy the UDID (might have to click on serial number to get to it)
 ## Create new interface
 
-    rvictl -s YOUR_UDID
+```bash
+rvictl -s YOUR_UDID
+```
 
 The command should SUCCEED and you will see your new interface (eg. `rvi0`)
 

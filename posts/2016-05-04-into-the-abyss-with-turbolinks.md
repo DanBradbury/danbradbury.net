@@ -26,15 +26,17 @@ And this is where it starts to get fun.. I just stumbled upon a bug that reared 
 
 Imagine we are using [`typeahead.js`](https://twitter.github.io/typeahead.js/) we want to go ahead and initialize our typeahead input on a given page. Here's what the JS might look like
 
-    $('#searchBar .typeahead').typeahead({
-      hint: true,
-      highlight: true,
-      minLength: 2
-    },
-    {
-      name: 'estados',
-      source: matcher(items)
-    });
+```javascript
+$('#searchBar .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 2
+},
+{
+  name: 'estados',
+  source: matcher(items)
+});
+```
 
 A pretty harmless call that you are probably going to copy paste in to try the first time you mess with `typeahead.js`. It works and you move on.. But be careful because `turbolinks` will give you some intereseting behaviour if we navigate between the page that has this piece of JS and another page. .
 
@@ -42,11 +44,13 @@ A pretty harmless call that you are probably going to copy paste in to try the f
 
 I figure we can just handle global state a little better than your typical inline JS would. To do this we simply wrap the initializer in a conditional to verify the number of typeahead divs that are present on the screen. With proper naming we should be able to expand this approach to multiple typeahead instances.
 
-    if($('.typeahead.tt-input').size() < 1) {
-      $('#searchBar .typeahead').typeahead({
-        ...
-      }
-    }
+```javascript
+if($('.typeahead.tt-input').size() < 1) {
+  $('#searchBar .typeahead').typeahead({
+    ...
+  }
+}
+```
 
 With that extra check we are able to handle the global state that turbolinks will create when natrually navigating and attempting to speed up our page.
 

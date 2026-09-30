@@ -15,6 +15,8 @@ There are a few snippets to override the default behavior that could prove usefu
 
 Because I don't mind writing an `onclick` for the links I'll probably implement something like this for a similar effect
 
-    $('html, body').animate({scrollTop: $('#anchor').offset().top}, 'slow')
+```javascript
+$('html, body').animate({scrollTop: $('#anchor').offset().top}, 'slow')
+```
 
 I'm definitely disappointed in `turbolinks` for failing me on this instance but will continue on this less travelled mysterious path DHH wants me to believe in.

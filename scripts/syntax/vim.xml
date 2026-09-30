@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language>
+<!-- Minimal Vim script (legacy + Vim9) grammar for pandoc/skylighting. -->
+<language name="Vim" alternativeNames="viml;vimscript;vim9script" section="Scripts" extensions="*.vim;*.viml;.vimrc;_vimrc" version="1" kateversion="5.0" license="MIT">
+  <highlighting>
+    <list name="keywords">
+      <item>if</item><item>elseif</item><item>else</item><item>endif</item>
+      <item>for</item><item>endfor</item><item>while</item><item>endwhile</item>
+      <item>in</item><item>try</item><item>catch</item><item>finally</item><item>endtry</item>
+      <item>throw</item><item>return</item><item>break</item><item>continue</item>
+      <item>function</item><item>endfunction</item><item>func</item><item>endfunc</item>
+      <item>fu</item><item>endf</item><item>def</item><item>enddef</item>
+      <item>class</item><item>endclass</item><item>interface</item><item>endinterface</item>
+      <item>enum</item><item>endenum</item><item>abstract</item><item>static</item>
+      <item>export</item><item>import</item><item>vim9script</item><item>legacy</item>
+      <item>let</item><item>unlet</item><item>const</item><item>var</item><item>final</item>
+      <item>call</item><item>execute</item><item>exe</item><item>normal</item><item>norm</item>
+      <item>echo</item><item>echom</item><item>echomsg</item><item>echoerr</item>
+      <item>set</item><item>setlocal</item><item>setglobal</item>
+      <item>autocmd</item><item>au</item><item>augroup</item><item>command</item><item>com</item>
+      <item>highlight</item><item>hi</item><item>syntax</item><item>syn</item>
+      <item>match</item><item>mat</item><item>source</item><item>runtime</item>
+      <item>map</item><item>noremap</item><item>nnoremap</item><item>inoremap</item>
+      <item>vnoremap</item><item>xnoremap</item><item>onoremap</item><item>cnoremap</item>
+      <item>tnoremap</item><item>nmap</item><item>imap</item><item>vmap</item><item>xmap</item>
+      <item>help</item><item>abort</item><item>range</item><item>dict</item><item>closure</item>
+    </list>
+    <list name="constants">
+      <item>true</item><item>false</item><item>null</item><item>v:true</item><item>v:false</item><item>v:null</item>
+    </list>
+    <list name="types">
+      <item>number</item><item>string</item><item>bool</item><item>float</item>
+      <item>list</item><item>dict</item><item>any</item><item>void</item><item>blob</item>
+      <item>func</item><item>job</item><item>channel</item>
+    </list>
+    <contexts>
+      <context name="Normal" attribute="Normal Text" lineEndContext="#stay">
+        <DetectSpaces />
+        <RegExpr attribute="Comment" context="Comment" String="^\s*(&quot;|#(?!\{))" />
+        <RegExpr attribute="Comment" context="Comment" String="#(\s.*)?$" />
+        <DetectChar attribute="String" context="SingleString" char="'" />
+        <DetectChar attribute="String" context="DoubleString" char="&quot;" />
+        <RegExpr attribute="Variable" context="#stay" String="\b[gslabwtv]:[A-Za-z_][A-Za-z0-9_#]*" />
+        <RegExpr attribute="Variable" context="#stay" String="&amp;[lg]?:?[a-z]+" />
+        <RegExpr attribute="Variable" context="#stay" String="@[a-z&quot;*+:/-]" />
+        <RegExpr attribute="Special" context="#stay" String="&lt;[A-Za-z][A-Za-z0-9-]*&gt;" />
+        <RegExpr attribute="Special" context="#stay" String="\*[A-Za-z0-9_-]+\*" />
+        <RegExpr attribute="Number" context="#stay" String="\b(0x[0-9A-Fa-f]+|\d+(\.\d+)?)\b" />
+        <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Constant" context="#stay" String="constants" />
+        <keyword attribute="Type" context="#stay" String="types" />
+        <RegExpr attribute="Function" context="#stay" String="\b[A-Za-z_][A-Za-z0-9_#.:]*(?=\()" />
+        <RegExpr attribute="Operator" context="#stay" String="[-+*/%=!&lt;&gt;.|&amp;?]+" />
+      </context>
+      <context name="SingleString" attribute="String" lineEndContext="#pop">
+        <Detect2Chars attribute="String" context="#stay" char="'" char1="'" />
+        <DetectChar attribute="String" context="#pop" char="'" />
+      </context>
+      <context name="DoubleString" attribute="String" lineEndContext="#pop">
+        <RegExpr attribute="Special" context="#stay" String="\\." />
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+      <context name="Comment" attribute="Comment" lineEndContext="#pop" />
+    </contexts>
+    <itemDatas>
+      <itemData name="Normal Text" defStyleNum="dsNormal" />
+      <itemData name="Keyword" defStyleNum="dsKeyword" />
+      <itemData name="Type" defStyleNum="dsDataType" />
+      <itemData name="Constant" defStyleNum="dsConstant" />
+      <itemData name="Function" defStyleNum="dsFunction" />
+      <itemData name="Variable" defStyleNum="dsVariable" />
+      <itemData name="Number" defStyleNum="dsDecVal" />
+      <itemData name="String" defStyleNum="dsString" />
+      <itemData name="Special" defStyleNum="dsSpecialChar" />
+      <itemData name="Operator" defStyleNum="dsOperator" />
+      <itemData name="Comment" defStyleNum="dsComment" />
+    </itemDatas>
+  </highlighting>
+  <general>
+    <comments>
+      <comment name="singleLine" start="&quot;" />
+    </comments>
+    <keywords casesensitive="1" />
+  </general>
+</language>

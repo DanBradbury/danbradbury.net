@@ -81,7 +81,7 @@ NewFoo('test')
 
 Also good to callout that this is the laziest port from `function` to `def` but we have additional abilities that should be leveraged by Vim9 script writers; arg and return types are a win.
 
-```
+```vim
 def Foo(thing: string, count: number): bool
   var a = 1 + count
   return true
@@ -92,7 +92,7 @@ enddef
 ![image](https://github.com/user-attachments/assets/f3bad698-c81c-4c2e-93e4-b464c002db39)
 
 Assume we have the following simple function
-```
+```vim
 def Thing()
   var a = 1
   echo a

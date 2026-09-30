@@ -662,6 +662,7 @@ code span.pp, code span.im { color: #ff9e80; }                         /* prepro
 code span.ex, code span.ot { color: #8fd3a8; }                         /* extension, other */
 code span.al, code span.er { color: #ff6b6b; font-weight: 700; }       /* alert, error */
 code span.wa  { color: #ffb86b; font-style: italic; }                  /* warning */
+code.rhtml span.er { color: #c7a4ff; font-weight: 400; }              /* ERB grammar marks HTML attributes as errors */
 
 /* --------------------------------------------------------------------------
    Footer

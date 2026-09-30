@@ -18,7 +18,9 @@ The guy was apparently using a `<a>` tag without the `href` attribute which woul
 
 My original (almost functional code) trigger looks like this
 
-    <span class="glyphicon glyphicon-menu-hamburger navbar-toggle" "style"="color:white;", "data-toggle"= "collapse", "data-target"=".navbar-collapse" />
+```html
+<span class="glyphicon glyphicon-menu-hamburger navbar-toggle" "style"="color:white;", "data-toggle"= "collapse", "data-target"=".navbar-collapse" />
+```
 
 Can you spot what's missing with this simple `data-toggle`? It turns out you need to add `cursor: pointer` to the style of whatever the element might be..
 
