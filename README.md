@@ -6,6 +6,10 @@ Static website for my personal website [danbradbury.net](https://danbradbury.net
 
 This is a static site that converts markdown blog posts to HTML using pandoc and deploys them via GitHub Actions.
 
+- `site/style.css` — shared theme (terminal/Vim look in Oregon Duck green `#154733` & yellow `#FEE123`) used by the home page and every post
+- `site/vim.js` — shared Vim keybindings (`j`/`k`, `gg`/`G`, `Ctrl-d`/`Ctrl-u`, `/` search with `n`/`N`), statusline position, and image zoom
+- `templates/post_template.html` — pandoc template for posts
+
 ## Deployment
 
 The site is automatically deployed via the `.github/workflows/deploy-site.yml` workflow on every push.

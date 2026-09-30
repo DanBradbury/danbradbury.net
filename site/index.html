@@ -3,1070 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>~/dev/docs</title>
+    <title>Dan Bradbury — Principal Software Engineer</title>
+    <meta name="description" content="Dan Bradbury — Principal Software Engineer in Sacramento, CA. Writing about Vim, Ruby, infrastructure and building things.">
+    <meta name="theme-color" content="#154733">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23154733'/%3E%3Cpath d='M8 10l6 6-6 6' stroke='%23fee123' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='16' y='20' width='9' height='3' rx='1' fill='%23fee123'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap">
     <link rel="stylesheet" href="style.css">
-    <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    :root {
-        /* Solarized color scheme from vim config */
-        --base03: #002b36;
-        --base02: #073642;
-        --base01: #586e75;
-        --base00: #657b83;
-        --base0: #839496;
-        --base1: #93a1a1;
-        --base2: #eee8d5;
-        --base3: #fdf6e3;
-        --yellow: #b58900;
-        --orange: #cb4b16;
-        --red: #dc322f;
-        --magenta: #d33682;
-        --violet: #6c71c4;
-        --blue: #268bd2;
-        --cyan: #2aa198;
-        --green: #719e07;
-        
-        /* Semantic color mappings - Default: Solarized Dark */
-        --bg-primary: var(--base03);
-        --bg-secondary: var(--base02);
-        --text-primary: var(--base0);
-        --text-secondary: var(--base1);
-        --text-dim: var(--base01);
-        --link-color: var(--blue);
-        --link-hover: var(--cyan);
-        --border-color: var(--base01);
-        --highlight-bg: var(--base02);
-    }
-
-    /* Theme variations */
-    [data-theme="solarized-dark"] {
-        --bg-primary: #002b36;
-        --bg-secondary: #073642;
-        --text-primary: #839496;
-        --text-secondary: #93a1a1;
-        --text-dim: #586e75;
-        --link-color: #268bd2;
-        --link-hover: #2aa198;
-        --border-color: #586e75;
-        --highlight-bg: #073642;
-    }
-
-    [data-theme="solarized-light"] {
-        --bg-primary: #fdf6e3;
-        --bg-secondary: #eee8d5;
-        --text-primary: #657b83;
-        --text-secondary: #586e75;
-        --text-dim: #93a1a1;
-        --link-color: #268bd2;
-        --link-hover: #2aa198;
-        --border-color: #93a1a1;
-        --highlight-bg: #eee8d5;
-    }
-
-    [data-theme="terminal-green"] {
-        --bg-primary: #1c1c1c;
-        --bg-secondary: #262626;
-        --text-primary: #87ff87;
-        --text-secondary: #5fd75f;
-        --text-dim: #5f875f;
-        --link-color: #87afff;
-        --link-hover: #afd7ff;
-        --border-color: #444444;
-        --highlight-bg: #3a3a3a;
-    }
-
-    body {
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 14px;
-        line-height: 1.4;
-        background-color: var(--bg-primary);
-        color: var(--text-primary);
-        padding: 20px;
-        min-height: 100vh;
-    }
-
-    .container {
-        max-width: 80ch;
-        margin: 0 auto;
-        width: 100%;
-    }
-
-    /* Header Section */
-    .header {
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-
-    .title-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        flex-wrap: wrap;
-        gap: 10px;
-        color: var(--text-dim);
-        font-size: 12px;
-        margin-bottom: 10px;
-    }
-
-    h1 {
-        color: var(--text-primary);
-        font-size: 16px;
-        font-weight: normal;
-        text-align: center;
-        margin: 15px 0;
-    }
-
-    .vim-keys {
-        display: inline-block;
-        background: var(--bg-secondary);
-        padding: 2px 4px;
-        border: 1px solid var(--border-color);
-        border-radius: 2px;
-        color: var(--text-secondary);
-        font-size: 12px;
-    }
-
-    /* Separator */
-    .separator {
-        color: var(--text-dim);
-        margin: 15px 0;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    /* Navigation/Quick Reference */
-    .quick-nav {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        padding: 10px;
-        margin: 20px 0;
-    }
-
-    .quick-nav-title {
-        color: var(--text-secondary);
-        margin-bottom: 8px;
-    }
-
-    .nav-items {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 5px;
-    }
-
-    .title-link {
-        color: var(--text-primary);
-        text-decoration: underline;
-    }
-    .title-link:hover {
-        font-weight: bold;
-    }
-
-    /* Links */
-    a:not(.title-link):not(.project-link) {
-        color: var(--link-color);
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    a:not(.title-link):not(.project-link):hover {
-        color: var(--link-hover);
-        background: var(--highlight-bg);
-        text-decoration: underline;
-    }
-
-    a:not(.title-link):not(.project-link):before {
-        content: '[';
-        color: var(--text-dim);
-    }
-
-    a:not(.title-link):not(.project-link):after {
-        content: ']';
-        color: var(--text-dim);
-    }
-
-    /* Section Headers */
-    h2 {
-        color: var(--text-primary);
-        font-size: 14px;
-        font-weight: normal;
-        margin: 20px 0 10px 0;
-        padding: 5px;
-        background: var(--bg-secondary);
-        border-left: 3px solid var(--text-secondary);
-    }
-
-    /* Content Sections */
-    .section {
-        margin: 20px 0;
-        padding-left: 20px;
-    }
-
-    .section-item {
-        margin: 8px 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .item-label {
-        color: var(--text-dim);
-        min-width: 100px;
-    }
-
-    .item-content {
-        flex: 1;
-        min-width: 200px;
-    }
-
-    /* Project Cards */
-    .project-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 15px;
-        margin: 20px 0;
-    }
-
-    .project-card {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        padding: 10px;
-        transition: all 0.2s ease;
-    }
-
-    .project-card:hover {
-        border-color: var(--text-secondary);
-        background: var(--highlight-bg);
-    }
-
-    .project-name {
-        color: var(--text-primary);
-        margin-bottom: 5px;
-    }
-
-    .project-desc {
-        color: var(--text-dim);
-        font-size: 12px;
-        margin-bottom: 8px;
-    }
-
-    .project-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-
-    .tag {
-        background: var(--bg-primary);
-        color: var(--text-dim);
-        padding: 2px 5px;
-        font-size: 11px;
-        border: 1px solid var(--border-color);
-    }
-
-    /* Footer */
-    .footer {
-        margin-top: 40px;
-        padding-bottom: 20px;
-        padding-top: 20px;
-        border-top: 1px solid var(--border-color);
-        text-align: center;
-        color: var(--text-dim);
-        font-size: 12px;
-    }
-
-    /* Command prompt style elements */
-    .prompt {
-        color: var(--text-secondary);
-    }
-
-    .prompt:before {
-        content: '$ ';
-    }
-
-    /* Status line */
-    .status-line {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: var(--green);
-        color: var(--base03);
-        padding: 5px 20px;
-        font-size: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .mode-indicator {
-        background: var(--base03);
-        color: var(--base0);
-        padding: 2px 5px;
-    }
-
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-        body {
-            font-size: 13px;
-            padding: 10px;
-        }
-
-        .container {
-            max-width: 100%;
-        }
-
-        .nav-items {
-            grid-template-columns: 1fr;
-        }
-
-        .section {
-            padding-left: 10px;
-        }
-
-        .section-item {
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .item-label {
-            min-width: auto;
-        }
-
-        .project-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .status-line {
-            font-size: 11px;
-            padding: 3px 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Reduce separator on mobile */
-        .separator {
-            font-size: 10px;
-        }
-    }
-
-    /* Small mobile adjustments */
-    @media (max-width: 480px) {
-        body {
-            font-size: 12px;
-        }
-
-        h1 {
-            font-size: 14px;
-        }
-
-        h2 {
-            font-size: 13px;
-        }
-
-        .vim-keys {
-            font-size: 11px;
-        }
-    }
-
-    /* ASCII Art Logo (Optional) */
-    .ascii-art {
-        color: var(--text-secondary);
-        font-size: 10px;
-        line-height: 1;
-        text-align: center;
-        margin: 20px 0;
-        white-space: pre;
-        overflow-x: auto;
-        font-family: monospace;
-    }
-
-    /* Code blocks */
-    .code-block {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        padding: 10px;
-        margin: 10px 0;
-        overflow-x: auto;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 12px;
-    }
-
-    /* Ensure no horizontal scroll on mobile */
-    @media (max-width: 768px) {
-        .ascii-art {
-            font-size: 8px;
-        }
-
-        .code-block {
-            font-size: 11px;
-            padding: 8px;
-        }
-    }
-
-    /* Search highlighting */
-    .search-highlight {
-        background-color: var(--yellow);
-        color: var(--base03);
-        padding: 0;
-    }
-
-    .search-highlight-current {
-        background-color: var(--orange);
-        color: var(--base03);
-        padding: 0;
-    }
-
-    /* Search input in status bar */
-    .search-input {
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        border: none;
-        outline: none;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 12px;
-        padding: 2px 5px;
-        width: auto;
-        min-width: 200px;
-    }
-
-    .project-link {
-      text-decoration: none;
-    }
-
-    /* Theme Switcher */
-    .theme-switcher {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        cursor: pointer;
-    }
-
-    .theme-dot {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        border: 2px solid var(--border-color);
-        background: linear-gradient(135deg, var(--bg-primary) 50%, var(--text-primary) 50%);
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .theme-dot:hover {
-        transform: scale(1.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    .theme-menu {
-        position: absolute;
-        top: 35px;
-        right: 0;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        padding: 8px;
-        display: none;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 160px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .theme-menu.active {
-        display: flex;
-    }
-
-    .theme-option {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 6px 8px;
-        cursor: pointer;
-        border-radius: 3px;
-        transition: background 0.2s ease;
-    }
-
-    .theme-option:hover {
-        background: var(--highlight-bg);
-    }
-
-    .theme-option-dot {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        border: 1px solid var(--border-color);
-        flex-shrink: 0;
-    }
-
-    .theme-option-name {
-        color: var(--text-primary);
-        font-size: 12px;
-        white-space: nowrap;
-    }
-
-    .theme-option.active .theme-option-name {
-        color: var(--link-color);
-        font-weight: bold;
-    }
-
-    @media (max-width: 768px) {
-        .theme-switcher {
-            top: 10px;
-            right: 10px;
-        }
-        
-        .theme-dot {
-            width: 20px;
-            height: 20px;
-        }
-
-        .theme-menu {
-            min-width: 140px;
-        }
-    }
-    </style>
 </head>
 <body>
-    <!-- Theme Switcher -->
-    <div class="theme-switcher">
-        <div class="theme-dot" id="themeDot"></div>
-        <div class="theme-menu" id="themeMenu">
-            <div class="theme-option" data-theme="solarized-dark">
-                <div class="theme-option-dot" style="background: linear-gradient(135deg, #002b36 50%, #839496 50%);"></div>
-                <span class="theme-option-name">Solarized Dark</span>
-            </div>
-            <div class="theme-option" data-theme="solarized-light">
-                <div class="theme-option-dot" style="background: linear-gradient(135deg, #fdf6e3 50%, #657b83 50%);"></div>
-                <span class="theme-option-name">Solarized Light</span>
-            </div>
-            <div class="theme-option" data-theme="terminal-green">
-                <div class="theme-option-dot" style="background: linear-gradient(135deg, #1c1c1c 50%, #87ff87 50%);"></div>
-                <span class="theme-option-name">Terminal Green</span>
-            </div>
+    <header class="tabline">
+        <div class="container">
+            <a class="tabline-brand" href="./"><span class="caret">&gt;</span>danbradbury.net<span class="cursor" aria-hidden="true"></span></a>
+            <nav aria-label="Primary">
+                <ul class="tabline-tabs">
+                    <li><a href="./" aria-current="page">home</a></li>
+                    <li><a href="#posts">posts</a></li>
+                    <li><a href="#projects">projects</a></li>
+                    <li><a href="https://github.com/DanBradbury">github</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <div class="container">
-        <header class="header">
-            <div class="title-bar">
-                <span>home.txt</span>
-                <span>For version 2025.1</span>
-                <span>Last change: 2025 Jan</span>
+    <main class="container">
+        <section class="hero" id="about">
+            <div class="prompt"><span class="ps1-user">dan@sacramento</span>:<span class="ps1-path">~</span>$ whoami</div>
+            <h1 class="hero-name">Dan Bradbury</h1>
+            <p class="hero-role">Principal Software Engineer<span class="sep">//</span><span class="muted">Sacramento, CA</span></p>
+            <p class="hero-bio">
+                Passionate developer focused on building scalable web applications
+                and contributing to open source projects. Vim enthusiast.
+            </p>
+            <div class="hero-links">
+                <a class="bracket" href="https://github.com/DanBradbury">github</a>
+                <a class="bracket" href="https://www.linkedin.com/in/daniel-bradbury-28003969/">linkedin</a>
+                <a class="bracket" href="#posts">blog_posts</a>
+                <a class="bracket" href="#projects">projects</a>
             </div>
-            
-            <h1>DEVELOPER DOCUMENTATION</h1>
-            
-            <div class="ascii-art">
-     _                 
-    | |                
-  __| | _____   __     
- / _` |/ _ \ \ / /     
-| (_| |  __/\ V /      
- \__,_|\___| \_/       
+            <div class="keys-hint" aria-hidden="true">
+                <span><kbd>j</kbd>/<kbd>k</kbd> scroll</span>
+                <span><kbd>gg</kbd>/<kbd>G</kbd> top/bottom</span>
+                <span><kbd>/</kbd> search</span>
+                <span><kbd>n</kbd>/<kbd>N</kbd> next/prev match</span>
             </div>
+        </section>
 
-            <div style="text-align: center; color: var(--text-dim); font-size: 12px; margin: 10px 0;">
-                Navigate: <span class="vim-keys">h</span> left, 
-                <span class="vim-keys">j</span> down, 
-                <span class="vim-keys">k</span> up, 
-                <span class="vim-keys">l</span> right, 
-                <span class="vim-keys">gg</span> top, 
-                <span class="vim-keys">G</span> bottom, 
-                <span class="vim-keys">/</span> search
-            </div>
-        </header>
+        <section id="projects">
+            <h2 class="section-title">projects</h2>
+            <div class="project-grid">
+                <a class="project-card" href="https://github.com/DanBradbury/copilot-chat.vim">
+                    <div class="project-name">copilot-chat.vim</div>
+                    <div class="project-desc">Copilot chat directly in vim. No lua BS just vimscript.</div>
+                    <div class="project-tags">
+                        <span class="tag">vim</span>
+                    </div>
+                </a>
 
-        <div class="separator">
-            ================================================================================
-        </div>
-
-        <div class="quick-nav">
-            <div class="quick-nav-title">QUICK NAVIGATION:</div>
-            <div class="nav-items">
-                <a href="#projects">projects</a>
-                <a href="#contact">contact_info</a>
-                <a href="#blog">blog_posts</a>
-                <a href="https://github.com/DanBradbury">github_profile</a>
-                <a href="https://www.linkedin.com/in/daniel-bradbury-28003969/">linkedin</a>
-            </div>
-        </div>
-
-        <div class="separator">
-            --------------------------------------------------------------------------------
-        </div>
-
-        <h2 id="about">ABOUT</h2>
-        <div class="section">
-            <div class="section-item">
-                <span class="item-label">Name:</span>
-                <span class="item-content">Dan Bradbury</span>
-            </div>
-            <div class="section-item">
-                <span class="item-label">Role:</span>
-                <span class="item-content">Principal Software Engineer</span>
-            </div>
-            <div class="section-item">
-                <span class="item-label">Location:</span>
-                <span class="item-content">Sacramento, CA</span>
-            </div>
-        </div>
-
-        <div class="code-block">
-          <span class="prompt">whoami</span><br>
-          Passionate developer focused on building scalable web applications
-          and contributing to open source projects. Vim enthusiast.
-        </div>
-
-        <h2 id="projects">FEATURED PROJECTS</h2>
-        <div class="project-grid">
-            <a class="project-link" href="https://github.com/DanBradbury/copilot-chat.vim">
-            <div class="project-card">
-                <div class="project-name">→ copilot-chat.vim</div>
-                <div class="project-desc">
-                    Copilot chat directly in vim. No lua BS just vimscript.
+                <div class="project-card">
+                    <div class="project-name">rust-webserver</div>
+                    <div class="project-desc">High-performance async web server written in Rust</div>
+                    <div class="project-tags">
+                        <span class="tag">rust</span>
+                        <span class="tag">async</span>
+                        <span class="tag">tokio</span>
+                    </div>
                 </div>
-                <div class="project-tags">
-                    <span class="tag">vim</span>
+
+                <div class="project-card">
+                    <div class="project-name">dotfiles</div>
+                    <div class="project-desc">Personal configuration files for development environment</div>
+                    <div class="project-tags">
+                        <span class="tag">bash</span>
+                        <span class="tag">vim</span>
+                        <span class="tag">tmux</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-name">markdown-parser</div>
+                    <div class="project-desc">Fast markdown parser with custom extensions</div>
+                    <div class="project-tags">
+                        <span class="tag">javascript</span>
+                        <span class="tag">node</span>
+                        <span class="tag">parser</span>
+                    </div>
                 </div>
             </div>
-            </a>
+        </section>
 
-            <div class="project-card">
-                <div class="project-name">→ rust-webserver</div>
-                <div class="project-desc">
-                    High-performance async web server written in Rust
-                </div>
-                <div class="project-tags">
-                    <span class="tag">rust</span>
-                    <span class="tag">async</span>
-                    <span class="tag">tokio</span>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-name">→ dotfiles</div>
-                <div class="project-desc">
-                    Personal configuration files for development environment
-                </div>
-                <div class="project-tags">
-                    <span class="tag">bash</span>
-                    <span class="tag">vim</span>
-                    <span class="tag">tmux</span>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-name">→ markdown-parser</div>
-                <div class="project-desc">
-                    Fast markdown parser with custom extensions
-                </div>
-                <div class="project-tags">
-                    <span class="tag">javascript</span>
-                    <span class="tag">node</span>
-                    <span class="tag">parser</span>
-                </div>
-            </div>
-        </div>
-
-        <h2 id="blog">RECENT POSTS</h2>
+        <section id="posts">
+            <h2 class="section-title">recent posts<span class="hint">ls -t ~/posts</span></h2>
+            <ul class="post-list">
         PLACEHOLDER_FOR_POSTS
+            </ul>
+        </section>
 
-        <footer class="footer">
-            <div>
-                vim:tw=78:ts=8:ft=help:norl: | Generated with &lt;3 and Vim
-            </div>
+        <footer class="site-footer">
+            <span>vim:tw=78:ts=8:ft=help:norl: &middot; built with &lt;3 and Vim</span>
+            <nav aria-label="Footer">
+                <a class="bracket" href="https://github.com/DanBradbury">github</a>
+                <a class="bracket" href="https://www.linkedin.com/in/daniel-bradbury-28003969/">linkedin</a>
+            </nav>
         </footer>
-    </div>
+    </main>
 
-    <div class="status-line">
-        <div>
+    <div class="status-line" aria-hidden="true">
+        <div class="status-left">
             <span class="mode-indicator">NORMAL</span>
-            <span style="margin-left: 10px;">index.html</span>
+            <span class="seg seg-file">~/index.html</span>
         </div>
-        <div>
-            <span>utf-8[unix]</span>
-            <span style="margin-left: 10px;">1,1</span>
-            <span style="margin-left: 10px;">Top</span>
+        <div class="status-right">
+            <span class="seg seg-ft">html</span>
+            <span class="seg seg-enc">utf-8[unix]</span>
+            <span class="seg seg-pos">Top</span>
         </div>
     </div>
 
-    <script>
-        // Theme Switcher
-        const themes = {
-            'solarized-dark': {
-                bg: '#002b36',
-                text: '#839496'
-            },
-            'solarized-light': {
-                bg: '#fdf6e3',
-                text: '#657b83'
-            },
-            'terminal-green': {
-                bg: '#1c1c1c',
-                text: '#87ff87'
-            }
-        };
-
-        // Initialize theme
-        const savedTheme = localStorage.getItem('theme') || 'solarized-dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        
-        // Update active theme option
-        function updateActiveTheme(themeName) {
-            document.querySelectorAll('.theme-option').forEach(option => {
-                option.classList.toggle('active', option.dataset.theme === themeName);
-            });
-        }
-        
-        updateActiveTheme(savedTheme);
-
-        // Theme switcher toggle
-        const themeDot = document.getElementById('themeDot');
-        const themeMenu = document.getElementById('themeMenu');
-        
-        themeDot.addEventListener('click', function(e) {
-            e.stopPropagation();
-            themeMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!themeMenu.contains(e.target) && e.target !== themeDot) {
-                themeMenu.classList.remove('active');
-            }
-        });
-
-        // Theme selection
-        document.querySelectorAll('.theme-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const theme = this.dataset.theme;
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-                updateActiveTheme(theme);
-                themeMenu.classList.remove('active');
-            });
-        });
-
-        // Search state
-        let searchMode = false;
-        let searchQuery = '';
-        let searchMatches = [];
-        let currentMatchIndex = -1;
-        let originalContent = null;
-
-        // Optional: Add vim-style keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            // Handle search mode
-            if (searchMode) {
-                if (e.key === 'Escape') {
-                    e.preventDefault();
-                    exitSearchMode();
-                    return;
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    jumpToNextMatch();
-                    return;
-                } else if (e.key === 'Backspace') {
-                    e.preventDefault();
-                    if (searchQuery.length > 0) {
-                        searchQuery = searchQuery.slice(0, -1);
-                        updateSearchInput();
-                        performSearch();
-                    }
-                    return;
-                } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
-                    e.preventDefault();
-                    searchQuery += e.key;
-                    updateSearchInput();
-                    performSearch();
-                    return;
-                }
-                return;
-            }
-
-            // Enter search mode with /
-            if (e.key === '/' && !isInputFocused()) {
-                e.preventDefault();
-                enterSearchMode();
-                return;
-            }
-
-            // Basic vim navigation keys
-            switch(e.key) {
-                case 'j':
-                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
-                        e.preventDefault();
-                        window.scrollBy(0, 40);
-                    }
-                    break;
-                case 'k':
-                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
-                        e.preventDefault();
-                        window.scrollBy(0, -40);
-                    }
-                    break;
-                case 'g':
-                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
-                        if (lastKeyWasG) { // gg - go to top
-                            e.preventDefault();
-                            window.scrollTo(0, 0);
-                            lastKeyWasG = false;
-                        } else {
-                            lastKeyWasG = true;
-                            setTimeout(() => { lastKeyWasG = false; }, 500);
-                        }
-                    }
-                    break;
-                case 'G':
-                    if (!e.ctrlKey && !e.metaKey && !isInputFocused()) {
-                        e.preventDefault();
-                        window.scrollTo(0, document.body.scrollHeight);
-                    }
-                    break;
-                case 'd':
-                    if (e.ctrlKey && !isInputFocused()) {
-                        e.preventDefault();
-                        window.scrollBy(0, window.innerHeight / 2);
-                    }
-                    break;
-                case 'u':
-                    if (e.ctrlKey && !isInputFocused()) {
-                        e.preventDefault();
-                        window.scrollBy(0, -window.innerHeight / 2);
-                    }
-                    break;
-            }
-        });
-
-        let lastKeyWasG = false;
-
-        function isInputFocused() {
-            const activeElement = document.activeElement;
-            return activeElement && (
-                activeElement.tagName === 'INPUT' ||
-                activeElement.tagName === 'TEXTAREA' ||
-                activeElement.contentEditable === 'true'
-            );
-        }
-
-        // Search functionality
-        function enterSearchMode() {
-            searchMode = true;
-            searchQuery = '';
-            searchMatches = [];
-            currentMatchIndex = -1;
-            
-            // Store original content
-            const container = document.querySelector('.container');
-            if (!originalContent) {
-                originalContent = container.innerHTML;
-            }
-            
-            updateStatusBar('/');
-        }
-
-        function exitSearchMode() {
-            searchMode = false;
-            searchQuery = '';
-            
-            // Clear highlights
-            if (originalContent) {
-                const container = document.querySelector('.container');
-                container.innerHTML = originalContent;
-                
-                // Reattach event listeners for smooth scrolling
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const target = document.querySelector(this.getAttribute('href'));
-                        if (target) {
-                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    });
-                });
-            }
-            
-            // Reset status bar
-            updateStatusBar('NORMAL');
-        }
-
-        function updateSearchInput() {
-            updateStatusBar('/' + searchQuery);
-        }
-
-        function performSearch() {
-            if (searchQuery.length === 0) {
-                // Restore original content
-                if (originalContent) {
-                    const container = document.querySelector('.container');
-                    container.innerHTML = originalContent;
-                    
-                    // Reattach event listeners
-                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                        anchor.addEventListener('click', function (e) {
-                            e.preventDefault();
-                            const target = document.querySelector(this.getAttribute('href'));
-                            if (target) {
-                                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
-                        });
-                    });
-                }
-                searchMatches = [];
-                currentMatchIndex = -1;
-                return;
-            }
-
-            const container = document.querySelector('.container');
-            
-            // Restore original content before searching
-            if (originalContent) {
-                container.innerHTML = originalContent;
-            }
-            
-            // Find and highlight all matches
-            searchMatches = [];
-            highlightSearchResults(container, searchQuery);
-            
-            // Reattach event listeners for smooth scrolling
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            });
-            
-            currentMatchIndex = -1;
-        }
-
-        function highlightSearchResults(element, query) {
-            const excludeTags = ['SCRIPT', 'STYLE', 'NOSCRIPT'];
-            
-            function traverse(node) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    const text = node.textContent;
-                    const lowerText = text.toLowerCase();
-                    const lowerQuery = query.toLowerCase();
-                    
-                    if (lowerText.includes(lowerQuery)) {
-                        const fragment = document.createDocumentFragment();
-                        let lastIndex = 0;
-                        let index = lowerText.indexOf(lowerQuery, lastIndex);
-                        
-                        while (index !== -1) {
-                            // Add text before match
-                            if (index > lastIndex) {
-                                fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
-                            }
-                            
-                            // Add highlighted match
-                            const span = document.createElement('span');
-                            span.className = 'search-highlight';
-                            span.textContent = text.substring(index, index + query.length);
-                            fragment.appendChild(span);
-                            searchMatches.push(span);
-                            
-                            lastIndex = index + query.length;
-                            index = lowerText.indexOf(lowerQuery, lastIndex);
-                        }
-                        
-                        // Add remaining text
-                        if (lastIndex < text.length) {
-                            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-                        }
-                        
-                        node.parentNode.replaceChild(fragment, node);
-                    }
-                } else if (node.nodeType === Node.ELEMENT_NODE && !excludeTags.includes(node.tagName)) {
-                    const children = Array.from(node.childNodes);
-                    children.forEach(child => traverse(child));
-                }
-            }
-            
-            traverse(element);
-        }
-
-        function jumpToNextMatch() {
-            if (searchMatches.length === 0) {
-                return;
-            }
-            
-            // Remove current highlight
-            if (currentMatchIndex >= 0) {
-                searchMatches[currentMatchIndex].className = 'search-highlight';
-            }
-            
-            // Move to next match (wrap around)
-            currentMatchIndex = (currentMatchIndex + 1) % searchMatches.length;
-            
-            // Highlight current match
-            const currentMatch = searchMatches[currentMatchIndex];
-            currentMatch.className = 'search-highlight-current';
-            
-            // Scroll to current match
-            currentMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Update status bar with match count
-            updateStatusBar('/' + searchQuery + ' [' + (currentMatchIndex + 1) + '/' + searchMatches.length + ']');
-        }
-
-        function updateStatusBar(text) {
-            const statusLine = document.querySelector('.status-line');
-            const leftDiv = statusLine.querySelector('div:first-child');
-            
-            if (text.startsWith('/')) {
-                leftDiv.innerHTML = '<span class="mode-indicator">SEARCH</span><span style="margin-left: 10px;">' + text + '</span>';
-            } else {
-                leftDiv.innerHTML = '<span class="mode-indicator">' + text + '</span><span style="margin-left: 10px;">index.html</span>';
-            }
-        }
-
-        // Update status line position indicator
-        function updatePosition() {
-            const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-            const statusPosition = document.querySelector('.status-line div:last-child span:last-child');
-            if (statusPosition) {
-                if (scrollPercent === 0) {
-                    statusPosition.textContent = 'Top';
-                } else if (scrollPercent >= 99) {
-                    statusPosition.textContent = 'Bot';
-                } else {
-                    statusPosition.textContent = scrollPercent + '%';
-                }
-            }
-        }
-
-        window.addEventListener('scroll', updatePosition);
-
-        // Add smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Optional: Flash mode indicator on keypress
-        document.addEventListener('keydown', function(e) {
-            const modeIndicator = document.querySelector('.mode-indicator');
-            if (modeIndicator && e.key === 'i' && !isInputFocused()) {
-                modeIndicator.textContent = 'INSERT';
-                setTimeout(() => {
-                    modeIndicator.textContent = 'NORMAL';
-                }, 1000);
-            }
-        });
-    </script>
+    <script src="vim.js" defer></script>
 </body>
 </html>

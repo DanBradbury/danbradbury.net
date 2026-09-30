@@ -17,18 +17,23 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
     tags=$(awk '/^tags:/{flag=1; next} /^ *- /{if(flag) {gsub(/^- /,""); printf "%s,", $0}} /^ *[^- ]/{if(flag) {flag=0}} END{if(flag) printf "\b\n"}' "$md_file" | sed 's/,$//' | sed 's/["'\'']//g')
 
     # Append to the recent posts HTML
-    recent_posts_html+="<div style=\"margin: 10px 0;\">\n"
-    recent_posts_html+="    <a href=\"$filename.html\">$date</a> <a href=\"$filename.html\" class=\"title-link\">$title</a>\n"
+    recent_posts_html+="<li class=\"post-row\">\n"
+    recent_posts_html+="    <time class=\"post-date\" datetime=\"$date\">$date</time>\n"
+    recent_posts_html+="    <a class=\"post-title\" href=\"$filename.html\">$title</a>\n"
+    recent_posts_html+="    <span class=\"post-tags\">"
     IFS=','
     for tag in $tags; do
-      recent_posts_html+="  <span class=\"tag\">$tag</span>\n"
+      recent_posts_html+="<span class=\"tag\">$tag</span>"
     done
-    recent_posts_html+="</div>\n"
+    recent_posts_html+="</span>\n"
+    recent_posts_html+="</li>\n"
 
     # Convert to HTML
     pandoc "$md_file" \
         --template=templates/post_template.html \
         --lua-filter=scripts/wrap_codeblocks.lua \
+        --metadata date="$date" \
+        --variable file="$filename" \
         -o "site/${filename}.html"
 
     echo "Converted: $md_file -> site/${filename}.html"
