@@ -9,6 +9,8 @@ This is a static site that converts markdown blog posts to HTML using pandoc and
 - `site/style.css` — shared theme (terminal/Vim look in Oregon Duck green `#154733` & yellow `#FEE123`) used by the home page and every post
 - `site/vim.js` — shared Vim keybindings (`j`/`k`, `gg`/`G`, `Ctrl-d`/`Ctrl-u`, `/` search with `n`/`N`), statusline position, and image zoom
 - `templates/post_template.html` — pandoc template for posts
+- `scripts/social_metadata.lua` — Open Graph titles and descriptions for posts; descriptions use the opening paragraph unless `description` is set in Markdown front matter
+- `site/og-image.png` — shared 1200 × 630 social preview image for the home page and posts
 
 ## Deployment
 

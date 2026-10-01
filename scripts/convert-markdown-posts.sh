@@ -32,6 +32,7 @@ for md_file in $(ls -1 posts/*.md | sort -r); do
     pandoc "$md_file" \
         --template=templates/post_template.html \
         --lua-filter=scripts/wrap_codeblocks.lua \
+        --lua-filter=scripts/social_metadata.lua \
         --syntax-definition=scripts/syntax/vim.xml \
         --syntax-definition=scripts/syntax/haml.xml \
         --metadata date="$date" \
@@ -45,6 +46,9 @@ done
 recent_posts_html_escaped=$(echo "$recent_posts_html" | sed 's/&/\\&/g')
 
 # Replace the "RECENT POSTS" section in index.html
-sed -i 's|^        PLACEHOLDER_FOR_POSTS\r*$|'"$recent_posts_html_escaped"'|' site/index.html
+index_tmp=$(mktemp)
+sed 's|^        PLACEHOLDER_FOR_POSTS\r*$|'"$recent_posts_html_escaped"'|' site/index.html > "$index_tmp"
+cat "$index_tmp" > site/index.html
+rm "$index_tmp"
 
 echo "Updated RECENT POSTS section in site/index.html"
