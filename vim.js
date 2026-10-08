@@ -56,7 +56,7 @@
             acceptNode: function (node) {
                 const p = node.parentNode;
                 if (!p || /^(SCRIPT|STYLE|NOSCRIPT|MARK)$/.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
-                if (p.closest('[hidden], select, .post-filter-count')) return NodeFilter.FILTER_REJECT;
+                if (p.closest('[hidden], .post-filter')) return NodeFilter.FILTER_REJECT;
                 return node.textContent.toLowerCase().includes(needle) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
             }
         });
@@ -193,7 +193,12 @@
     // ---- Post tag filter ----------------------------------------------------
     const postFilter = document.querySelector('.post-filter');
     if (postFilter) {
-        const select = postFilter.querySelector('select');
+        const input = postFilter.querySelector('input');
+        const suggestions = postFilter.querySelector('.tag-suggestions');
+        const chips = postFilter.querySelector('.selected-tags');
+        const selected = new Set();
+        let matches = [];
+        let active = -1;
         const count = postFilter.querySelector('.post-filter-count');
         const posts = Array.from(document.querySelectorAll('.post-list .post-row')).map(function (row) {
             return {
@@ -205,17 +210,85 @@
         });
         const tags = Array.from(new Set(posts.flatMap(function (post) { return post.tags; })));
         tags.sort(function (a, b) { return a.localeCompare(b); });
-        tags.forEach(function (tag) {
-            const option = document.createElement('option');
-            option.value = tag;
-            option.textContent = tag;
-            select.appendChild(option);
-        });
+        function closeSuggestions() {
+            suggestions.hidden = true;
+            input.setAttribute('aria-expanded', 'false');
+            input.removeAttribute('aria-activedescendant');
+            active = -1;
+        }
+
+        function activate(index) {
+            active = index;
+            Array.from(suggestions.children).forEach(function (option, i) {
+                option.setAttribute('aria-selected', String(i === active));
+            });
+            if (active >= 0) {
+                input.setAttribute('aria-activedescendant', suggestions.children[active].id);
+                suggestions.children[active].scrollIntoView({ block: 'nearest' });
+            } else {
+                input.removeAttribute('aria-activedescendant');
+            }
+        }
+
+        function suggestTags() {
+            const query = input.value.trim().toLowerCase();
+            matches = tags.filter(function (tag) {
+                return !selected.has(tag) && tag.toLowerCase().includes(query);
+            });
+            suggestions.replaceChildren();
+            matches.forEach(function (tag, i) {
+                const option = document.createElement('li');
+                option.id = 'tag-option-' + i;
+                option.setAttribute('role', 'option');
+                option.setAttribute('aria-selected', 'false');
+                option.textContent = tag;
+                option.addEventListener('mousedown', function (event) { event.preventDefault(); });
+                option.addEventListener('click', function () { selectTag(tag); });
+                suggestions.appendChild(option);
+            });
+            if (!matches.length) {
+                const empty = document.createElement('li');
+                empty.textContent = 'No matching tags';
+                empty.setAttribute('role', 'presentation');
+                suggestions.appendChild(empty);
+            }
+            suggestions.hidden = false;
+            input.setAttribute('aria-expanded', 'true');
+            activate(-1);
+        }
+
+        function renderSelected() {
+            chips.replaceChildren();
+            selected.forEach(function (tag) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'tag selected-tag';
+                button.textContent = tag + ' ×';
+                button.setAttribute('aria-label', 'Remove tag ' + tag);
+                button.addEventListener('click', function () {
+                    selected.delete(tag);
+                    renderSelected();
+                    filterPosts();
+                    input.focus();
+                    suggestTags();
+                });
+                chips.appendChild(button);
+            });
+        }
+
+        function selectTag(tag) {
+            selected.add(tag);
+            input.value = '';
+            renderSelected();
+            filterPosts();
+            input.focus();
+            suggestTags();
+        }
 
         function filterPosts() {
             let visible = 0;
             posts.forEach(function (post) {
-                post.row.hidden = !!select.value && !post.tags.includes(select.value);
+                post.row.hidden = selected.size > 0 && !post.tags.some(function (tag) { return selected.has(tag); });
                 if (!post.row.hidden) visible++;
             });
             count.textContent = visible + ' of ' + posts.length + ' posts';
@@ -226,7 +299,23 @@
             updatePosition();
         }
 
-        select.addEventListener('change', filterPosts);
+        input.addEventListener('input', suggestTags);
+        input.addEventListener('focus', suggestTags);
+        input.addEventListener('blur', closeSuggestions);
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (suggestions.hidden) suggestTags();
+                if (matches.length) {
+                    activate((active + (event.key === 'ArrowDown' ? 1 : (active < 0 ? 0 : -1)) + matches.length) % matches.length);
+                }
+            } else if (event.key === 'Enter' && !suggestions.hidden && matches.length) {
+                event.preventDefault();
+                selectTag(matches[active >= 0 ? active : 0]);
+            } else if (event.key === 'Escape') {
+                closeSuggestions();
+            }
+        });
         filterPosts();
         postFilter.hidden = tags.length === 0;
     }

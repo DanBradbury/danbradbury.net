@@ -105,10 +105,15 @@
         <section id="posts">
             <h2 class="section-title">recent posts<span class="hint">ls -t ~/posts</span></h2>
             <div class="post-filter" hidden>
-                <label for="post-tag-filter">filter by tag</label>
-                <select id="post-tag-filter" aria-controls="post-list">
-                    <option value="">All tags</option>
-                </select>
+                <label for="post-tag-filter">filter by tags</label>
+                <div class="tag-search">
+                    <input id="post-tag-filter" type="text" placeholder="Search tags…" autocomplete="off"
+                        role="combobox" aria-autocomplete="list" aria-expanded="false"
+                        aria-controls="tag-suggestions" aria-describedby="tag-filter-help">
+                    <ul id="tag-suggestions" class="tag-suggestions" role="listbox" aria-label="Matching tags" hidden></ul>
+                </div>
+                <span id="tag-filter-help">Matches any selected tag</span>
+                <div class="selected-tags" aria-label="Selected tags"></div>
                 <span class="post-filter-count" role="status"></span>
             </div>
             <ul class="post-list" id="post-list">
