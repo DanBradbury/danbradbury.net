@@ -17,7 +17,7 @@
 
     function isTyping() {
         const el = document.activeElement;
-        return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+        return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
     }
 
     function setMode(mode, text) {
@@ -56,6 +56,7 @@
             acceptNode: function (node) {
                 const p = node.parentNode;
                 if (!p || /^(SCRIPT|STYLE|NOSCRIPT|MARK)$/.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+                if (p.closest('[hidden], select, .post-filter-count')) return NodeFilter.FILTER_REJECT;
                 return node.textContent.toLowerCase().includes(needle) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
             }
         });
@@ -188,6 +189,47 @@
     window.addEventListener('scroll', updatePosition, { passive: true });
     window.addEventListener('resize', updatePosition);
     updatePosition();
+
+    // ---- Post tag filter ----------------------------------------------------
+    const postFilter = document.querySelector('.post-filter');
+    if (postFilter) {
+        const select = postFilter.querySelector('select');
+        const count = postFilter.querySelector('.post-filter-count');
+        const posts = Array.from(document.querySelectorAll('.post-list .post-row')).map(function (row) {
+            return {
+                row: row,
+                tags: Array.from(row.querySelectorAll('.post-tags .tag')).map(function (tag) {
+                    return tag.textContent.trim();
+                }).filter(Boolean)
+            };
+        });
+        const tags = Array.from(new Set(posts.flatMap(function (post) { return post.tags; })));
+        tags.sort(function (a, b) { return a.localeCompare(b); });
+        tags.forEach(function (tag) {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            select.appendChild(option);
+        });
+
+        function filterPosts() {
+            let visible = 0;
+            posts.forEach(function (post) {
+                post.row.hidden = !!select.value && !post.tags.includes(select.value);
+                if (!post.row.hidden) visible++;
+            });
+            count.textContent = visible + ' of ' + posts.length + ' posts';
+            if (searchQuery) {
+                highlight(searchQuery);
+                setMode('NORMAL');
+            }
+            updatePosition();
+        }
+
+        select.addEventListener('change', filterPosts);
+        filterPosts();
+        postFilter.hidden = tags.length === 0;
+    }
 
     // ---- Image zoom ---------------------------------------------------------
     const images = document.querySelectorAll('.content img');
