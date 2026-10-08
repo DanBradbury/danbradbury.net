@@ -23,7 +23,7 @@
     --yellow-soft: #d8bf1a;
 
     --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --measure: 76ch;
+    --measure: 48rem;
     --statusline-h: 28px;
 }
 
@@ -61,7 +61,7 @@ body {
 .container {
     max-width: var(--measure);
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 1.5rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -416,21 +416,23 @@ a.project-card:hover {
 
 .content {
     padding: 2rem 0 1rem;
-    font-size: 15.5px;
-    line-height: 1.8;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #c9d4cd;
 }
 
-.content > * + * { margin-top: 1.15rem; }
+.content > * + * { margin-top: 1em; }
 
 .content h2,
 .content h3,
 .content h4 {
-    margin-top: 2.5rem;
-    margin-bottom: -.2rem;
+    font-weight: 600;
+    margin-top: 2em;
+    margin-bottom: -.4em;
 }
 
-.content h2 { font-size: 1.3rem; }
-.content h3 { font-size: 1.1rem; }
+.content h2 { font-size: 1.25rem; }
+.content h3 { font-size: 1.05rem; }
 .content h4 { font-size: 1rem; color: var(--fg); }
 
 .content h2::before,
@@ -452,7 +454,7 @@ a.project-card:hover {
     border: 0;
     height: 1px;
     background: var(--line-strong);
-    margin: 2.5rem 0;
+    margin: 2em 0;
 }
 
 .content ul,
@@ -460,7 +462,7 @@ a.project-card:hover {
     padding-left: 2.2ch;
 }
 
-.content li + li { margin-top: .4rem; }
+.content li + li { margin-top: .35em; }
 .content li > ul,
 .content li > ol { margin-top: .4rem; }
 
@@ -496,11 +498,9 @@ a.project-card:hover {
 .content ol { padding-left: 3.4ch; }
 
 .content blockquote {
-    padding: .75rem 1rem;
-    border-left: 3px solid var(--duck-green);
-    background: var(--bg-alt);
+    padding: .25em 0 .25em 1.25em;
+    border-left: 2px solid var(--yellow);
     color: var(--fg-muted);
-    border-radius: 0 4px 4px 0;
 }
 
 .content blockquote > * + * { margin-top: .75rem; }
@@ -572,7 +572,7 @@ a.project-card:hover {
    -------------------------------------------------------------------------- */
 code {
     font-family: var(--font-mono);
-    font-size: .88em;
+    font-size: .86em;
 }
 
 :not(pre) > code {
@@ -586,7 +586,7 @@ code {
 
 pre {
     font-family: var(--font-mono);
-    font-size: 13.5px;
+    font-size: 13px;
     line-height: 1.6;
     overflow-x: auto;
     tab-size: 4;
@@ -817,7 +817,6 @@ mark.search-highlight.is-current {
 @media (max-width: 640px) {
     body { font-size: 14px; }
     .container { padding: 0 1rem; }
-    .content { font-size: 15px; line-height: 1.75; }
     pre { font-size: 12.5px; }
 
     .tabline-tabs a { padding: .55rem .6rem; }
