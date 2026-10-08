@@ -1,9 +1,9 @@
 ---
 title: Horse's Hoofs - Sagely Errors
 tags:
-- 'daoism'
-- 'zhangzi'
-- 'philosophy'
+  - daoism
+  - zhuangzi
+  - philosophy
 ...
 Associated reading: [Zhuangzi - Horse's hoofs](http://ctext.org/zhuangzi/horsess-hoofs)
 

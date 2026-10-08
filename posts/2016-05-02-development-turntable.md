@@ -1,10 +1,10 @@
 ---
 title: Development Turntable
 tags:
-- rants
-- scrum
-- development
-- teams
+  - rants
+  - scrum
+  - development
+  - teams
 ...
 > And the turntable keeps on turnin' and turnin'
 > Nothing can fuck with the way it goes around

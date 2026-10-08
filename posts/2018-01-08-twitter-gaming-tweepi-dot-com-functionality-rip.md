@@ -1,10 +1,10 @@
 ---
 title: "Twitter Gaming: Tweepi.com Functionality Rip"
 tags:
-- 'twitter'
-- 'tweepi'
-- 'javascript'
-- 'python'
+  - twitter
+  - tweepi
+  - javascript
+  - python
 ...
 There are plenty of twitter management tools out that will help automate / manage your twitter account for a few bucks a month.
 

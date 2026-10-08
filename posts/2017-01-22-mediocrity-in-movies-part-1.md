@@ -1,10 +1,10 @@
 ---
 title: Mediocrity in Movies (part 1)
 tags:
-- movies
-- rants
-- mediocrity
-- cbs
+  - movies
+  - rants
+  - mediocrity
+  - cbs
 ...
 I've been trying to make sense of the wave of mediocore movies, games, and music that has been dumped on us lately. This will be part 1 of a series of rants dedicated to mediocrity.
 

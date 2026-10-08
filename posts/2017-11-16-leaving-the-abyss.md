@@ -1,8 +1,8 @@
 ---
 title: "Turbolinks: Leaving the Abyss"
 tags:
-- 'turbolinks'
-- 'rails5'
+  - turbolinks
+  - rails5
 ...
 Just trying to do things like
 

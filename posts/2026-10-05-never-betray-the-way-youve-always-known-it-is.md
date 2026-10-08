@@ -1,9 +1,9 @@
 ---
 title: Never Betray the way you've always known it is
 tags:
-	- software engineering
-	- AI
-	- coding
+  - software engineering
+  - AI
+  - coding
 ...
 AI has changed how we ship software.
 

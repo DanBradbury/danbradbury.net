@@ -1,7 +1,7 @@
 ---
 title: Reverse Engineering 'Product Catalog'
 tags:
-- 'reverse engineering'
+  - reverse engineering
 ...
 Recently I've been looking at an application that has some data that I'd like to scrape and use/format for my own selfish desires. The application we are targeting is on iOS + Android so I went through the usual flow on my iPhone
 - mitmproxy - no good. traffic must be SSL / non-HTTP. Android cert-pinning stops app on init

@@ -1,6 +1,9 @@
 ---
 title: The magic of Vim script
 tags:
+  - vim
+  - vimscript
+  - vim9script
 ...
 I've pulled a random bit of documentation from `:help matchadd` to show off some of the magic thats referenced in the docs.
 

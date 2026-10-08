@@ -1,9 +1,9 @@
 ---
 title: Intercepting iOS Network Traffic on Mac
 tags:
-- wireshark
-- sniffing
-- recon
+  - wireshark
+  - sniffing
+  - recon
 ...
 For the most part you are probably fine just using a solution like `mitmproxy` ([shown here](http://jasdev.me/intercepting-ios-traffic)) and sniffing HTTP/S traffic but sometimes there's a need to go deeper.. 
 

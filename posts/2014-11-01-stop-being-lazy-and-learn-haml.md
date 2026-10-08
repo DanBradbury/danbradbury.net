@@ -1,6 +1,9 @@
 ---
 title: Stop Being Lazy And Learn Haml
 tags:
+  - haml
+  - html
+  - web
 ...
 The desire to write familiar view code, similar to the same `html` you were writing to support your shitty LAMP apps is completely understandable but it's time to move on from the glory days..
 

@@ -1,11 +1,11 @@
 ---
 title: Replacing Heroku
 tags:
-- heroku
-- digitalocean
-- droplet
-- graphite
-- statsD
+  - heroku
+  - digitalocean
+  - droplet
+  - graphite
+  - statsd
 ...
 categories: heroku digitalocean droplet graphite statsD
 ---

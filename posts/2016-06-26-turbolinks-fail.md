@@ -1,9 +1,9 @@
 ---
 title: Turbolinks and anchors
 tags:
-- turbolinks
-- rails
-- html
+  - turbolinks
+  - rails
+  - html
 ...
 So far my journey with `turbolinks` hasn't been too bad; I write my slop and things work as I'd expect them to. I knew this streak of good luck was bound to come to an end at some point and today is the day.
 

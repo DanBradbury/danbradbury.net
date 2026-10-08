@@ -1,6 +1,9 @@
 ---
 title: Deploying with Kamal
 tags:
+  - rails
+  - kamal
+  - deployment
 ...
 After seeing the costs from 2 months of ECS running on my personal AWS account it was time to tryout something that doesn’t cost more than $15 a month to get a minimalist website up and running (this personal site)
 

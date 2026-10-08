@@ -1,10 +1,10 @@
 ---
 title: Connecting to Wifi on Amtrak
 tags:
-- 'travel'
-- 'wifi'
-- 'browser'
-- 'wev'
+  - travel
+  - wifi
+  - browser
+  - web
 ...
 title: Connecting to Wifi on Amtrak
 date: 2017-11-17 13:01:18 -0800

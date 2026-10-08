@@ -1,14 +1,14 @@
 ---
 title: Different browsers are the worst
 tags:
-- web
-- bootstrap
-- css
-- javascript
-- FE
-- browsers
-- safari
-- browser bugs
+  - web
+  - bootstrap
+  - css
+  - javascript
+  - frontend
+  - browsers
+  - safari
+  - browser bugs
 ...
 While working on a personal project I ran into an issue with a bootstrap navbar collapse. In my local testing everything went fine and I decided to push and hoped everything would behave properly.. I grab my iPhone 5 and take a look only to see that the dropdown is not working at all.
 

@@ -1,8 +1,8 @@
 ---
 title: Git Auth when Windows Credentials are Locked
 tags:
-- 'windows'
-- 'git'
+  - windows
+  - git
 ...
 Most Windows users won’t run into this problem because they don’t have a system administrator controlling their machine but for anyone who is experiencing weirdness while using `wincred` here’s a brief explanation of the problem + an easy fix to get things back up and running.
 

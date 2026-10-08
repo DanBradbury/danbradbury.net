@@ -1,6 +1,8 @@
 ---
 title: Ruby Install Issues on Mac
 tags:
+  - ruby
+  - macos
 ...
 I love `rvm` but won't pretend that I don't have to fight with it to stay on the latest version of Ruby when using my mac.
 

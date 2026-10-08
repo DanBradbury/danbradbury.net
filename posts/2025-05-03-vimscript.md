@@ -1,10 +1,10 @@
 ---
 title: Vimscript isn't bad. You are just dumb.
 tags:
-    - vim
-    - vimscript
-    - viml
-    - vim9script
+  - vim
+  - vimscript
+  - viml
+  - vim9script
 ...
 I want to talk about folks complaining without knowing anything. The topic for today will be vimscript / vimL and particularly vim9script.
 

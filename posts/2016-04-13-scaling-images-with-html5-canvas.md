@@ -1,10 +1,10 @@
 ---
 title: Scaling Images with HTML5 Canvas
 tags:
-- html5
-- browser
-- canvas
-- javascript
+  - html5
+  - browser
+  - canvas
+  - javascript
 ...
 title: Scaling Images with HTML5 Canvas
 comments: true

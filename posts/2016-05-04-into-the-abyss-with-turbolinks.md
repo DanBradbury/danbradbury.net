@@ -1,8 +1,8 @@
 ---
 title: Into the Abyss with Turbolinks
 tags:
-- 'turbolinks'
-- 'rails'
+  - turbolinks
+  - rails
 ...
 title: Into the Abyss with Turbolinks
 comments: true

@@ -1,8 +1,8 @@
 ---
 title: Trying to make sense of PG&E's Marketing Campaigns
 tags:
-- 'rants'
-- 'economics'
+  - rants
+  - economics
 ...
 title: Trying to make sense of PG&E's Marketing Campaigns
 comments: true

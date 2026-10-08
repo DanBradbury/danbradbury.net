@@ -1,6 +1,9 @@
 ---
 title: Simple Ruby MCP Setup
 tags:
+  - ruby
+  - mcp
+  - claude
 ...
 After seeing the [Blender MCP](https://github.com/ahujasid/blender-mcp) I was curious enough to get a pro subscription to Claude and try hooking it up and start to get my hands dirty with what MCPs are / what implementation looked like.
 

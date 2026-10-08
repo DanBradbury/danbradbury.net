@@ -1,12 +1,11 @@
 ---
 title: Deploying Jekyll Site on Ubuntu VPS
 tags:
-- Heroku
-- full
-- stack
-- DigitalOcean
-- VPS
-- Jeykll
+  - heroku
+  - full stack
+  - digitalocean
+  - vps
+  - jekyll
 ...
 Over the past few months Heroku has become an increasingly expensive option for projects that are starting to scale in any way ([Addon price hikes](https://addons.heroku.com/mongolab), [Dyno Sleeping and Charging](https://devcenter.heroku.com/articles/dyno-sleeping), etc.). For ease of use and speed to spin-up up a prototype and have it running Heroku is still the leader and will continue to be my goto in times of need. But as soon as *Dyno Charging* becomes an issue I think it's time to `capify` that app and use one of the many VPS hosting options out there.
 

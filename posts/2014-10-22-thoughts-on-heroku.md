@@ -1,6 +1,8 @@
 ---
 title: Thoughts On Heroku
 tags:
+  - heroku
+  - hosting
 ...
 After deploying over 10 applications with Heroku I think that I can finally make a fair assessment on the general developer / Heroku relationship.
 

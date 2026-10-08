@@ -1,6 +1,10 @@
 ---
 title: Deploying Rails Application to ECS with GitHub Actions
 tags:
+  - rails
+  - aws
+  - ecs
+  - github actions
 ...
 I recently had the pleasure of figuring out a deploy scenario without any of my favorite deploy tools `kamal`, `Capistrano` were not options as we are not allowed to SSH to any box that we want to deploy. In the scenario I'm describing you are being forced to use AWS without being able to spin up an EC2 instance and just dump the code there.
 
