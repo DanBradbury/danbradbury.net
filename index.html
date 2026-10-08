@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dan Bradbury — Principal Software Engineer</title>
+    <meta name="description" content="Dan Bradbury — Principal Software Engineer in Sacramento, CA. Writing about Vim, Ruby, infrastructure and building things.">
+    <meta property="og:title" content="Dan Bradbury — Principal Software Engineer">
+    <meta property="og:description" content="Dan Bradbury — Principal Software Engineer in Sacramento, CA. Writing about Vim, Ruby, infrastructure and building things.">
+    <meta property="og:image" content="https://danbradbury.net/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Dan Bradbury — Principal Software Engineer. Vim, Ruby, infrastructure and building things.">
+    <meta property="og:url" content="https://danbradbury.net/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Dan Bradbury">
+    <meta name="theme-color" content="#154733">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23154733'/%3E%3Cpath d='M8 10l6 6-6 6' stroke='%23fee123' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='16' y='20' width='9' height='3' rx='1' fill='%23fee123'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="tabline">
+        <div class="container">
+            <a class="tabline-brand" href="./"><span class="caret">&gt;</span>danbradbury.net<span class="cursor" aria-hidden="true"></span></a>
+            <nav aria-label="Primary">
+                <ul class="tabline-tabs">
+                    <li><a href="./" aria-current="page">home</a></li>
+                    <li><a href="#posts">posts</a></li>
+                    <li><a href="#projects">projects</a></li>
+                    <li><a href="https://github.com/DanBradbury">github</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero" id="about">
+            <div class="prompt"><span class="ps1-user">dan@sacramento</span>:<span class="ps1-path">~</span>$ whoami</div>
+            <h1 class="hero-name">Dan Bradbury</h1>
+            <p class="hero-role">Principal Software Engineer<span class="sep">//</span><span class="muted">Sacramento, CA</span></p>
+            <p class="hero-bio">
+                Passionate developer focused on building scalable web applications
+                and contributing to open source projects. Vim enthusiast.
+            </p>
+            <div class="hero-links">
+                <a class="bracket" href="https://github.com/DanBradbury">github</a>
+                <a class="bracket" href="https://www.linkedin.com/in/daniel-bradbury-28003969/">linkedin</a>
+                <a class="bracket" href="#posts">blog_posts</a>
+                <a class="bracket" href="#projects">projects</a>
+            </div>
+            <div class="keys-hint" aria-hidden="true">
+                <span><kbd>j</kbd>/<kbd>k</kbd> scroll</span>
+                <span><kbd>gg</kbd>/<kbd>G</kbd> top/bottom</span>
+                <span><kbd>/</kbd> search</span>
+                <span><kbd>n</kbd>/<kbd>N</kbd> next/prev match</span>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">projects</h2>
+            <div class="project-grid">
+                <a class="project-card" href="https://github.com/DanBradbury/copilot-chat.vim">
+                    <div class="project-name">copilot-chat.vim</div>
+                    <div class="project-desc">Copilot chat directly in vim. No lua BS just vimscript.</div>
+                    <div class="project-tags">
+                        <span class="tag">vim</span>
+                    </div>
+                </a>
+
+                <div class="project-card">
+                    <div class="project-name">rust-webserver</div>
+                    <div class="project-desc">High-performance async web server written in Rust</div>
+                    <div class="project-tags">
+                        <span class="tag">rust</span>
+                        <span class="tag">async</span>
+                        <span class="tag">tokio</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-name">dotfiles</div>
+                    <div class="project-desc">Personal configuration files for development environment</div>
+                    <div class="project-tags">
+                        <span class="tag">bash</span>
+                        <span class="tag">vim</span>
+                        <span class="tag">tmux</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-name">markdown-parser</div>
+                    <div class="project-desc">Fast markdown parser with custom extensions</div>
+                    <div class="project-tags">
+                        <span class="tag">javascript</span>
+                        <span class="tag">node</span>
+                        <span class="tag">parser</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="posts">
+            <h2 class="section-title">recent posts<span class="hint">ls -t ~/posts</span></h2>
+            <ul class="post-list">
+        PLACEHOLDER_FOR_POSTS
+            </ul>
+        </section>
+
+        <footer class="site-footer">
+            <span>vim:tw=78:ts=8:ft=help:norl: &middot; built with &lt;3 and Vim</span>
+            <nav aria-label="Footer">
+                <a class="bracket" href="https://github.com/DanBradbury">github</a>
+                <a class="bracket" href="https://www.linkedin.com/in/daniel-bradbury-28003969/">linkedin</a>
+            </nav>
+        </footer>
+    </main>
+
+    <div class="status-line" aria-hidden="true">
+        <div class="status-left">
+            <span class="mode-indicator">NORMAL</span>
+            <span class="seg seg-file">~/index.html</span>
+        </div>
+        <div class="status-right">
+            <span class="seg seg-ft">html</span>
+            <span class="seg seg-enc">utf-8[unix]</span>
+            <span class="seg seg-pos">Top</span>
+        </div>
+    </div>
+
+    <script src="vim.js" defer></script>
+</body>
+</html>
