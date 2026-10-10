@@ -880,6 +880,7 @@ mark.search-highlight.is-current {
     .tabline-tabs a { padding: .55rem .6rem; }
     .hero { padding-top: 2.25rem; }
     .keys-hint { display: none; }
+    .bprev { display: none; }
 
     .post-row {
         grid-template-columns: 1fr;
