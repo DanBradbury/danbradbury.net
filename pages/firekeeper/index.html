@@ -42,6 +42,8 @@
             <p class="post-tagline"><em>One bonfire to tend to for all providers.</em></p>
         </header>
 
+        <firekeeper-bonfire></firekeeper-bonfire>
+
         <article class="content">
             <p>I use more than one coding agent, and couldn't answer simple questions about my own work. What did a session cost? Which model did I use last Wednesday? Where did that fix come from? The answers were scattered across tools with their own dashboards, or none at all.</p>
 
@@ -95,5 +97,738 @@
     </div>
 
     <script src="/vim.js" defer></script>
+    <script>
+/*!
+ * firekeeper-bonfire: an animated ASCII bonfire for a web page.
+ * One bonfire to tend for all your coding agents.
+ *
+ *   <script src="firekeeper-bonfire.js" defer><\/script>
+ *   <firekeeper-bonfire></firekeeper-bonfire>
+ *
+ * A dark forest under a night sky, lit by one fire: a real flame simulation,
+ * embers and smoke rising into the stars, firelight on the pines and the
+ * ground, and a wizard, a warrior and a mage sitting around it.
+ *
+ * No dependencies, no build step, one file. It draws on a <canvas> inside the
+ * tag (shadow DOM, so your CSS cannot break it and it cannot break yours).
+ *
+ * Attributes (all optional)
+ *   cols     grid width in characters, 80 to 240 (default 160; rows follow)
+ *   fps      frames a second, 1 to 60 (default 20)
+ *   fade     "off" to turn off the soft fade into the page at the edges
+ *   motion   play even when the visitor prefers reduced motion
+ *   seed     any number: a different forest, same bonfire
+ *   label    the text a screen reader hears
+ * CSS
+ *   firekeeper-bonfire { --bonfire-bg: #0d1511; aspect-ratio: 16 / 10; }
+ *   The tag is a block that fills its container. Give it a height or a different
+ *   aspect-ratio and the picture is cropped (never stretched), keeping the fire in view.
+ * JS (on the element)
+ *   el.pause()  el.play()  el.advance(seconds)
+ *
+ * MIT licence. The ASCII halftone approach follows ascii.rest by @bas3line.
+ */
+(() => {
+  "use strict";
+  const TAG = "firekeeper-bonfire";
+  if (typeof customElements === "undefined" || customElements.get(TAG)) return;
+
+  // ---- the picture's own units: 160 across, 100 down, whatever the grid ------
+  const LW = 160, LH = 100;
+  const LIGHT_U = 80, LIGHT_V = 66; // where the firelight comes from
+  const GROUND_V = 49; // the horizon
+  const WARM = [1, 0.52, 0.17]; // the colour of the light
+  const FW = 44, FH = 24, FU0 = 58, FV0 = 33.5; // flame grid: columns, rows, origin; one cell is 1u x 2v
+  const FIRE_U = FU0 + FW / 2;
+  const MOON = [117, 17.5];
+
+  // ---- glyphs ----------------------------------------------------------------
+  const GLY = " .,'`:;-~=+*xX%#@^|/\\()[]oO0&8!\"_<>iltIf1";
+  const G = (c) => GLY.indexOf(c);
+  const COV = new Float32Array(GLY.length).fill(0.3); // roughly how much of a cell each glyph inks
+  const covs = { " ": 0, ".": 0.1, ",": 0.14, "'": 0.12, "`": 0.1, ":": 0.2, ";": 0.24, "-": 0.2, "~": 0.24, "=": 0.32, "+": 0.28, "*": 0.36, x: 0.36, X: 0.45, "%": 0.52, "#": 0.62, "@": 0.7, "^": 0.25, "|": 0.22, "/": 0.22, "\\": 0.22, o: 0.4, O: 0.5, 0: 0.55, "&": 0.55, 8: 0.58, "!": 0.2, '"': 0.15, _: 0.12, i: 0.3, l: 0.28, t: 0.35, I: 0.33, f: 0.38, 1: 0.34 };
+  for (const c in covs) COV[G(c)] = covs[c];
+  const ramp = (s) => Uint8Array.from(s, (c) => G(c));
+  const R_SKY = 0, R_FOL = 1, R_GRD = 2, R_OBJ = 3, R_FIX = 4;
+  const RAMPS = [ramp(" .,:"), ramp(":;i!lI|fx%#&@"), ramp(" .,':;~=+*"), ramp("=+xX%#@"), ramp(" ")];
+  const FIRE = ramp(" .:^*x%#@");
+  const BGK = [1, 0.42, 0.55, 0.4, 0.4]; // how much of a cell's colour fills its background, by kind
+  const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16 - 0.5);
+
+  // 16 levels a channel, finer in the darks: 4096 colours, so a glyph atlas stays small
+  const LVL = [0, 5, 10, 16, 23, 31, 40, 51, 64, 80, 100, 125, 155, 190, 225, 255];
+  const LVQ = new Uint8Array(256);
+  for (let i = 0; i < 256; i++) {
+    let b = 0, bd = 1e9;
+    for (let j = 0; j < 16; j++) {
+      const d = Math.abs(LVL[j] - i);
+      if (d < bd) (bd = d), (b = j);
+    }
+    LVQ[i] = b;
+  }
+
+  // ---- small maths -------------------------------------------------------------
+  const clamp = (v, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
+  const smooth = (a, b, v) => {
+    const k = clamp((v - a) / (b - a));
+    return k * k * (3 - 2 * k);
+  };
+  const mix = (a, b, k) => a + (b - a) * k;
+  function mulberry32(a) {
+    return () => {
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function hash(x, y) {
+    let h = Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263);
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  function noise(x, y) {
+    const xi = Math.floor(x), yi = Math.floor(y);
+    const fx = x - xi, fy = y - yi;
+    const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy);
+    const a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+  function fbm(x, y, o) {
+    let s = 0, n = 0, a = 0.5, f = 1;
+    for (let i = 0; i < o; i++) {
+      s += a * noise(x * f, y * f);
+      n += a;
+      a *= 0.5;
+      f *= 2;
+    }
+    return s / n;
+  }
+
+  // ---- the scene, built once per grid size ---------------------------------------
+  // Every cell gets an ambient (moonlit) colour, the colour it takes at full firelight,
+  // and the kind of glyph it is drawn with. A frame is then ambient + light * flicker.
+  function build(W, H, seed) {
+    const N = W * H, rng = mulberry32(seed);
+    const S = {
+      W, H, N,
+      r0: new Float32Array(N), g0: new Float32Array(N), b0: new Float32Array(N),
+      r1: new Float32Array(N), g1: new Float32Array(N), b1: new Float32Array(N),
+      ramp: new Uint8Array(N), gl: new Uint8Array(N), emt: new Uint8Array(N), emw: new Float32Array(N),
+      top: new Uint8Array(N), hv: new Float32Array(N), bgs: new Float32Array(N),
+    };
+    const sx = W / LW, sy = H / LH;
+    const cellsIn = (u0, v0, u1, v1, fn) => {
+      const c0 = Math.max(0, Math.floor(u0 * sx)), c1 = Math.min(W - 1, Math.floor(u1 * sx));
+      const r0 = Math.max(0, Math.floor(v0 * sy)), r1 = Math.min(H - 1, Math.floor(v1 * sy));
+      for (let row = r0; row <= r1; row++) for (let col = c0; col <= c1; col++) fn(col, row, row * W + col, (col + 0.5) / sx, (row + 0.5) / sy);
+    };
+    // lit by the fire: `face` is how squarely this cell looks at it, `pen` how far back in the woods it is
+    const setCell = (k, u, v, rp, amb, lit, face, pen, gain, ky) => {
+      const d = Math.hypot(u - LIGHT_U, (v - LIGHT_V) * ky) + pen;
+      const l = (gain * face * 2.6) / (1 + (d / 20) * (d / 20));
+      S.r0[k] = amb[0], S.g0[k] = amb[1], S.b0[k] = amb[2];
+      S.r1[k] = lit[0] * WARM[0] * l, S.g1[k] = lit[1] * WARM[1] * l, S.b1[k] = lit[2] * WARM[2] * l;
+      S.ramp[k] = rp, S.emt[k] = 0, S.emw[k] = 0, S.top[k] = 0, S.bgs[k] = BGK[rp];
+    };
+
+    // sky and ground
+    for (let row = 0; row < H; row++) {
+      for (let col = 0; col < W; col++) {
+        const k = row * W + col, u = (col + 0.5) / sx, v = (row + 0.5) / sy;
+        S.hv[k] = hash(col * 7 + 3, row * 13 + seed);
+        if (v < GROUND_V) {
+          const g = Math.pow(v / GROUND_V, 1.5);
+          let r = mix(0.01, 0.06, g), gg = mix(0.018, 0.12, g), b = mix(0.045, 0.2, g);
+          // the Milky Way, a faint band running up to the right
+          const dv = v - (42 - 0.46 * (u - 28));
+          const band = Math.exp(-((dv / 11) ** 2)) * (0.35 + fbm(u * 0.06, v * 0.09, 3));
+          r += 0.03 * band, gg += 0.04 * band, b += 0.085 * band;
+          const halo = Math.exp(-Math.hypot(u - MOON[0], v - MOON[1]) / 9);
+          r += 0.07 * halo, gg += 0.1 * halo, b += 0.14 * halo;
+          setCell(k, u, v, R_SKY, [r, gg, b], [0, 0, 0], 0, 0, 0, 1);
+          // smoke and haze above the fire catch a little of its light
+          const l = 0.5 / (1 + (Math.hypot(u - LIGHT_U, v - LIGHT_V) / 26) ** 2);
+          S.r1[k] = 0.5 * l, S.g1[k] = 0.27 * l, S.b1[k] = 0.1 * l;
+          // the moon: a crescent
+          const inOuter = Math.hypot(u - MOON[0], v - MOON[1]) <= 6.4;
+          const inCut = Math.hypot(u - (MOON[0] + 3.6), v - (MOON[1] - 1.6)) <= 5.7;
+          if (inOuter && !inCut) {
+            S.ramp[k] = R_FIX, S.gl[k] = G(Math.hypot(u - MOON[0], v - MOON[1]) > 5.2 ? "%" : "@");
+            S.r0[k] = 0.97, S.g0[k] = 0.97, S.b0[k] = 0.86, S.r1[k] = S.g1[k] = S.b1[k] = 0, S.bgs[k] = 0.8;
+          }
+        } else {
+          const dg = Math.hypot(u - FIRE_U, (v - 88) * 2.4);
+          const l = (0.62 * 2.6) / (1 + (dg / 20) * (dg / 20));
+          const dark = mix(1, 0.5, smooth(60, 100, v));
+          S.ramp[k] = R_GRD, S.emt[k] = 0, S.top[k] = 0, S.bgs[k] = BGK[R_GRD];
+          S.r0[k] = 0.04 * dark, S.g0[k] = 0.06 * dark, S.b0[k] = 0.065 * dark;
+          S.r1[k] = 0.6 * WARM[0] * l, S.g1[k] = 0.42 * WARM[1] * l, S.b1[k] = 0.24 * WARM[2] * l;
+        }
+      }
+    }
+
+    // trees: a spruce is a trunk and boughs that widen in tiers
+    const paintTree = (x0, base, h, w, layer) => {
+      const pen = [24, 9, 0][layer], gain = [0.9, 1.15, 1.35][layer];
+      const amb = [[0.07, 0.125, 0.15], [0.045, 0.085, 0.095], [0.02, 0.045, 0.05]][layer];
+      const lit = [[0.5, 0.55, 0.45], [0.55, 0.5, 0.3], [0.6, 0.45, 0.25]][layer];
+      const dir = Math.sign(LIGHT_U - x0);
+      const tiers = 4 + Math.round(h / 9);
+      cellsIn(x0 - w / 2 - 2, base - h - 1, x0 + w / 2 + 2, base + 1, (col, row, k, u, v) => {
+        const t = (base - v) / h;
+        if (t < -0.02 || t > 1.02) return;
+        const dx = u - x0;
+        let hw = 0, nx = 0, part = 0;
+        if (t >= 0.1) {
+          const f = (((t * tiers) % 1) + 1) % 1;
+          hw = (w / 2) * Math.pow(1 - t, 0.85) * (1 - 0.42 * f) * (0.86 + 0.28 * hash(col * 3 + layer, row));
+          if (Math.abs(dx) <= hw) (part = 1), (nx = dx / Math.max(hw, 0.6));
+        }
+        if (!part && v <= base && Math.abs(dx) <= Math.max(0.9, w * 0.045)) (part = 2), (nx = dx > 0 ? 0.6 : -0.6);
+        if (!part) return;
+        const face = dir === 0 ? 0.7 : clamp(0.3 + 0.7 * (0.5 + 0.5 * nx * dir));
+        const jit = 0.8 + 0.4 * S.hv[k];
+        if (part === 1) {
+          setCell(k, u, v, R_FOL, amb, lit, face * jit, pen, gain, 1.15);
+          if (hw - Math.abs(dx) < 1.15) (S.ramp[k] = R_FIX), (S.gl[k] = G(dx < 0 ? "/" : "\\"));
+        }
+        else setCell(k, u, v, R_OBJ, [0.04, 0.026, 0.02], [0.5, 0.3, 0.15], face, pen, gain, 1.15);
+      });
+    };
+    const trees = [];
+    for (let u = -4; u < LW + 6; u += 3.4 + rng() * 2.6) {
+      const e = smooth(26, 78, Math.abs(u - 80)), h = 11 + rng() * 7 + e * 20;
+      trees.push({ u, base: 55 + rng() * 3, h, w: h * (0.42 + 0.08 * rng()), layer: 0 });
+    }
+    for (let u = -6; u < LW + 8; u += 7 + rng() * 5) {
+      const e = smooth(24, 70, Math.abs(u - 80)), h = 17 + rng() * 9 + e * 34;
+      trees.push({ u, base: 62 + rng() * 8, h, w: h * (0.46 + 0.08 * rng()), layer: 1 });
+    }
+    trees.sort((a, b) => a.layer - b.layer || a.base - b.base);
+    for (const t of trees) paintTree(t.u, t.base, t.h, t.w, t.layer);
+
+    // geometry helpers for the things in the clearing
+    const segDist = (u, v, ax, ay, bx, by) => {
+      const dx = bx - ax, dy = by - ay, t = clamp(((u - ax) * dx + (v - ay) * dy) / (dx * dx + dy * dy || 1));
+      return [Math.hypot(u - (ax + dx * t), v - (ay + dy * t)), v - (ay + dy * t), t];
+    };
+    const log = (ax, ay, bx, by, r, top, glow) => {
+      cellsIn(Math.min(ax, bx) - r - 1, Math.min(ay, by) - r - 1, Math.max(ax, bx) + r + 1, Math.max(ay, by) + r + 1, (col, row, k, u, v) => {
+        const [d, dv] = segDist(u, v, ax, ay, bx, by);
+        if (d > r) return;
+        setCell(k, u, v, R_OBJ, [0.05, 0.03, 0.022], [0.55, 0.32, 0.15], clamp(0.55 - 0.45 * (dv / r)), 0, 0.9, 1.4);
+        S.top[k] = top;
+        if (glow) (S.emt[k] = 1), (S.emw[k] = (0.3 + 0.7 * noise(u * 0.5, v * 0.45)) * (0.5 + 0.5 * (1 - d / r)));
+      });
+    };
+    // stones round the fire
+    for (let i = 0; i < 15; i++) {
+      const a = (i / 15) * Math.PI * 2 + 0.25, su = FIRE_U + Math.cos(a) * (20 + 2 * rng()), sv = 88 + Math.sin(a) * 6.2;
+      const r = 2.2 + 1.2 * rng() + 0.5 * Math.max(0, Math.sin(a)), front = Math.sin(a) > 0.1 ? 1 : 0;
+      const lx = LIGHT_U - su, ly = 82 - sv, ll = Math.hypot(lx, ly) || 1;
+      cellsIn(su - r - 1, sv - r - 1, su + r + 1, sv + r * 0.8 + 1, (col, row, k, u, v) => {
+        const dx = (u - su) / r, dy = (v - sv) / (r * 0.8);
+        const q = dx * dx + dy * dy;
+        if (q > 1) return;
+        const lit = clamp(0.45 + 0.65 * ((dx * lx + dy * ly) / ll) + 0.2 * S.hv[k]);
+        setCell(k, u, v, R_OBJ, [0.05, 0.058, 0.075], [0.5, 0.46, 0.42], lit, 0, 1.0, 1.4);
+        S.top[k] = front;
+      });
+    }
+    // the logs: two crossed behind, one across the front
+    log(65, 91, 91, 79.5, 2.5, 0, true);
+    log(95, 91, 69, 79.5, 2.5, 0, true);
+    log(66, 92.5, 94, 92.5, 2.1, 1, true);
+
+    // the party: a wizard, a warrior and a mage, each facing the fire
+    const figure = (kind, x0, vb, sc) => {
+      const d = x0 < LIGHT_U ? 1 : -1;
+      const P = {
+        wiz: { amb: [0.1, 0.07, 0.19], lit: [0.6, 0.4, 0.9] },
+        war: { amb: [0.1, 0.12, 0.15], lit: [0.75, 0.77, 0.82] },
+        mag: { amb: [0.05, 0.14, 0.16], lit: [0.4, 0.78, 0.82] },
+      }[kind];
+      const put = (col, row, k, u, v, nx, g) => {
+        const face = clamp(0.3 + 0.7 * (0.5 + 0.5 * nx * d));
+        setCell(k, u, v, R_OBJ, P.amb, P.lit, face * (0.85 + 0.3 * S.hv[k]), 0, (g || 1) * 2.1, 1.4);
+        S.top[k] = 1;
+      };
+      const X = (a) => x0 + d * a * sc, V = (a) => vb - a * sc; // figure units to picture units
+      const disc = (cu, cv, r, g) => cellsIn(cu - r - 1, cv - r - 1, cu + r + 1, cv + r + 1, (col, row, k, u, v) => {
+        const q = Math.hypot(u - cu, v - cv);
+        if (q <= r) put(col, row, k, u, v, (u - cu) / r, g);
+      });
+      // the seat
+      log(x0 - 8.5 * sc, vb + 1.6 * sc, x0 + 8.5 * sc, vb + 1.6 * sc, 1.8 * sc, 1, false);
+      // legs: a thigh out toward the fire and a shin down
+      cellsIn(x0 - 6 * sc, vb - 4 * sc, x0 + 8 * sc, vb + 1, (col, row, k, u, v) => {
+        const a = (u - x0) * d / sc;
+        if ((a >= 0 && a <= 7 && v >= vb - 3.6 * sc && v <= vb - 1 * sc) || (a >= 5.4 && a <= 7.6 && v >= vb - 3.6 * sc && v <= vb + 0.4 * sc)) put(col, row, k, u, v, 0.5 * d, 0.8);
+      });
+      // robe or armour: wider toward the hem
+      const top = kind === "war" ? 14 : 13.5, hwTop = { wiz: 2.6, war: 4.7, mag: 2.3 }[kind], hwBot = { wiz: 4.8, war: 4.2, mag: 3.6 }[kind];
+      cellsIn(x0 - 7 * sc, vb - top * sc, x0 + 7 * sc, vb - 1 * sc, (col, row, k, u, v) => {
+        const t = (v - (vb - top * sc)) / ((top - 1) * sc), hw = mix(hwTop, hwBot, t) * sc;
+        if (Math.abs(u - x0) <= hw) put(col, row, k, u, v, (u - x0) / hw);
+      });
+      // head
+      disc(x0, vb - 15.4 * sc, (kind === "mag" ? 2.7 : 2.3) * sc);
+      if (kind === "wiz") {
+        // a pointed hat with a brim, bent back, and a beard
+        cellsIn(x0 - 6 * sc, vb - 28 * sc, x0 + 6 * sc, vb - 15.5 * sc, (col, row, k, u, v) => {
+          const t = (v - (vb - 27 * sc)) / (10 * sc);
+          if (t >= 0 && t <= 1) {
+            const cx = x0 - d * 2.6 * sc * (1 - t);
+            if (Math.abs(u - cx) <= 3.4 * sc * t) put(col, row, k, u, v, (u - cx) / (3.4 * sc * t + 0.01), 0.9);
+          }
+          if (Math.abs(u - x0) <= 5.2 * sc && Math.abs(v - (vb - 17.4 * sc)) <= 0.9 * sc) put(col, row, k, u, v, (u - x0) / (5.2 * sc), 0.9);
+          if (Math.abs(u - X(1)) <= 1.7 * sc && v >= vb - 14.3 * sc && v <= vb - 10.5 * sc) put(col, row, k, u, v, 0.4 * d, 1.2); // beard, pale
+        });
+      } else if (kind === "war") {
+        // a helm with a crest, and a sword point-down in the ground
+        cellsIn(x0 - 3 * sc, vb - 21.5 * sc, x0 + 3 * sc, vb - 15 * sc, (col, row, k, u, v) => {
+          if (Math.abs(u - x0) <= 0.7 * sc && v >= vb - 21 * sc && v <= vb - 17.5 * sc) put(col, row, k, u, v, 0.3 * d, 1.1);
+        });
+        cellsIn(X(8) - 3, vb - 17 * sc, X(8) + 3, vb + 1, (col, row, k, u, v) => {
+          if (Math.abs(u - X(8)) <= 0.8 && v >= vb - 15 * sc && v <= vb) put(col, row, k, u, v, -0.2 * d, 1.9);
+          if (Math.abs(u - X(8)) <= 2.4 * sc && Math.abs(v - (vb - 11 * sc)) <= 0.7) put(col, row, k, u, v, 0.1 * d, 1.5);
+        });
+      } else {
+        // a hood, and a staff with a glowing blue-white orb
+        cellsIn(x0 - 4 * sc, vb - 22 * sc, x0 + 4 * sc, vb - 16 * sc, (col, row, k, u, v) => {
+          const t = (v - (vb - 21.5 * sc)) / (5 * sc);
+          if (t >= 0 && t <= 1 && Math.abs(u - (x0 - d * 0.8 * sc)) <= 2.3 * sc * t) put(col, row, k, u, v, (u - x0) / (2.3 * sc), 0.9);
+        });
+        const su = X(-6.2), tv = vb - 25 * sc;
+        cellsIn(su - 8, tv - 8, su + 8, vb + 1, (col, row, k, u, v) => {
+          if (Math.abs(u - su) <= 0.8 && v >= tv && v <= vb) put(col, row, k, u, v, 0.1 * d, 0.7);
+          const q = Math.hypot(u - su, v - (tv - 1.4));
+          if (q <= 1.9) {
+            setCell(k, u, v, R_OBJ, [0.1, 0.2, 0.3], [0.4, 0.6, 0.8], 0.5, 0, 1, 1.4);
+            S.top[k] = 1, S.emt[k] = 2, S.emw[k] = 1 - 0.3 * (q / 1.9);
+          } else if (q <= 7) {
+            // its cool light on whatever is near
+            const a = (1 - (q - 1.9) / 5.1) ** 2 * 0.16;
+            S.r0[k] += 0.25 * a, S.g0[k] += 0.55 * a, S.b0[k] += 0.9 * a;
+          }
+        });
+      }
+    };
+    figure("wiz", 46, 91, 1.22);
+    figure("war", 115, 91, 1.22);
+    figure("mag", 62, 99.5, 1.12);
+
+    // near trees frame the picture from both sides
+    const near = [[8, 99, 106, 27], [31, 95, 68, 20], [-5, 100, 124, 24], [152, 99, 108, 28], [129, 95, 66, 20], [167, 100, 118, 25]];
+    for (const [u, base, h, w] of near) paintTree(u, base, h, w, 2);
+
+    // tufts of grass along the bottom edge
+    const tuft = (tu, tv, n, len, lean) => {
+      for (let i = 0; i < n; i++) {
+        const ang = lean + (i / (n - 1) - 0.5) * 1.5 + 0.2 * (rng() - 0.5), L = len * (0.6 + 0.6 * rng());
+        for (let s = 0; s <= L * 2; s++) {
+          const q = s / 2, ux = tu + Math.sin(ang) * q * 1.0 + 0.04 * q * q * Math.sign(ang), vy = tv - Math.cos(ang) * q;
+          const col = Math.floor(ux * sx), row = Math.floor(vy * sy);
+          if (col < 0 || col >= W || row < 0 || row >= H) continue;
+          const k = row * W + col;
+          setCell(k, ux, vy, R_FIX, [0.02, 0.06, 0.04], [0.3, 0.45, 0.2], 0.8, 0, 1, 1.4);
+          S.gl[k] = G(Math.abs(ang) < 0.28 ? "|" : ang > 0 ? "/" : "\\");
+          S.top[k] = 1;
+        }
+      }
+    };
+    for (const [u, v, n, len, lean] of [[6, 100, 9, 12, 0.2], [20, 100, 7, 8, 0.1], [140, 100, 8, 11, -0.15], [154, 100, 9, 13, -0.2], [30, 100, 5, 5, 0.1], [128, 100, 5, 6, -0.1], [98, 100, 5, 4.5, 0], [44, 100, 5, 4, 0.05]]) tuft(u, v, n, len, lean);
+
+    // stars where the sky is still open
+    S.stars = [];
+    for (let row = 0; row < H; row++) {
+      for (let col = 0; col < W; col++) {
+        const k = row * W + col, u = (col + 0.5) / sx, v = (row + 0.5) / sy;
+        if (S.ramp[k] !== R_SKY || v > 44) continue;
+        const dv = v - (42 - 0.46 * (u - 28)), band = Math.exp(-((dv / 11) ** 2));
+        const h = hash(col * 5 + 11, row * 3 + seed * 7);
+        if (h < 0.012 + 0.03 * band) {
+          const b = 0.35 + 0.65 * hash(col, row * 2 + 1);
+          S.stars.push({ k, b, ph: hash(row, col) * 6.28, sp: 0.8 + 2.4 * hash(col + 9, row), warm: hash(col * 2, row) < 0.2 ? 1 : 0 });
+        }
+      }
+    }
+    // which cells the flames and smoke can touch
+    S.fire = [];
+    cellsIn(FU0, FV0, FU0 + FW, FV0 + FH * 2, (col, row, k, u, v) => {
+      const fx = Math.floor(u - FU0), fy = Math.floor((v - FV0) / 2);
+      if (fx >= 0 && fx < FW && fy >= 0 && fy < FH) S.fire.push(k, fy * FW + fx);
+    });
+    S.smoke = [];
+    cellsIn(44, 0, 118, 48, (col, row, k, u, v) => {
+      if (S.ramp[k] !== R_FIX) S.smoke.push(k, col, row);
+    });
+    return S;
+  }
+
+  // ---- the flames: a grid of heat that rises, cools and sways -------------------------
+  const SIM_HZ = 18;
+  function newState(seed) {
+    return { heat: new Float32Array(FW * FH), rng: mulberry32(seed * 7919 + 13), t: 0, acc: 0, I: 1, burst: 0, bx: FW / 2, embers: [], ember_acc: 0 };
+  }
+  function stepFire(st) {
+    const H = st.heat, rng = st.rng, y0 = FH - 1, c = FW / 2;
+    // the logs feed the bottom row
+    for (let x = 0; x < FW; x++) {
+      const dx = x + 0.5 - c;
+      H[y0 * FW + x] = Math.exp(-((dx / 10.5) ** 2)) * (0.8 + 0.34 * rng());
+    }
+    if (st.burst > 0) {
+      st.burst--;
+      for (let x = 0; x < FW; x++) {
+        const w = 1 - Math.abs(x - st.bx) / 4;
+        if (w > 0) {
+          H[y0 * FW + x] = Math.min(1.35, H[y0 * FW + x] + w);
+          H[(y0 - 1) * FW + x] = Math.min(1.3, H[(y0 - 1) * FW + x] + 0.6 * w);
+        }
+      }
+    } else if (rng() < 0.1) (st.burst = 2 + ((rng() * 3) | 0)), (st.bx = c + (rng() - 0.5) * 10);
+    for (let y = 0; y < FH - 1; y++) {
+      const sway = Math.sin(st.t * 1.7 + y * 0.35) * 0.8 * ((FH - 1 - y) / FH + 0.2);
+      for (let x = 0; x < FW; x++) {
+        const off = Math.round(sway + (rng() < 0.18 ? (rng() < 0.5 ? -1 : 1) : 0));
+        const sx = clamp(x + off, 1, FW - 2), b = (y + 1) * FW + sx;
+        const edge = Math.abs(x + 0.5 - c) / 14;
+        const cool = 0.026 + 0.05 * rng() + 0.13 * edge * edge;
+        H[y * FW + x] = Math.max(0, 0.2 * H[b - 1] + 0.6 * H[b] + 0.2 * H[b + 1] - cool);
+      }
+    }
+    st.t += 1 / SIM_HZ;
+    // how bright the whole clearing is: the flames' mean heat, smoothed
+    let m = 0;
+    for (let y = FH - 9; y < FH - 2; y++) for (let x = 14; x < FW - 14; x++) m += H[y * FW + x];
+    m /= 7 * (FW - 28);
+    st.I += (0.74 + 0.62 * m + 0.05 * Math.sin(st.t * 9.1) - st.I) * 0.3;
+    // embers leave the flame tips and rise into the stars
+    if (st.embers.length < 90 && rng() < 0.85) {
+      for (let tries = 0; tries < 5; tries++) {
+        const x = (c + (rng() - 0.5) * 14) | 0, y = 3 + ((rng() * 9) | 0);
+        if (H[y * FW + x] > 0.22) {
+          st.embers.push({ u: FU0 + x + 0.5, v: FV0 + y * 2 + 1, vx: (rng() - 0.5) * 3 + 1, vy: -(6 + rng() * 12), age: 0, life: 2.2 + rng() * 3.4, ph: rng() * 6.28 });
+          break;
+        }
+      }
+    }
+    const dt = 1 / SIM_HZ;
+    for (let i = st.embers.length - 1; i >= 0; i--) {
+      const e = st.embers[i];
+      e.age += dt;
+      e.vx += (rng() - 0.5) * 9 * dt + 0.5 * dt;
+      e.u += (e.vx + Math.sin(st.t * 2 + e.ph) * 1.6) * dt;
+      e.v += e.vy * dt;
+      if (e.age > e.life || e.v < -2) st.embers.splice(i, 1);
+    }
+  }
+  // heat to colour: black, deep red, orange, yellow, nearly white
+  const FSTOPS = [[0, 0.1, 0.02, 0.01], [0.1, 0.45, 0.06, 0.02], [0.25, 0.85, 0.18, 0.03], [0.45, 1, 0.42, 0.06], [0.65, 1, 0.65, 0.15], [0.85, 1, 0.85, 0.4], [1.01, 1, 0.97, 0.75]];
+  const fcol = [0, 0, 0];
+  function fireColor(h) {
+    let i = 1;
+    while (i < FSTOPS.length - 1 && h > FSTOPS[i][0]) i++;
+    const a = FSTOPS[i - 1], b = FSTOPS[i], k = clamp((h - a[0]) / (b[0] - a[0]));
+    fcol[0] = mix(a[1], b[1], k), fcol[1] = mix(a[2], b[2], k), fcol[2] = mix(a[3], b[3], k);
+  }
+
+  // ---- one frame: scene + light + fire -> a glyph, a colour and a background per cell -------------
+  function frame(S, st, OG, OC, OB) {
+    const { W, H } = S, t = st.t, I = st.I;
+    const q = (x) => LVQ[x <= 0 ? 0 : x >= 1 ? 255 : (x * 255 + 0.5) | 0];
+    const qc = (r, g, b) => (q(r) << 8) | (q(g) << 4) | q(b);
+    const dr = (c) => LVL[(c >> 8) & 15] / 255, dg = (c) => LVL[(c >> 4) & 15] / 255, db = (c) => LVL[c & 15] / 255;
+    for (let row = 0; row < H; row++) {
+      for (let col = 0; col < W; col++) {
+        const k = row * W + col, bay = BAYER[(row & 3) * 4 + (col & 3)];
+        let r = S.r0[k] + S.r1[k] * I, g = S.g0[k] + S.g1[k] * I, b = S.b0[k] + S.b1[k] * I;
+        const em = S.emt[k];
+        if (em === 1) {
+          const e = S.emw[k] * (0.55 + 0.55 * I) * (0.75 + 0.25 * Math.sin(t * 5 + S.hv[k] * 40));
+          r += 0.85 * e, g += 0.27 * e, b += 0.03 * e;
+        } else if (em === 2) {
+          const e = S.emw[k] * (0.88 + 0.12 * Math.sin(t * 2.2));
+          r += 0.5 * e, g += 0.75 * e, b += e;
+        }
+        const bs = S.bgs[k], rp = S.ramp[k];
+        OB[k] = qc(r * bs, g * bs, b * bs);
+        if (rp === R_SKY) {
+          OG[k] = 0, OC[k] = 0;
+          continue;
+        }
+        if (rp === R_FIX) {
+          OG[k] = S.gl[k], OC[k] = qc(r, g, b);
+          continue;
+        }
+        const p = Math.max(r, g, b, 1e-4), R = RAMPS[rp], n = R.length;
+        let x, jit = 0;
+        if (rp === R_GRD) (x = clamp(p * 1.7)), (jit = (S.hv[k] - 0.5) * 0.8);
+        else (x = clamp(p * 1.2)), (jit = (S.hv[k] - 0.5) * (rp === R_FOL ? 1.6 : 0.5));
+        const gl = R[clamp(Math.round(x * (n - 1) + bay * 0.95 + jit), 0, n - 1)];
+        if (gl === 0) {
+          OG[k] = 0, OC[k] = 0;
+          continue;
+        }
+        OG[k] = gl;
+        if (rp === R_GRD) {
+          // sparse glyphs are drawn brighter to make up their size
+          const s = Math.min(1.6, (0.5 + p) / (1 + p) / Math.max(COV[gl], 0.1) * 0.5);
+          OC[k] = qc(r * s, g * s, b * s);
+        } else OC[k] = qc(r * 1.1, g * 1.1, b * 1.1);
+      }
+    }
+    // stars
+    for (const s of S.stars) {
+      const b = s.b * (0.62 + 0.38 * Math.sin(t * s.sp + s.ph));
+      if (b < 0.2 || S.r1[s.k] * I > 0.16) continue;
+      OG[s.k] = s.b > 0.88 && b > 0.7 ? G("+") : s.b > 0.62 ? G("*") : G(".");
+      OC[s.k] = qc(s.warm ? b : b * 0.85, s.warm ? b * 0.92 : b * 0.93, s.warm ? b * 0.7 : b);
+    }
+    // smoke: a plume drifting up and to the right, lit warm at its foot
+    const sm = S.smoke;
+    for (let i = 0; i < sm.length; i += 3) {
+      const k = sm[i], u = (sm[i + 1] + 0.5) * (LW / W), v = (sm[i + 2] + 0.5) * (LH / H);
+      const cx = 82 + (48 - v) * 0.32 + 4 * Math.sin(v * 0.13 - t * 0.7), hw = 4 + (48 - v) * 0.3;
+      const dx = (u - cx) / hw;
+      if (dx * dx > 4) continue;
+      const fade = smooth(1, 14, v) * (1 - smooth(36, 48, v));
+      const n = fbm((u - cx) * 0.17, v * 0.1 + t * 0.55, 3);
+      const d = Math.exp(-dx * dx) * smooth(0.44, 0.8, n) * fade * 0.8;
+      if (d < 0.07) continue;
+      const warm = Math.exp(-(48 - v) / 14) * I;
+      const rr = (0.3 + 0.55 * warm) * d * 1.5, gg = (0.32 + 0.25 * warm) * d * 1.5, bb = (0.4 + 0.05 * warm) * d * 1.5;
+      OG[k] = d > 0.5 ? G("~") : d > 0.28 ? G(":") : G(".");
+      OC[k] = qc(rr, gg, bb);
+      const ob = OB[k];
+      OB[k] = qc(dr(ob) + rr * 0.3, dg(ob) + gg * 0.3, db(ob) + bb * 0.3);
+    }
+    // flames: bright glyphs on a glowing background
+    const fl = S.fire, heat = st.heat;
+    for (let i = 0; i < fl.length; i += 2) {
+      const k = fl[i], h = heat[fl[i + 1]];
+      if (h < 0.06 || S.top[k]) continue;
+      const row = (k / W) | 0, col = k - row * W, bay = BAYER[(row & 3) * 4 + (col & 3)];
+      const gl = FIRE[clamp(Math.round(Math.min(1, h) * (FIRE.length - 1) + bay * 0.8), 0, FIRE.length - 1)];
+      if (gl === 0) continue;
+      fireColor(Math.min(1, h));
+      const a = smooth(0.06, 0.24, h), ob = OB[k], oc = OC[k];
+      OG[k] = gl;
+      OC[k] = qc(mix(dr(oc), fcol[0], a), mix(dg(oc), fcol[1], a), mix(db(oc), fcol[2], a));
+      OB[k] = qc(mix(dr(ob), fcol[0] * 0.55, a), mix(dg(ob), fcol[1] * 0.5, a), mix(db(ob), fcol[2] * 0.4, a));
+    }
+    // embers
+    for (const e of st.embers) {
+      const col = Math.floor((e.u * W) / LW), row = Math.floor((e.v * H) / LH);
+      if (col < 0 || col >= W || row < 0 || row >= H) continue;
+      const k = row * W + col, f = 1 - e.age / e.life;
+      if (S.top[k]) continue;
+      const fl2 = 0.7 + 0.3 * Math.sin(t * 14 + e.ph);
+      OG[k] = f > 0.62 ? G("*") : f > 0.3 ? G("'") : G(".");
+      OC[k] = qc((0.55 + 0.45 * f) * fl2 + 0.25, (0.15 + 0.7 * f * f) * fl2, 0.12 * f * f);
+    }
+  }
+
+  // ---- drawing: a glyph atlas, so a frame is a few thousand drawImage calls ------------------------
+  class Atlas {
+    constructor() {
+      this.cv = document.createElement("canvas");
+      this.cx = this.cv.getContext("2d");
+      this.map = new Map();
+      this.n = 0;
+      this.cols = 64;
+      this.max = 4096;
+    }
+    setSize(cw, ch, font) {
+      this.cw = cw, this.ch = ch, this.font = font;
+      this.cv.width = this.cols * cw;
+      this.cv.height = (this.max / this.cols) * ch;
+      this.reset();
+    }
+    reset() {
+      this.cx.clearRect(0, 0, this.cv.width, this.cv.height);
+      this.map.clear();
+      this.n = 0;
+    }
+    slot(g, c) {
+      const key = g * 4096 + c;
+      let s = this.map.get(key);
+      if (s !== undefined) return s;
+      if (this.n >= this.max) this.reset();
+      s = this.n++;
+      const x = (s % this.cols) * this.cw, y = Math.floor(s / this.cols) * this.ch, cx = this.cx;
+      cx.font = this.font;
+      cx.textAlign = "center";
+      cx.textBaseline = "alphabetic";
+      cx.fillStyle = `rgb(${LVL[(c >> 8) & 15]},${LVL[(c >> 4) & 15]},${LVL[c & 15]})`;
+      cx.fillText(GLY[g], x + this.cw / 2, y + this.ch * 0.8);
+      this.map.set(key, s);
+      return s;
+    }
+  }
+
+  const STYLE = `
+    :host { display: block; position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--bonfire-bg, #0d1511); contain: content; }
+    canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 78%; }
+    :host(:not([fade="off"])) canvas {
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 88%, transparent);
+      -webkit-mask-composite: source-in;
+      mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 88%, transparent);
+      mask-composite: intersect;
+    }`;
+  const FONT = '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace';
+
+  class FirekeeperBonfire extends HTMLElement {
+    static get observedAttributes() {
+      return ["cols", "fps", "seed", "label"];
+    }
+    constructor() {
+      super();
+      const root = this.attachShadow({ mode: "open" });
+      root.innerHTML = `<style>${STYLE}</style><canvas></canvas>`;
+      this._cv = root.querySelector("canvas");
+      this._ctx = this._cv.getContext("2d");
+      this._atlas = new Atlas();
+      this._playing = false;
+      this._onScreen = false;
+    }
+    connectedCallback() {
+      if (!this.hasAttribute("role")) this.setAttribute("role", "img");
+      this._label();
+      this._init();
+      this._ro = new ResizeObserver(() => this._resize());
+      this._ro.observe(this);
+      this._io = new IntersectionObserver((e) => {
+        this._onScreen = e[e.length - 1].isIntersecting;
+        this._run();
+      });
+      this._io.observe(this);
+      this._vis = () => this._run();
+      document.addEventListener("visibilitychange", this._vis);
+      this._rm = matchMedia("(prefers-reduced-motion: reduce)");
+      this._rm.addEventListener("change", this._vis);
+      // draw again once a web font arrives, so the glyphs match the page
+      this._fonts = () => (this._atlas.reset(), (this._prevG && this._prevG.fill(255)), this._draw());
+      if (document.fonts) {
+        document.fonts.addEventListener("loadingdone", this._fonts);
+        document.fonts.load('12px "JetBrains Mono"').catch(() => {});
+      }
+    }
+    disconnectedCallback() {
+      this._ro && this._ro.disconnect();
+      this._io && this._io.disconnect();
+      document.removeEventListener("visibilitychange", this._vis);
+      this._rm && this._rm.removeEventListener("change", this._vis);
+      document.fonts && document.fonts.removeEventListener("loadingdone", this._fonts);
+      cancelAnimationFrame(this._raf);
+      this._raf = 0;
+    }
+    attributeChangedCallback(name) {
+      if (!this.isConnected || !this._S) return;
+      if (name === "label") this._label();
+      else if (name === "fps") this._run();
+      else (this._init(), this._resize());
+    }
+    _label() {
+      this.setAttribute("aria-label", this.getAttribute("label") || "An animated ASCII bonfire in a dark forest under the stars, with a wizard, a warrior and a mage sitting around it");
+    }
+    _init() {
+      const cols = clamp(Math.round(Number(this.getAttribute("cols")) || 160), 80, 240);
+      const rows = Math.round(cols * 0.3125);
+      const seed = Number(this.getAttribute("seed")) || 1;
+      this._W = cols, this._H = rows;
+      this._S = build(cols, rows, seed | 0);
+      this._st = newState(seed | 0);
+      this._OG = new Uint8Array(cols * rows);
+      this._OC = new Uint16Array(cols * rows);
+      this._OB = new Uint16Array(cols * rows);
+      this._prevG = new Uint8Array(cols * rows).fill(255);
+      this._prevC = new Uint16Array(cols * rows);
+      this._prevB = new Uint16Array(cols * rows);
+      this._bgStyle = [];
+      this._step(2.4); // let the fire catch and the embers get going
+      frame(this._S, this._st, this._OG, this._OC, this._OB);
+      this._cw = 0;
+    }
+    _step(sec) {
+      const n = Math.round(sec * SIM_HZ);
+      for (let i = 0; i < n; i++) stepFire(this._st);
+    }
+    _resize() {
+      const box = this.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      const dpr = window.devicePixelRatio || 1;
+      const cw = clamp(Math.ceil(Math.max((box.width * dpr) / this._W, (box.height * dpr) / (this._H * 2))), 3, 26), ch = cw * 2;
+      if (cw === this._cw) return;
+      this._cw = cw, this._ch = ch;
+      this._cv.width = this._W * cw;
+      this._cv.height = this._H * ch;
+      this._atlas.setSize(cw, ch, `${(cw / 0.6).toFixed(1)}px ${FONT}`);
+      this._prevG.fill(255);
+      this._draw();
+      this._run();
+    }
+    _draw() {
+      if (!this._cw) return;
+      const { _W: W, _H: H, _cw: cw, _ch: ch, _ctx: ctx, _atlas: at, _OG: OG, _OC: OC, _OB: OB, _prevG: pG, _prevC: pC, _prevB: pB, _bgStyle: bgs } = this;
+      for (let row = 0; row < H; row++) {
+        for (let col = 0; col < W; col++) {
+          const k = row * W + col, g = OG[k], c = g ? OC[k] : 0, b = OB[k];
+          if (g === pG[k] && c === pC[k] && b === pB[k]) continue;
+          pG[k] = g, pC[k] = c, pB[k] = b;
+          ctx.fillStyle = bgs[b] || (bgs[b] = `rgb(${LVL[(b >> 8) & 15]},${LVL[(b >> 4) & 15]},${LVL[b & 15]})`);
+          ctx.fillRect(col * cw, row * ch, cw, ch);
+          if (g === 0) continue;
+          const s = at.slot(g, c);
+          ctx.drawImage(at.cv, (s % at.cols) * cw, Math.floor(s / at.cols) * ch, cw, ch, col * cw, row * ch, cw, ch);
+        }
+      }
+    }
+    _tick(dt) {
+      this._st.acc += dt;
+      let n = 0;
+      while (this._st.acc >= 1 / SIM_HZ && n < 6) (this._st.acc -= 1 / SIM_HZ), stepFire(this._st), n++;
+      if (n === 6) this._st.acc = 0;
+      frame(this._S, this._st, this._OG, this._OC, this._OB);
+      this._draw();
+    }
+    _run() {
+      const still = this._rm && this._rm.matches && !this.hasAttribute("motion");
+      const go = !this._paused && this._onScreen && !document.hidden && !still && this._cw > 0;
+      if (go && !this._raf) {
+        this._last = performance.now();
+        const fps = clamp(Number(this.getAttribute("fps")) || 20, 1, 60);
+        const loop = (now) => {
+          this._raf = requestAnimationFrame(loop);
+          const dt = now - this._last;
+          if (dt < 1000 / fps - 3) return;
+          this._last = now;
+          this._tick(Math.min(dt, 100) / 1000);
+        };
+        this._raf = requestAnimationFrame(loop);
+      } else if (!go && this._raf) {
+        cancelAnimationFrame(this._raf);
+        this._raf = 0;
+      }
+    }
+    pause() {
+      this._paused = true;
+      this._run();
+    }
+    play() {
+      this._paused = false;
+      this._run();
+    }
+    advance(sec) {
+      this._step(sec);
+      frame(this._S, this._st, this._OG, this._OC, this._OB);
+      this._draw();
+    }
+  }
+  customElements.define(TAG, FirekeeperBonfire);
+})();
+    </script>
 </body>
 </html>
