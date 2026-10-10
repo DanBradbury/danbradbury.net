@@ -55,11 +55,17 @@ rm "$index_tmp"
 
 echo "Updated RECENT POSTS section in site/index.html"
 
+# Standalone pages: each pages/<name>/index.html is served at /<name>
+if [ -d pages ]; then
+    cp -R pages/. site/
+    echo "Copied standalone pages to site/"
+fi
+
 # Cache-bust static assets: Cloudflare caches them as immutable, so give each
 # version a unique URL based on its content hash
 for asset in style.css vim.js; do
     hash=$(sha256sum "site/$asset" | cut -c1-10)
-    sed -i -E "s#(href|src)=\"$asset(\?v=[a-f0-9]+)?\"#\1=\"$asset?v=$hash\"#" site/*.html
+    sed -i -E "s#(href|src)=\"(/?)$asset(\?v=[a-f0-9]+)?\"#\1=\"\2$asset?v=$hash\"#" site/*.html site/*/index.html
 done
 
 echo "Versioned static assets in site/*.html"
