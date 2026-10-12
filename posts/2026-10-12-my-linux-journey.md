@@ -4,9 +4,6 @@ tags:
   - linux
   - development
 ...
-<pura-vida></pura-vida>
-<script src="assets/pura-vida.js" defer></script>
-
 Omarchy crashed Chromium on me, so I built my own setup instead.
 
 I'd installed Omarchy on a spare machine a few months back and brought it back online. The intro animation played, and I figured I was off to the races. Then I fumbled around an unfamiliar interface, opened Chromium... and crash!
