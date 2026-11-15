@@ -1,8 +1,11 @@
 ---
 title: Every driver has a favorite miss. Find one that matches yours from 74 models
+description: Of 74 drivers robotically tested, Ping's G440 LST is the only head that ranks first or second in every miss region. Find the driver that matches your miss.
 tags:
   - golf
 ...
+> Originally published by Golf Digest: [Driver testing: 71 models, robotic analysis](https://www.golfdigest.com/story/driver-testing-71-models-robotic-analysis)
+
 To fully comprehend the interactive graphic below, let's start with a driver that hammers home the point we're trying to make: Ping's G440 LST. Of the models we tested in this glorified "driver royal rumble," G440 LST didn't post the field's longest center-strike carry. That title actually belongs to an older Ping model: G425 LST (231.2 yards).
 
 However, if you were to move impact away from the geometric center (high, low, heel and toe), G440 LST becomes the only driver in a 74-head field that ranks first or second in every miss region we measured.
