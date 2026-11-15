@@ -1,6 +1,8 @@
 ---
 title: Every driver has a favorite miss. Find one that matches yours from 74 models
 description: Of 74 drivers robotically tested, Ping's G440 LST is the only head that ranks first or second in every miss region. Find the driver that matches your miss.
+image: golf/driver-miss-chart-preview.png
+image-alt: Scatter plot of 74 drivers showing how much each carries better on toe versus heel and high versus low misses
 tags:
   - golf
 ...
