@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every driver has a favorite miss – interactive chart</title>
+<style>body{margin:0;padding:24px;background:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#111}.wrap{max-width:1100px;margin:0 auto}</style>
+</head><body><div class="wrap">
+  <style>
+.dsi *,
+.dsi *::before,
+.dsi *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+.dsi {
+  --dsi-text: #000000; --dsi-bg: #FFFFFF; --dsi-bg-alt: #F6F6F6;
+  --dsi-bg-alt-2: #EDEDED; --dsi-border: #E6E6E6;
+  --dsi-grey: #BEC0C3; --dsi-dark-grey: #727272;
+  --dsi-red: #ED3E49; --dsi-orange: #F96A32; --dsi-yellow: #FFE845;
+  --dsi-lgreen: #94C93D; --dsi-dgreen: #21681B;
+  --dsi-b-callaway: #F96A32; --dsi-b-cobra: #FFE845; --dsi-b-ping: #21681B;
+  --dsi-b-taylormade: #ED3E49; --dsi-b-titleist: #2A91B5; --dsi-b-mizuno: #CFB4D6;
+  --dsi-b-pxg: #727272; --dsi-b-srixon: #94C93D; --dsi-b-cleveland: #000000;
+  font-family: 'GothamGD', sans-serif; font-weight: 400; font-size: 16px;
+  color: var(--dsi-text); background: var(--dsi-bg);
+  max-width: 1000px; margin: 0 auto; padding: 24px 16px;
+}
+
+.dsi__header { margin-bottom: 16px; }
+.dsi__title { font-family: 'TiemposHeadline', serif; font-weight: 500; font-size: 28px; line-height: 1.15; margin-bottom: 8px; }
+.dsi__deck { font-family: 'GothamGD', sans-serif; font-weight: 400; font-size: 14px; line-height: 1.4; color: var(--dsi-dark-grey); max-width: 780px; }
+
+.dsi__chart-wrap { background: var(--dsi-bg-alt); padding: 8px; margin: 12px 0 0; }
+.dsi__chart { display: block; width: 100%; height: auto; }
+.dsi__chart--mobile { display: none; }
+
+@media (max-width: 720px) {
+  .dsi__chart--desktop { display: none; }
+  .dsi__chart--mobile { display: block; }
+  .dsi__chart--mobile .dsi__label { font-size: 10px; }
+  .dsi__chart--mobile .dsi__leader { stroke-width: 0.6; }
+}
+
+.dsi__plot-bg { fill: transparent; }
+.dsi__gridline { stroke: #E0E0E0; stroke-width: 1; }
+.dsi__median { stroke: #727272; stroke-width: 1.5; }
+
+.dsi__tick, .dsi__corner, .dsi__axis-label, .dsi__median-label {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif; font-weight: 700;
+}
+.dsi__tick { font-size: 11px; fill: var(--dsi-dark-grey); }
+.dsi__corner { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; fill: var(--dsi-red); }
+.dsi__axis-label { font-size: 11px; letter-spacing: 0.08em; fill: var(--dsi-text); }
+.dsi__median-label { font-size: 10px; letter-spacing: 0.06em; fill: var(--dsi-dark-grey); }
+
+.dsi__chart--mobile .dsi__tick { font-size: 10px; }
+.dsi__chart--mobile .dsi__corner { font-size: 10px; letter-spacing: 0.06em; }
+.dsi__chart--mobile .dsi__axis-label { font-size: 10px; }
+.dsi__chart--mobile .dsi__median-label { font-size: 9px; }
+
+.dsi__label {
+  font-family: 'GothamGD', sans-serif; font-weight: 600; font-size: 11px; fill: var(--dsi-text);
+  paint-order: stroke; stroke: var(--dsi-bg-alt); stroke-width: 3; stroke-linejoin: round;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.dsi__leader { stroke: #555555; stroke-width: 0.8; opacity: 0.8; fill: none;
+  transition: opacity 0.25s ease;
+}
+
+.dsi__pt { stroke: #000000; stroke-width: 1; cursor: pointer;
+  transition: opacity 0.25s ease, stroke-width 0.15s ease;
+}
+.dsi__pt:hover { stroke-width: 2; }
+.dsi__pt:focus { outline: none; stroke-width: 2.5; }
+
+.dsi__pt--dimmed { opacity: 0.15; }
+.dsi__label--dimmed:not(.dsi__label--selected) { display: none; }
+.dsi__leader--dimmed:not(.dsi__leader--selected) { display: none; }
+
+.dsi__pt--callaway   { fill: var(--dsi-b-callaway); }
+.dsi__pt--cobra      { fill: var(--dsi-b-cobra); }
+.dsi__pt--ping       { fill: var(--dsi-b-ping); }
+.dsi__pt--taylormade { fill: var(--dsi-b-taylormade); }
+.dsi__pt--titleist   { fill: var(--dsi-b-titleist); }
+.dsi__pt--mizuno     { fill: var(--dsi-b-mizuno); }
+.dsi__pt--pxg        { fill: var(--dsi-b-pxg); }
+.dsi__pt--srixon     { fill: var(--dsi-b-srixon); }
+.dsi__pt--cleveland  { fill: var(--dsi-b-cleveland); }
+.dsi__pt--wilson     { fill: var(--dsi-b-wilson); }
+
+.dsi__detail {
+  margin-top: 16px; background: var(--dsi-bg-alt);
+  padding: 20px 20px 22px;
+  border-top: 3px solid var(--dsi-text);
+}
+
+.dsi__controls {
+  display: flex; flex-wrap: wrap; gap: 12px 16px;
+  margin-bottom: 20px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--dsi-border);
+  align-items: flex-end;
+}
+
+.dsi__control-group {
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.dsi__control-label {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.08em;
+  color: var(--dsi-dark-grey); text-transform: uppercase;
+}
+
+.dsi__select {
+  font-family: 'GothamGD', sans-serif; font-weight: 500; font-size: 13px;
+  color: var(--dsi-text); background: var(--dsi-bg);
+  border: 1px solid var(--dsi-text);
+  padding: 8px 12px; cursor: pointer;
+  min-width: 160px; appearance: none;
+}
+.dsi__select:focus { outline: 2px solid var(--dsi-red); outline-offset: -1px; }
+
+.dsi__select--compare { min-width: 220px; }
+
+.dsi__clear {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: transparent; color: var(--dsi-dark-grey);
+  border: none; padding: 8px 4px; cursor: pointer;
+  align-self: flex-end;
+}
+.dsi__clear:hover { color: var(--dsi-red); }
+
+.dsi__body { display: grid; grid-template-columns: 1fr; gap: 24px; }
+.dsi__body--compare { grid-template-columns: 1fr 1fr; }
+.dsi__body--compare .dsi__heatmap-wrap { max-width: none; }
+
+.dsi__side-header {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 20px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--dsi-border);
+}
+.dsi__side[data-side="compare"] .dsi__side-header {
+  border-bottom-color: var(--dsi-text); border-bottom-style: dashed;
+}
+.dsi__side-brand {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.08em;
+  color: var(--dsi-dark-grey); text-transform: uppercase;
+}
+.dsi__side-model { font-family: 'TiemposHeadline', serif; font-weight: 500; font-size: 22px; line-height: 1.15; }
+.dsi__side-mc { font-family: 'GothamGD', sans-serif; font-weight: 500; font-size: 13px; }
+.dsi__side-mc strong {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 15px; color: var(--dsi-text); margin: 0 2px 0 4px;
+}
+
+.dsi__stats { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 24px; }
+.dsi__stat {
+  flex: 0 0 auto; min-width: 92px;
+  padding: 12px 14px; background: var(--dsi-bg);
+  border-left: 3px solid var(--dsi-text);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.dsi__side[data-side="compare"] .dsi__stat { border-left-style: dashed; }
+.dsi__stat-label {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.06em;
+  color: var(--dsi-dark-grey); text-transform: uppercase;
+}
+.dsi__stat-val {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 18px; color: var(--dsi-text); line-height: 1;
+}
+
+.dsi__heatmap-wrap { max-width: 480px; }
+.dsi__heatmap-label {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.08em;
+  color: var(--dsi-dark-grey); text-transform: uppercase; margin-bottom: 14px;
+}
+.dsi__heatmap {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px; background: var(--dsi-text); padding: 2px;
+}
+.dsi__cell {
+  aspect-ratio: 1.6 / 1;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 8px 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.dsi__body--compare .dsi__cell { aspect-ratio: 1.4 / 1; padding: 6px 4px; }
+.dsi__cell-zone {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 9px; letter-spacing: 0.08em; opacity: 0.9; margin-bottom: 3px;
+}
+.dsi__cell-val {
+  font-family: 'TiemposHeadline', serif; font-weight: 500; font-size: 22px; line-height: 1;
+}
+.dsi__body--compare .dsi__cell-val { font-size: 18px; }
+
+.dsi__cell-axis {
+  display: flex; padding: 14px 2px 0; gap: 4px;
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 10px; letter-spacing: 0.08em; color: var(--dsi-dark-grey);
+}
+.dsi__cell-axis-item { flex: 1; text-align: center; }
+
+.dsi__scale {
+  display: flex; align-items: center; gap: 4px;
+  margin-top: 20px; padding-top: 14px;
+  border-top: 1px solid var(--dsi-border);
+  font-family: 'GothamGD', sans-serif; font-size: 11px; color: var(--dsi-dark-grey);
+}
+.dsi__scale-swatches { display: flex; height: 12px; flex: 1; max-width: 240px; }
+.dsi__scale-swatch { flex: 1; }
+
+.dsi__legend {
+  margin-top: 20px; padding-top: 14px;
+  border-top: 1px solid var(--dsi-border);
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+}
+.dsi__legend-label {
+  font-family: 'DecimaMonoRound', 'GothamGD', arial, sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--dsi-dark-grey);
+}
+.dsi__legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'GothamGD', sans-serif; font-weight: 500; font-size: 12px;
+}
+.dsi__legend-dot { width: 10px; height: 10px; display: inline-block; border: 1px solid var(--dsi-text); }
+.dsi__legend-dot--callaway { background: var(--dsi-b-callaway); }
+.dsi__legend-dot--cleveland { background: var(--dsi-b-cleveland); }
+.dsi__legend-dot--wilson { background: var(--dsi-b-wilson); }
+.dsi__legend-dot--cobra { background: var(--dsi-b-cobra); }
+.dsi__legend-dot--mizuno { background: var(--dsi-b-mizuno); }
+.dsi__legend-dot--ping { background: var(--dsi-b-ping); }
+.dsi__legend-dot--pxg { background: var(--dsi-b-pxg); }
+.dsi__legend-dot--srixon { background: var(--dsi-b-srixon); }
+.dsi__legend-dot--taylormade { background: var(--dsi-b-taylormade); }
+.dsi__legend-dot--titleist { background: var(--dsi-b-titleist); }
+
+.dsi__source {
+  margin-top: 14px; font-family: 'GothamGD', sans-serif;
+  font-weight: 400; font-size: 11px; line-height: 1.4; color: var(--dsi-dark-grey);
+}
+
+@media (max-width: 720px) {
+  .dsi { padding: 16px 12px; }
+  .dsi__title { font-size: 22px; }
+  .dsi__body--compare { grid-template-columns: 1fr; }
+  .dsi__side-model { font-size: 20px; }
+  .dsi__cell-val { font-size: 18px; }
+  .dsi__body--compare .dsi__cell-val { font-size: 16px; }
+  .dsi__select { min-width: 100%; }
+  .dsi__select--compare { min-width: 100%; }
+  .dsi__control-group { flex: 1 1 100%; }
+  .dsi__clear { align-self: flex-start; padding: 4px 0; }
+}
+</style>
+
+
+<div class="dsi">
+  <div class="dsi__header">
+    <div class="dsi__title" role="heading" aria-level="2">Driver sweet-spot matrix</div>
+    <div class="dsi__deck">
+      Each dot is one of 74 drivers tested by Golf Laboratories. The horizontal axis measures how much better a driver carries on toe misses versus heel misses; the vertical axis does the same for high versus low. Grey lines mark the field median. Filter by brand or release era to explore subsets of the field. Click any dot to see that driver's carry distance for all nine zones of the face; use the compare dropdown to view two heads side by side.
+    </div>
+  </div>
+
+  <div class="dsi__chart-wrap">
+    <svg class="dsi__chart dsi__chart--desktop" viewBox="0 0 1000 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive scatter plot of 74 drivers by miss-bias.">
+      <rect class="dsi__plot-bg" x="100" y="90" width="840" height="590" />
+      <line class="dsi__gridline" x1="100.0" y1="90" x2="100.0" y2="680" />
+      <line class="dsi__gridline" x1="240.0" y1="90" x2="240.0" y2="680" />
+      <line class="dsi__gridline" x1="380.0" y1="90" x2="380.0" y2="680" />
+      <line class="dsi__gridline" x1="520.0" y1="90" x2="520.0" y2="680" />
+      <line class="dsi__gridline" x1="660.0" y1="90" x2="660.0" y2="680" />
+      <line class="dsi__gridline" x1="800.0" y1="90" x2="800.0" y2="680" />
+      <line class="dsi__gridline" x1="940.0" y1="90" x2="940.0" y2="680" />
+      <line class="dsi__gridline" x1="100" y1="680.0" x2="940" y2="680.0" />
+      <line class="dsi__gridline" x1="100" y1="606.25" x2="940" y2="606.25" />
+      <line class="dsi__gridline" x1="100" y1="532.5" x2="940" y2="532.5" />
+      <line class="dsi__gridline" x1="100" y1="458.75" x2="940" y2="458.75" />
+      <line class="dsi__gridline" x1="100" y1="385.0" x2="940" y2="385.0" />
+      <line class="dsi__gridline" x1="100" y1="311.25" x2="940" y2="311.25" />
+      <line class="dsi__gridline" x1="100" y1="237.5" x2="940" y2="237.5" />
+      <line class="dsi__gridline" x1="100" y1="163.75" x2="940" y2="163.75" />
+      <line class="dsi__gridline" x1="100" y1="90.0" x2="940" y2="90.0" />
+      <line class="dsi__median" x1="517.2" y1="90" x2="517.2" y2="680" />
+      <line class="dsi__median" x1="100" y1="341.4875" x2="940" y2="341.4875" />
+      <text class="dsi__tick" x="100.0" y="702" text-anchor="middle">-10</text>
+      <text class="dsi__tick" x="240.0" y="702" text-anchor="middle">-5</text>
+      <text class="dsi__tick" x="380.0" y="702" text-anchor="middle">0</text>
+      <text class="dsi__tick" x="520.0" y="702" text-anchor="middle">+5</text>
+      <text class="dsi__tick" x="660.0" y="702" text-anchor="middle">+10</text>
+      <text class="dsi__tick" x="800.0" y="702" text-anchor="middle">+15</text>
+      <text class="dsi__tick" x="940.0" y="702" text-anchor="middle">+20</text>
+      <text class="dsi__tick" x="88" y="684.0" text-anchor="end">-15</text>
+      <text class="dsi__tick" x="88" y="610.25" text-anchor="end">-10</text>
+      <text class="dsi__tick" x="88" y="536.5" text-anchor="end">-5</text>
+      <text class="dsi__tick" x="88" y="462.75" text-anchor="end">0</text>
+      <text class="dsi__tick" x="88" y="389.0" text-anchor="end">+5</text>
+      <text class="dsi__tick" x="88" y="315.25" text-anchor="end">+10</text>
+      <text class="dsi__tick" x="88" y="241.5" text-anchor="end">+15</text>
+      <text class="dsi__tick" x="88" y="167.75" text-anchor="end">+20</text>
+      <text class="dsi__tick" x="88" y="94.0" text-anchor="end">+25</text>
+      <text class="dsi__corner" x="920" y="118" text-anchor="end">TOE + HIGH BIAS</text>
+      <text class="dsi__corner" x="120" y="118" text-anchor="start">HEEL + HIGH BIAS</text>
+      <text class="dsi__corner" x="120" y="660" text-anchor="start">HEEL + LOW BIAS</text>
+      <text class="dsi__corner" x="920" y="660" text-anchor="end">TOE + LOW BIAS</text>
+      <g class="dsi__points">
+    <circle class="dsi__pt dsi__pt--callaway" cx="637.6" cy="376.1" r="8" data-id="0" data-brand="Callaway" data-year="2024" tabindex="0" role="button" aria-label="Callaway Ai Smoke Max" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="559.2" cy="317.1" r="8" data-id="1" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="634.8" cy="479.4" r="8" data-id="2" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="304.4" cy="653.5" r="8" data-id="3" data-brand="Callaway" data-year="2024" tabindex="0" role="button" aria-label="Callaway Ai Smoke Max D" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="601.2" cy="386.5" r="8" data-id="4" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte X" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="475.2" cy="625.4" r="8" data-id="5" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum Max D" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="595.6" cy="348.1" r="8" data-id="6" data-brand="Callaway" data-year="2024" tabindex="0" role="button" aria-label="Callaway Ai Smoke TD" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="514.4" cy="308.3" r="8" data-id="7" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte TD" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="620.8" cy="337.8" r="8" data-id="8" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum TD" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="343.6" cy="383.5" r="8" data-id="9" data-brand="Cobra" data-year="2024" tabindex="0" role="button" aria-label="Cobra Dark Speed Max" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="735.6" cy="334.9" r="8" data-id="10" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt Max-K" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="279.2" cy="231.6" r="8" data-id="11" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM Max K" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="506.0" cy="300.9" r="8" data-id="12" data-brand="Cobra" data-year="2024" tabindex="0" role="button" aria-label="Cobra Dark Speed LS" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="500.4" cy="331.9" r="8" data-id="13" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt LS" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="422.0" cy="247.8" r="8" data-id="14" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM LS" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="430.4" cy="320.1" r="8" data-id="15" data-brand="Cobra" data-year="2024" tabindex="0" role="button" aria-label="Cobra Dark Speed X" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="559.2" cy="455.8" r="8" data-id="16" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt X" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="707.6" cy="413.0" r="8" data-id="17" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM X" />
+    <circle class="dsi__pt dsi__pt--ping" cx="604.0" cy="439.6" r="8" data-id="18" data-brand="Ping" data-year="2024" tabindex="0" role="button" aria-label="Ping G430 Max 10K" />
+    <circle class="dsi__pt dsi__pt--ping" cx="808.4" cy="326.0" r="8" data-id="19" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 K" />
+    <circle class="dsi__pt dsi__pt--ping" cx="556.4" cy="328.9" r="8" data-id="20" data-brand="Ping" data-year="2023" tabindex="0" role="button" aria-label="Ping G430 LST" />
+    <circle class="dsi__pt dsi__pt--ping" cx="584.4" cy="376.1" r="8" data-id="21" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 LST" />
+    <circle class="dsi__pt dsi__pt--ping" cx="528.4" cy="379.1" r="8" data-id="22" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 Max" />
+    <circle class="dsi__pt dsi__pt--ping" cx="511.6" cy="342.2" r="8" data-id="23" data-brand="Ping" data-year="2017" tabindex="0" role="button" aria-label="Ping G400" />
+    <circle class="dsi__pt dsi__pt--ping" cx="654.4" cy="383.5" r="8" data-id="24" data-brand="Ping" data-year="2018" tabindex="0" role="button" aria-label="Ping G400 Max" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="483.6" cy="289.1" r="8" data-id="25" data-brand="TaylorMade" data-year="2024" tabindex="0" role="button" aria-label="TaylorMade Qi10" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="368.8" cy="339.3" r="8" data-id="26" data-brand="TaylorMade" data-year="2025" tabindex="0" role="button" aria-label="TaylorMade Qi35" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="895.2" cy="234.6" r="8" data-id="27" data-brand="TaylorMade" data-year="2026" tabindex="0" role="button" aria-label="TaylorMade Qi4D" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="886.8" cy="129.8" r="8" data-id="28" data-brand="TaylorMade" data-year="2024" tabindex="0" role="button" aria-label="TaylorMade Qi10 LS" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="475.2" cy="382.1" r="8" data-id="29" data-brand="TaylorMade" data-year="2025" tabindex="0" role="button" aria-label="TaylorMade Qi35 LS" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="606.8" cy="387.9" r="8" data-id="30" data-brand="TaylorMade" data-year="2026" tabindex="0" role="button" aria-label="TaylorMade Qi4D LS" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="472.4" cy="190.3" r="8" data-id="31" data-brand="TaylorMade" data-year="2024" tabindex="0" role="button" aria-label="TaylorMade Qi10 Max" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="405.2" cy="354.0" r="8" data-id="32" data-brand="TaylorMade" data-year="2025" tabindex="0" role="button" aria-label="TaylorMade Qi35 Max" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="688.0" cy="370.2" r="8" data-id="33" data-brand="TaylorMade" data-year="2026" tabindex="0" role="button" aria-label="TaylorMade Qi4D Max" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="562.0" cy="283.2" r="8" data-id="34" data-brand="Titleist" data-year="2024" tabindex="0" role="button" aria-label="Titleist GT 2" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="480.8" cy="340.8" r="8" data-id="35" data-brand="Titleist" data-year="2026" tabindex="0" role="button" aria-label="Titleist GTS 2" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="380.0" cy="411.6" r="8" data-id="36" data-brand="Titleist" data-year="2024" tabindex="0" role="button" aria-label="Titleist GT 3" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="615.2" cy="324.5" r="8" data-id="37" data-brand="Titleist" data-year="2026" tabindex="0" role="button" aria-label="Titleist GTS 3" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="629.2" cy="328.9" r="8" data-id="38" data-brand="Titleist" data-year="2024" tabindex="0" role="button" aria-label="Titleist GT 4" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="500.4" cy="349.6" r="8" data-id="39" data-brand="Titleist" data-year="2026" tabindex="0" role="button" aria-label="Titleist GTS 4" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="634.8" cy="479.4" r="8" data-id="40" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum Max" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="500.4" cy="433.7" r="8" data-id="41" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum TD Max" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="209.2" cy="497.1" r="8" data-id="42" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM Max D" />
+    <circle class="dsi__pt dsi__pt--mizuno" cx="494.8" cy="367.3" r="8" data-id="43" data-brand="Mizuno" data-year="2025" tabindex="0" role="button" aria-label="Mizuno JPX One" />
+    <circle class="dsi__pt dsi__pt--mizuno" cx="483.6" cy="278.8" r="8" data-id="44" data-brand="Mizuno" data-year="2025" tabindex="0" role="button" aria-label="Mizuno JPX One Select" />
+    <circle class="dsi__pt dsi__pt--pxg" cx="646.0" cy="348.1" r="8" data-id="45" data-brand="PXG" data-year="2025" tabindex="0" role="button" aria-label="PXG Lightning Tour Max 10K+" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="461.2" cy="290.6" r="8" data-id="46" data-brand="Srixon" data-year="2025" tabindex="0" role="button" aria-label="Srixon Zxi LS" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="637.6" cy="328.9" r="8" data-id="47" data-brand="Srixon" data-year="2025" tabindex="0" role="button" aria-label="Srixon Zxi" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="598.4" cy="326.0" r="8" data-id="48" data-brand="Srixon" data-year="2025" tabindex="0" role="button" aria-label="Srixon Zxi Max" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="469.6" cy="309.8" r="8" data-id="49" data-brand="Srixon" data-year="2023" tabindex="0" role="button" aria-label="Srixon ZX5 MK2" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="612.4" cy="308.3" r="8" data-id="50" data-brand="Srixon" data-year="2023" tabindex="0" role="button" aria-label="Srixon ZX7 MK2" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="503.2" cy="289.1" r="8" data-id="51" data-brand="Srixon" data-year="2023" tabindex="0" role="button" aria-label="Srixon ZX5 MK2 LS" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="450.0" cy="153.4" r="8" data-id="52" data-brand="Srixon" data-year="2020" tabindex="0" role="button" aria-label="Srixon ZX7" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="584.4" cy="305.4" r="8" data-id="53" data-brand="Srixon" data-year="2020" tabindex="0" role="button" aria-label="Srixon ZX5" />
+    <circle class="dsi__pt dsi__pt--cleveland" cx="346.4" cy="455.8" r="8" data-id="54" data-brand="Cleveland" data-year="2007" tabindex="0" role="button" aria-label="Cleveland HiBore XL" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="153.2" cy="399.8" r="8" data-id="55" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt Max-D" />
+    <circle class="dsi__pt dsi__pt--ping" cx="332.4" cy="565.0" r="8" data-id="56" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 SFT" />
+    <circle class="dsi__pt dsi__pt--ping" cx="735.6" cy="379.1" r="8" data-id="57" data-brand="Ping" data-year="2021" tabindex="0" role="button" aria-label="Ping G425 LST" />
+    <circle class="dsi__pt dsi__pt--ping" cx="559.2" cy="333.4" r="8" data-id="58" data-brand="Ping" data-year="2021" tabindex="0" role="button" aria-label="Ping G425 Max" />
+    <circle class="dsi__pt dsi__pt--ping" cx="310.0" cy="433.7" r="8" data-id="59" data-brand="Ping" data-year="2021" tabindex="0" role="button" aria-label="Ping G425 SFT" />
+    <circle class="dsi__pt dsi__pt--ping" cx="520.0" cy="224.2" r="8" data-id="60" data-brand="Ping" data-year="2023" tabindex="0" role="button" aria-label="Ping G430 Max" />
+    <circle class="dsi__pt dsi__pt--ping" cx="220.4" cy="457.3" r="8" data-id="61" data-brand="Ping" data-year="2023" tabindex="0" role="button" aria-label="Ping G430 SFT" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="385.6" cy="196.2" r="8" data-id="62" data-brand="TaylorMade" data-year="2023" tabindex="0" role="button" aria-label="TaylorMade Stealth 2" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="296.0" cy="308.3" r="8" data-id="63" data-brand="TaylorMade" data-year="2023" tabindex="0" role="button" aria-label="TaylorMade Stealth 2 Plus" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="284.8" cy="293.6" r="8" data-id="64" data-brand="TaylorMade" data-year="2023" tabindex="0" role="button" aria-label="TaylorMade Stealth 2 HD" />
+    <circle class="dsi__pt dsi__pt--wilson" cx="562.0" cy="410.1" r="8" data-id="65" data-brand="Wilson" data-year="2023" tabindex="0" role="button" aria-label="Wilson Dynapwr Carbon" />
+    <circle class="dsi__pt dsi__pt--wilson" cx="718.8" cy="371.7" r="8" data-id="66" data-brand="Wilson" data-year="2023" tabindex="0" role="button" aria-label="Wilson Dynapwr Max" />
+    <circle class="dsi__pt dsi__pt--wilson" cx="713.2" cy="253.7" r="8" data-id="67" data-brand="Wilson" data-year="2023" tabindex="0" role="button" aria-label="Wilson Dynapwr LS" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="472.4" cy="234.6" r="8" data-id="68" data-brand="Callaway" data-year="2023" tabindex="0" role="button" aria-label="Callaway Paradym" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="268.0" cy="438.1" r="8" data-id="69" data-brand="Callaway" data-year="2023" tabindex="0" role="button" aria-label="Callaway Paradym X" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="777.6" cy="333.4" r="8" data-id="70" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte TD Max" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="534.0" cy="296.5" r="8" data-id="71" data-brand="Titleist" data-year="2022" tabindex="0" role="button" aria-label="Titleist TSR2" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="430.4" cy="320.1" r="8" data-id="72" data-brand="Titleist" data-year="2022" tabindex="0" role="button" aria-label="Titleist TSR3" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="315.6" cy="401.2" r="8" data-id="73" data-brand="Titleist" data-year="2022" tabindex="0" role="button" aria-label="Titleist TSR4" />
+  </g>
+      <circle class="dsi__ring dsi__ring--primary" cx="0" cy="0" r="14" fill="none" stroke="#000000" stroke-width="2.5" style="display:none;" pointer-events="none" />
+      <circle class="dsi__ring dsi__ring--compare" cx="0" cy="0" r="14" fill="none" stroke="#000000" stroke-width="2.5" stroke-dasharray="4 3" style="display:none;" pointer-events="none" />
+      <g class="dsi__leaders" pointer-events="none">
+    <line class="dsi__leader" x1="637.6" y1="376.1" x2="490.8" y2="474.5" data-id="0" />
+    <line class="dsi__leader" x1="559.2" y1="317.1" x2="623.3" y2="253.0" data-id="1" />
+    <line class="dsi__leader" x1="634.8" y1="479.4" x2="634.8" y2="551.0" data-id="2" />
+    <line class="dsi__leader" x1="304.4" y1="653.5" x2="227.4" y2="621.7" data-id="3" />
+    <line class="dsi__leader" x1="601.2" y1="386.5" x2="671.4" y2="456.7" data-id="4" />
+    <line class="dsi__leader" x1="475.2" y1="625.4" x2="542.5" y2="617.7" data-id="5" />
+    <line class="dsi__leader" x1="595.6" y1="348.1" x2="677.9" y2="430.4" data-id="6" />
+    <line class="dsi__leader" x1="514.4" y1="308.3" x2="514.4" y2="203.7" data-id="7" />
+    <line class="dsi__leader" x1="620.8" y1="337.8" x2="722.7" y2="235.9" data-id="8" />
+    <line class="dsi__leader" x1="343.6" y1="383.5" x2="343.6" y2="501.1" data-id="9" />
+    <line class="dsi__leader" x1="735.6" y1="334.9" x2="858.0" y2="344.9" data-id="10" />
+    <line class="dsi__leader" x1="279.2" y1="231.6" x2="158.6" y2="177.5" data-id="11" />
+    <line class="dsi__leader" x1="506.0" y1="300.9" x2="585.3" y2="221.6" data-id="12" />
+    <line class="dsi__leader" x1="500.4" y1="331.9" x2="321.3" y2="331.9" data-id="13" />
+    <line class="dsi__leader" x1="422.0" y1="247.8" x2="410" y2="180" data-id="14" />
+    <line class="dsi__leader" x1="430.4" y1="320.1" x2="354.2" y2="243.9" data-id="15" />
+    <line class="dsi__leader" x1="559.2" y1="455.8" x2="626.7" y2="523.3" data-id="16" />
+    <line class="dsi__leader" x1="707.6" y1="413.0" x2="766.8" y2="413.0" data-id="17" />
+    <line class="dsi__leader" x1="604.0" y1="439.6" x2="604.0" y2="574.1" data-id="18" />
+    <line class="dsi__leader" x1="808.4" y1="326.0" x2="831.2" y2="269.1" data-id="19" />
+    <line class="dsi__leader" x1="556.4" y1="328.9" x2="445.0" y2="491.9" data-id="20" />
+    <line class="dsi__leader" x1="584.4" y1="376.1" x2="628.0" y2="419.7" data-id="21" />
+    <line class="dsi__leader" x1="528.4" y1="379.1" x2="528.4" y2="491.2" data-id="22" />
+    <line class="dsi__leader" x1="511.6" y1="342.2" x2="580.8" y2="508.1" data-id="23" />
+    <line class="dsi__leader" x1="654.4" y1="383.5" x2="654" y2="340" data-id="24" />
+    <line class="dsi__leader" x1="483.6" y1="289.1" x2="623.5" y2="318.9" data-id="25" />
+    <line class="dsi__leader" x1="368.8" y1="339.3" x2="368.8" y2="270.8" data-id="26" />
+    <line class="dsi__leader" x1="895.2" y1="234.6" x2="825" y2="235" data-id="27" />
+    <line class="dsi__leader" x1="886.8" y1="129.8" x2="720" y2="180" data-id="28" />
+    <line class="dsi__leader" x1="475.2" y1="382.1" x2="475.2" y2="459.9" data-id="29" />
+    <line class="dsi__leader" x1="606.8" y1="387.9" x2="564.0" y2="430.7" data-id="30" />
+    <line class="dsi__leader" x1="472.4" y1="190.3" x2="529.0" y2="133.7" data-id="31" />
+    <line class="dsi__leader" x1="405.2" y1="354.0" x2="324.3" y2="354.0" data-id="32" />
+    <line class="dsi__leader" x1="688.0" y1="370.2" x2="688.0" y2="289.3" data-id="33" />
+    <line class="dsi__leader" x1="562.0" y1="283.2" x2="572.1" y2="236.1" data-id="34" />
+    <line class="dsi__leader" x1="480.8" y1="340.8" x2="444.1" y2="377.6" data-id="35" />
+    <line class="dsi__leader" x1="380.0" y1="411.6" x2="442.3" y2="411.6" data-id="36" />
+    <line class="dsi__leader" x1="615.2" y1="324.5" x2="661.0" y2="278.7" data-id="37" />
+    <line class="dsi__leader" x1="629.2" y1="328.9" x2="629.2" y2="266.6" data-id="38" />
+    <line class="dsi__leader" x1="500.4" y1="349.6" x2="418.0" y2="432.0" data-id="39" />
+    <line class="dsi__leader" x1="634.8" y1="479.4" x2="718.8" y2="479.4" data-id="40" />
+    <line class="dsi__leader" x1="500.4" y1="433.7" x2="378.6" y2="308.1" data-id="41" />
+    <line class="dsi__leader" x1="209.2" y1="497.1" x2="209.2" y2="597.3" data-id="42" />
+    <line class="dsi__leader" x1="494.8" y1="367.3" x2="510.8" y2="505.3" data-id="43" />
+    <line class="dsi__leader" x1="483.6" y1="278.8" x2="419.5" y2="214.7" data-id="44" />
+    <line class="dsi__leader" x1="646.0" y1="348.1" x2="471.5" y2="353.9" data-id="45" />
+    <line class="dsi__leader" x1="461.2" y1="290.6" x2="398.9" y2="290.6" data-id="46" />
+    <line class="dsi__leader" x1="637.6" y1="328.9" x2="704.4" y2="395.7" data-id="47" />
+    <line class="dsi__leader" x1="598.4" y1="326.0" x2="598.4" y2="208.3" data-id="48" />
+    <line class="dsi__leader" x1="469.6" y1="309.8" x2="469.6" y2="401.4" data-id="49" />
+    <line class="dsi__leader" x1="612.4" y1="308.3" x2="730.1" y2="308.3" data-id="50" />
+    <line class="dsi__leader" x1="503.2" y1="289.1" x2="597.3" y2="195.0" data-id="51" />
+    <line class="dsi__leader" x1="450.0" y1="153.4" x2="450.0" y2="122.1" data-id="52" />
+    <line class="dsi__leader" x1="584.4" y1="305.4" x2="705.7" y2="327.7" data-id="53" />
+    <line class="dsi__leader" x1="346.4" y1="455.8" x2="196.9" y2="358.0" data-id="54" />
+    <line class="dsi__leader" x1="153.2" y1="399.8" x2="198.6" y2="540.0" data-id="55" />
+    <line class="dsi__leader" x1="332.4" y1="565.0" x2="376.0" y2="521.4" data-id="56" />
+    <line class="dsi__leader" x1="735.6" y1="379.1" x2="797.9" y2="379.1" data-id="57" />
+    <line class="dsi__leader" x1="559.2" y1="333.4" x2="480.7" y2="254.9" data-id="58" />
+    <line class="dsi__leader" x1="310.0" y1="433.7" x2="331.1" y2="595.0" data-id="59" />
+    <line class="dsi__leader" x1="520.0" y1="224.2" x2="563.6" y2="180.6" data-id="60" />
+    <line class="dsi__leader" x1="220.4" y1="457.3" x2="167.3" y2="507.7" data-id="61" />
+    <line class="dsi__leader" x1="385.6" y1="196.2" x2="301.6" y2="196.2" data-id="62" />
+    <line class="dsi__leader" x1="296.0" y1="308.3" x2="226.4" y2="377.9" data-id="63" />
+    <line class="dsi__leader" x1="284.8" y1="293.6" x2="191.5" y2="293.6" data-id="64" />
+    <line class="dsi__leader" x1="562.0" y1="410.1" x2="653.6" y2="410.1" data-id="65" />
+    <line class="dsi__leader" x1="718.8" y1="371.7" x2="795.0" y2="447.9" data-id="66" />
+    <line class="dsi__leader" x1="713.2" y1="253.7" x2="854.3" y2="313.1" data-id="67" />
+    <line class="dsi__leader" x1="472.4" y1="234.6" x2="472.4" y2="105.7" data-id="68" />
+    <line class="dsi__leader" x1="268.0" y1="438.1" x2="268.0" y2="515.9" data-id="69" />
+    <line class="dsi__leader" x1="777.6" y1="333.4" x2="659.9" y2="348.7" data-id="70" />
+    <line class="dsi__leader" x1="534.0" y1="296.5" x2="534.0" y2="171.9" data-id="71" />
+    <line class="dsi__leader" x1="430.4" y1="320.1" x2="430.4" y2="444.7" data-id="72" />
+    <line class="dsi__leader" x1="315.6" y1="401.2" x2="253.3" y2="401.2" data-id="73" />
+  </g>
+      <g class="dsi__labels" pointer-events="none">
+    <text class="dsi__label" x="490.8" y="474.5" text-anchor="middle" dominant-baseline="middle" data-id="0">Callaway Ai Smoke Max</text>
+    <text class="dsi__label" x="623.3" y="253.0" text-anchor="middle" dominant-baseline="middle" data-id="1">Callaway Elyte</text>
+    <text class="dsi__label" x="634.8" y="551.0" text-anchor="middle" dominant-baseline="middle" data-id="2">Callaway Quantum</text>
+    <text class="dsi__label" x="227.4" y="621.7" text-anchor="middle" dominant-baseline="middle" data-id="3">Ai Smoke Max D</text>
+    <text class="dsi__label" x="671.4" y="456.7" text-anchor="middle" dominant-baseline="middle" data-id="4">Callaway Elyte X</text>
+    <text class="dsi__label" x="542.5" y="617.7" text-anchor="middle" dominant-baseline="middle" data-id="5">Callaway Quantum Max D</text>
+    <text class="dsi__label" x="677.9" y="430.4" text-anchor="middle" dominant-baseline="middle" data-id="6">Callaway Ai Smoke TD</text>
+    <text class="dsi__label" x="514.4" y="203.7" text-anchor="middle" dominant-baseline="middle" data-id="7">Callaway Elyte TD</text>
+    <text class="dsi__label" x="722.7" y="235.9" text-anchor="middle" dominant-baseline="middle" data-id="8">Callaway Quantum TD</text>
+    <text class="dsi__label" x="343.6" y="501.1" text-anchor="middle" dominant-baseline="middle" data-id="9">Cobra Dark Speed Max</text>
+    <text class="dsi__label" x="858.0" y="344.9" text-anchor="middle" dominant-baseline="middle" data-id="10">Cobra Dark Speed Adapt Max-K</text>
+    <text class="dsi__label" x="158.6" y="177.5" text-anchor="middle" dominant-baseline="middle" data-id="11">Cobra OPTM Max K</text>
+    <text class="dsi__label" x="585.3" y="221.6" text-anchor="middle" dominant-baseline="middle" data-id="12">Cobra Dark Speed LS</text>
+    <text class="dsi__label" x="321.3" y="331.9" text-anchor="middle" dominant-baseline="middle" data-id="13">Cobra Dark Speed Adapt LS</text>
+    <text class="dsi__label" x="410" y="180" text-anchor="middle" dominant-baseline="middle" data-id="14">Cobra OPTM LS</text>
+    <text class="dsi__label" x="354.2" y="243.9" text-anchor="middle" dominant-baseline="middle" data-id="15">Cobra Dark Speed X</text>
+    <text class="dsi__label" x="626.7" y="523.3" text-anchor="middle" dominant-baseline="middle" data-id="16">Cobra Dark Speed Adapt X</text>
+    <text class="dsi__label" x="766.8" y="413.0" text-anchor="middle" dominant-baseline="middle" data-id="17">Cobra OPTM X</text>
+    <text class="dsi__label" x="604.0" y="574.1" text-anchor="middle" dominant-baseline="middle" data-id="18">Ping G430 Max 10K</text>
+    <text class="dsi__label" x="831.2" y="269.1" text-anchor="middle" dominant-baseline="middle" data-id="19">Ping G440 K</text>
+    <text class="dsi__label" x="445.0" y="491.9" text-anchor="middle" dominant-baseline="middle" data-id="20">Ping G430 LST</text>
+    <text class="dsi__label" x="628.0" y="419.7" text-anchor="middle" dominant-baseline="middle" data-id="21">Ping G440 LST</text>
+    <text class="dsi__label" x="528.4" y="491.2" text-anchor="middle" dominant-baseline="middle" data-id="22">Ping G440 Max</text>
+    <text class="dsi__label" x="580.8" y="508.1" text-anchor="middle" dominant-baseline="middle" data-id="23">Ping G400</text>
+    <text class="dsi__label" x="654" y="340" text-anchor="middle" dominant-baseline="middle" data-id="24">G400 Max</text>
+    <text class="dsi__label" x="623.5" y="318.9" text-anchor="middle" dominant-baseline="middle" data-id="25">TaylorMade Qi10</text>
+    <text class="dsi__label" x="368.8" y="270.8" text-anchor="middle" dominant-baseline="middle" data-id="26">TaylorMade Qi35</text>
+    <text class="dsi__label" x="825" y="235" text-anchor="middle" dominant-baseline="middle" data-id="27">TaylorMade Qi4D</text>
+    <text class="dsi__label" x="720" y="180" text-anchor="middle" dominant-baseline="middle" data-id="28">TaylorMade Qi10 LS</text>
+    <text class="dsi__label" x="475.2" y="459.9" text-anchor="middle" dominant-baseline="middle" data-id="29">TaylorMade Qi35 LS</text>
+    <text class="dsi__label" x="564.0" y="430.7" text-anchor="middle" dominant-baseline="middle" data-id="30">Qi4D LS</text>
+    <text class="dsi__label" x="529.0" y="133.7" text-anchor="middle" dominant-baseline="middle" data-id="31">TaylorMade Qi10 Max</text>
+    <text class="dsi__label" x="324.3" y="354.0" text-anchor="middle" dominant-baseline="middle" data-id="32">TaylorMade Qi35 Max</text>
+    <text class="dsi__label" x="688.0" y="289.3" text-anchor="middle" dominant-baseline="middle" data-id="33">TaylorMade Qi4D Max</text>
+    <text class="dsi__label" x="572.1" y="236.1" text-anchor="middle" dominant-baseline="middle" data-id="34">Titleist GT 2</text>
+    <text class="dsi__label" x="444.1" y="377.6" text-anchor="middle" dominant-baseline="middle" data-id="35">GTS 2</text>
+    <text class="dsi__label" x="442.3" y="411.6" text-anchor="middle" dominant-baseline="middle" data-id="36">Titleist GT 3</text>
+    <text class="dsi__label" x="661.0" y="278.7" text-anchor="middle" dominant-baseline="middle" data-id="37">Titleist GTS 3</text>
+    <text class="dsi__label" x="629.2" y="266.6" text-anchor="middle" dominant-baseline="middle" data-id="38">Titleist GT 4</text>
+    <text class="dsi__label" x="418.0" y="432.0" text-anchor="middle" dominant-baseline="middle" data-id="39">Titleist GTS 4</text>
+    <text class="dsi__label" x="718.8" y="479.4" text-anchor="middle" dominant-baseline="middle" data-id="40">Callaway Quantum Max</text>
+    <text class="dsi__label" x="378.6" y="308.1" text-anchor="middle" dominant-baseline="middle" data-id="41">Callaway Quantum TD Max</text>
+    <text class="dsi__label" x="209.2" y="597.3" text-anchor="middle" dominant-baseline="middle" data-id="42">Cobra OPTM Max D</text>
+    <text class="dsi__label" x="510.8" y="505.3" text-anchor="middle" dominant-baseline="middle" data-id="43">Mizuno JPX One</text>
+    <text class="dsi__label" x="419.5" y="214.7" text-anchor="middle" dominant-baseline="middle" data-id="44">JPX One Select</text>
+    <text class="dsi__label" x="471.5" y="353.9" text-anchor="middle" dominant-baseline="middle" data-id="45">PXG Lightning Tour Max 10K+</text>
+    <text class="dsi__label" x="398.9" y="290.6" text-anchor="middle" dominant-baseline="middle" data-id="46">Srixon Zxi LS</text>
+    <text class="dsi__label" x="704.4" y="395.7" text-anchor="middle" dominant-baseline="middle" data-id="47">Srixon Zxi</text>
+    <text class="dsi__label" x="598.4" y="208.3" text-anchor="middle" dominant-baseline="middle" data-id="48">Srixon Zxi Max</text>
+    <text class="dsi__label" x="469.6" y="401.4" text-anchor="middle" dominant-baseline="middle" data-id="49">Srixon ZX5 MK2</text>
+    <text class="dsi__label" x="730.1" y="308.3" text-anchor="middle" dominant-baseline="middle" data-id="50">Srixon ZX7 MK2</text>
+    <text class="dsi__label" x="597.3" y="195.0" text-anchor="middle" dominant-baseline="middle" data-id="51">Srixon ZX5 MK2 LS</text>
+    <text class="dsi__label" x="450.0" y="122.1" text-anchor="middle" dominant-baseline="middle" data-id="52">ZX7</text>
+    <text class="dsi__label" x="705.7" y="327.7" text-anchor="middle" dominant-baseline="middle" data-id="53">Srixon ZX5</text>
+    <text class="dsi__label" x="196.9" y="358.0" text-anchor="middle" dominant-baseline="middle" data-id="54">Cleveland HiBore XL</text>
+    <text class="dsi__label" x="198.6" y="540.0" text-anchor="middle" dominant-baseline="middle" data-id="55">Cobra Dark Speed Adapt Max-D</text>
+    <text class="dsi__label" x="376.0" y="521.4" text-anchor="middle" dominant-baseline="middle" data-id="56">Ping G440 SFT</text>
+    <text class="dsi__label" x="797.9" y="379.1" text-anchor="middle" dominant-baseline="middle" data-id="57">Ping G425 LST</text>
+    <text class="dsi__label" x="480.7" y="254.9" text-anchor="middle" dominant-baseline="middle" data-id="58">Ping G425 Max</text>
+    <text class="dsi__label" x="331.1" y="595.0" text-anchor="middle" dominant-baseline="middle" data-id="59">Ping G425 SFT</text>
+    <text class="dsi__label" x="563.6" y="180.6" text-anchor="middle" dominant-baseline="middle" data-id="60">Ping G430 Max</text>
+    <text class="dsi__label" x="167.3" y="507.7" text-anchor="middle" dominant-baseline="middle" data-id="61">Ping G430 SFT</text>
+    <text class="dsi__label" x="301.6" y="196.2" text-anchor="middle" dominant-baseline="middle" data-id="62">TaylorMade Stealth 2</text>
+    <text class="dsi__label" x="226.4" y="377.9" text-anchor="middle" dominant-baseline="middle" data-id="63">TaylorMade Stealth 2 Plus</text>
+    <text class="dsi__label" x="191.5" y="293.6" text-anchor="middle" dominant-baseline="middle" data-id="64">TaylorMade Stealth 2 HD</text>
+    <text class="dsi__label" x="653.6" y="410.1" text-anchor="middle" dominant-baseline="middle" data-id="65">Dynapwr Carbon</text>
+    <text class="dsi__label" x="795.0" y="447.9" text-anchor="middle" dominant-baseline="middle" data-id="66">Wilson Dynapwr Max</text>
+    <text class="dsi__label" x="854.3" y="313.1" text-anchor="middle" dominant-baseline="middle" data-id="67">Wilson Dynapwr LS</text>
+    <text class="dsi__label" x="472.4" y="105.7" text-anchor="middle" dominant-baseline="middle" data-id="68">Callaway Paradym</text>
+    <text class="dsi__label" x="268.0" y="515.9" text-anchor="middle" dominant-baseline="middle" data-id="69">Callaway Paradym X</text>
+    <text class="dsi__label" x="659.9" y="348.7" text-anchor="middle" dominant-baseline="middle" data-id="70">Callaway Elyte TD Max</text>
+    <text class="dsi__label" x="534.0" y="171.9" text-anchor="middle" dominant-baseline="middle" data-id="71">Titleist TSR2</text>
+    <text class="dsi__label" x="430.4" y="444.7" text-anchor="middle" dominant-baseline="middle" data-id="72">Titleist TSR3</text>
+    <text class="dsi__label" x="253.3" y="401.2" text-anchor="middle" dominant-baseline="middle" data-id="73">Titleist TSR4</text>
+  </g>
+      <text class="dsi__axis-label" x="520.0" y="750" text-anchor="middle">TOE CARRY MINUS HEEL CARRY (YARDS) →</text>
+      <text class="dsi__axis-label" x="40" y="385.0" text-anchor="middle" transform="rotate(-90, 40, 385.0)">HIGH CARRY MINUS LOW CARRY (YARDS) ↑</text>
+      <text class="dsi__median-label" x="523.2" y="102">FIELD MEDIAN</text>
+    </svg>
+    <svg class="dsi__chart dsi__chart--mobile" viewBox="0 0 500 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Portrait scatter of 74 drivers, optimized for mobile. Tap any dot for details.">
+      <rect class="dsi__plot-bg" x="55" y="65" width="420" height="655" />
+      <line class="dsi__gridline" x1="55.0" y1="65" x2="55.0" y2="720" />
+      <line class="dsi__gridline" x1="125.0" y1="65" x2="125.0" y2="720" />
+      <line class="dsi__gridline" x1="195.0" y1="65" x2="195.0" y2="720" />
+      <line class="dsi__gridline" x1="265.0" y1="65" x2="265.0" y2="720" />
+      <line class="dsi__gridline" x1="335.0" y1="65" x2="335.0" y2="720" />
+      <line class="dsi__gridline" x1="405.0" y1="65" x2="405.0" y2="720" />
+      <line class="dsi__gridline" x1="475.0" y1="65" x2="475.0" y2="720" />
+      <line class="dsi__gridline" x1="55" y1="720.0" x2="475" y2="720.0" />
+      <line class="dsi__gridline" x1="55" y1="638.1" x2="475" y2="638.1" />
+      <line class="dsi__gridline" x1="55" y1="556.2" x2="475" y2="556.2" />
+      <line class="dsi__gridline" x1="55" y1="474.4" x2="475" y2="474.4" />
+      <line class="dsi__gridline" x1="55" y1="392.5" x2="475" y2="392.5" />
+      <line class="dsi__gridline" x1="55" y1="310.6" x2="475" y2="310.6" />
+      <line class="dsi__gridline" x1="55" y1="228.8" x2="475" y2="228.8" />
+      <line class="dsi__gridline" x1="55" y1="146.9" x2="475" y2="146.9" />
+      <line class="dsi__gridline" x1="55" y1="65.0" x2="475" y2="65.0" />
+      <line class="dsi__median" x1="263.6" y1="65" x2="263.6" y2="720" />
+      <line class="dsi__median" x1="55" y1="344.2" x2="475" y2="344.2" />
+      <text class="dsi__tick" x="55.0" y="740" text-anchor="middle">-10</text>
+      <text class="dsi__tick" x="195.0" y="740" text-anchor="middle">0</text>
+      <text class="dsi__tick" x="335.0" y="740" text-anchor="middle">+10</text>
+      <text class="dsi__tick" x="475.0" y="740" text-anchor="middle">+20</text>
+      <text class="dsi__tick" x="47" y="724.0" text-anchor="end">-15</text>
+      <text class="dsi__tick" x="47" y="560.2" text-anchor="end">-5</text>
+      <text class="dsi__tick" x="47" y="396.5" text-anchor="end">+5</text>
+      <text class="dsi__tick" x="47" y="232.8" text-anchor="end">+15</text>
+      <text class="dsi__tick" x="47" y="69.0" text-anchor="end">+25</text>
+      <text class="dsi__corner" x="465" y="83" text-anchor="end">TOE + HIGH</text>
+      <text class="dsi__corner" x="65" y="83" text-anchor="start">HEEL + HIGH</text>
+      <text class="dsi__corner" x="65" y="710" text-anchor="start">HEEL + LOW</text>
+      <text class="dsi__corner" x="465" y="710" text-anchor="end">TOE + LOW</text>
+      <g class="dsi__points">
+    <circle class="dsi__pt dsi__pt--callaway" cx="323.8" cy="382.7" r="10" data-id="0" data-brand="Callaway" data-year="2024" tabindex="0" role="button" aria-label="Callaway Ai Smoke Max" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="284.6" cy="317.2" r="10" data-id="1" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="322.4" cy="497.3" r="10" data-id="2" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="157.2" cy="690.5" r="10" data-id="3" data-brand="Callaway" data-year="2024" tabindex="0" role="button" aria-label="Callaway Ai Smoke Max D" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="305.6" cy="394.1" r="10" data-id="4" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte X" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="242.6" cy="659.4" r="10" data-id="5" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum Max D" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="302.8" cy="351.6" r="10" data-id="6" data-brand="Callaway" data-year="2024" tabindex="0" role="button" aria-label="Callaway Ai Smoke TD" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="262.2" cy="307.4" r="10" data-id="7" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte TD" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="315.4" cy="340.1" r="10" data-id="8" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum TD" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="176.8" cy="390.9" r="10" data-id="9" data-brand="Cobra" data-year="2024" tabindex="0" role="button" aria-label="Cobra Dark Speed Max" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="372.8" cy="336.8" r="10" data-id="10" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt Max-K" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="144.6" cy="222.2" r="10" data-id="11" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM Max K" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="258.0" cy="299.2" r="10" data-id="12" data-brand="Cobra" data-year="2024" tabindex="0" role="button" aria-label="Cobra Dark Speed LS" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="255.2" cy="333.6" r="10" data-id="13" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt LS" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="216.0" cy="240.2" r="10" data-id="14" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM LS" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="220.2" cy="320.5" r="10" data-id="15" data-brand="Cobra" data-year="2024" tabindex="0" role="button" aria-label="Cobra Dark Speed X" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="284.6" cy="471.1" r="10" data-id="16" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt X" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="358.8" cy="423.6" r="10" data-id="17" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM X" />
+    <circle class="dsi__pt dsi__pt--ping" cx="307.0" cy="453.1" r="10" data-id="18" data-brand="Ping" data-year="2024" tabindex="0" role="button" aria-label="Ping G430 Max 10K" />
+    <circle class="dsi__pt dsi__pt--ping" cx="409.2" cy="327.0" r="10" data-id="19" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 K" />
+    <circle class="dsi__pt dsi__pt--ping" cx="283.2" cy="330.3" r="10" data-id="20" data-brand="Ping" data-year="2023" tabindex="0" role="button" aria-label="Ping G430 LST" />
+    <circle class="dsi__pt dsi__pt--ping" cx="297.2" cy="382.7" r="10" data-id="21" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 LST" />
+    <circle class="dsi__pt dsi__pt--ping" cx="269.2" cy="386.0" r="10" data-id="22" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 Max" />
+    <circle class="dsi__pt dsi__pt--ping" cx="260.8" cy="345.0" r="10" data-id="23" data-brand="Ping" data-year="2017" tabindex="0" role="button" aria-label="Ping G400" />
+    <circle class="dsi__pt dsi__pt--ping" cx="332.2" cy="390.9" r="10" data-id="24" data-brand="Ping" data-year="2018" tabindex="0" role="button" aria-label="Ping G400 Max" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="246.8" cy="286.1" r="10" data-id="25" data-brand="TaylorMade" data-year="2024" tabindex="0" role="button" aria-label="TaylorMade Qi10" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="189.4" cy="341.7" r="10" data-id="26" data-brand="TaylorMade" data-year="2025" tabindex="0" role="button" aria-label="TaylorMade Qi35" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="452.6" cy="225.5" r="10" data-id="27" data-brand="TaylorMade" data-year="2026" tabindex="0" role="button" aria-label="TaylorMade Qi4D" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="448.4" cy="109.2" r="10" data-id="28" data-brand="TaylorMade" data-year="2024" tabindex="0" role="button" aria-label="TaylorMade Qi10 LS" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="242.6" cy="389.2" r="10" data-id="29" data-brand="TaylorMade" data-year="2025" tabindex="0" role="button" aria-label="TaylorMade Qi35 LS" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="308.4" cy="395.8" r="10" data-id="30" data-brand="TaylorMade" data-year="2026" tabindex="0" role="button" aria-label="TaylorMade Qi4D LS" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="241.2" cy="176.4" r="10" data-id="31" data-brand="TaylorMade" data-year="2024" tabindex="0" role="button" aria-label="TaylorMade Qi10 Max" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="207.6" cy="358.1" r="10" data-id="32" data-brand="TaylorMade" data-year="2025" tabindex="0" role="button" aria-label="TaylorMade Qi35 Max" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="349.0" cy="376.1" r="10" data-id="33" data-brand="TaylorMade" data-year="2026" tabindex="0" role="button" aria-label="TaylorMade Qi4D Max" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="286.0" cy="279.5" r="10" data-id="34" data-brand="Titleist" data-year="2024" tabindex="0" role="button" aria-label="Titleist GT 2" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="245.4" cy="343.4" r="10" data-id="35" data-brand="Titleist" data-year="2026" tabindex="0" role="button" aria-label="Titleist GTS 2" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="195.0" cy="422.0" r="10" data-id="36" data-brand="Titleist" data-year="2024" tabindex="0" role="button" aria-label="Titleist GT 3" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="312.6" cy="325.4" r="10" data-id="37" data-brand="Titleist" data-year="2026" tabindex="0" role="button" aria-label="Titleist GTS 3" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="319.6" cy="330.3" r="10" data-id="38" data-brand="Titleist" data-year="2024" tabindex="0" role="button" aria-label="Titleist GT 4" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="255.2" cy="353.2" r="10" data-id="39" data-brand="Titleist" data-year="2026" tabindex="0" role="button" aria-label="Titleist GTS 4" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="322.4" cy="497.3" r="10" data-id="40" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum Max" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="255.2" cy="446.5" r="10" data-id="41" data-brand="Callaway" data-year="2026" tabindex="0" role="button" aria-label="Callaway Quantum TD Max" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="109.6" cy="517.0" r="10" data-id="42" data-brand="Cobra" data-year="2026" tabindex="0" role="button" aria-label="Cobra OPTM Max D" />
+    <circle class="dsi__pt dsi__pt--mizuno" cx="252.4" cy="372.9" r="10" data-id="43" data-brand="Mizuno" data-year="2025" tabindex="0" role="button" aria-label="Mizuno JPX One" />
+    <circle class="dsi__pt dsi__pt--mizuno" cx="246.8" cy="274.6" r="10" data-id="44" data-brand="Mizuno" data-year="2025" tabindex="0" role="button" aria-label="Mizuno JPX One Select" />
+    <circle class="dsi__pt dsi__pt--pxg" cx="328.0" cy="351.6" r="10" data-id="45" data-brand="PXG" data-year="2025" tabindex="0" role="button" aria-label="PXG Lightning Tour Max 10K+" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="235.6" cy="287.7" r="10" data-id="46" data-brand="Srixon" data-year="2025" tabindex="0" role="button" aria-label="Srixon Zxi LS" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="323.8" cy="330.3" r="10" data-id="47" data-brand="Srixon" data-year="2025" tabindex="0" role="button" aria-label="Srixon Zxi" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="304.2" cy="327.0" r="10" data-id="48" data-brand="Srixon" data-year="2025" tabindex="0" role="button" aria-label="Srixon Zxi Max" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="239.8" cy="309.0" r="10" data-id="49" data-brand="Srixon" data-year="2023" tabindex="0" role="button" aria-label="Srixon ZX5 MK2" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="311.2" cy="307.4" r="10" data-id="50" data-brand="Srixon" data-year="2023" tabindex="0" role="button" aria-label="Srixon ZX7 MK2" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="256.6" cy="286.1" r="10" data-id="51" data-brand="Srixon" data-year="2023" tabindex="0" role="button" aria-label="Srixon ZX5 MK2 LS" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="230.0" cy="135.4" r="10" data-id="52" data-brand="Srixon" data-year="2020" tabindex="0" role="button" aria-label="Srixon ZX7" />
+    <circle class="dsi__pt dsi__pt--srixon" cx="297.2" cy="304.1" r="10" data-id="53" data-brand="Srixon" data-year="2020" tabindex="0" role="button" aria-label="Srixon ZX5" />
+    <circle class="dsi__pt dsi__pt--cleveland" cx="178.2" cy="471.1" r="10" data-id="54" data-brand="Cleveland" data-year="2007" tabindex="0" role="button" aria-label="Cleveland HiBore XL" />
+    <circle class="dsi__pt dsi__pt--cobra" cx="81.6" cy="408.9" r="10" data-id="55" data-brand="Cobra" data-year="2025" tabindex="0" role="button" aria-label="Cobra Dark Speed Adapt Max-D" />
+    <circle class="dsi__pt dsi__pt--ping" cx="171.2" cy="592.3" r="10" data-id="56" data-brand="Ping" data-year="2025" tabindex="0" role="button" aria-label="Ping G440 SFT" />
+    <circle class="dsi__pt dsi__pt--ping" cx="372.8" cy="386.0" r="10" data-id="57" data-brand="Ping" data-year="2021" tabindex="0" role="button" aria-label="Ping G425 LST" />
+    <circle class="dsi__pt dsi__pt--ping" cx="284.6" cy="335.2" r="10" data-id="58" data-brand="Ping" data-year="2021" tabindex="0" role="button" aria-label="Ping G425 Max" />
+    <circle class="dsi__pt dsi__pt--ping" cx="160.0" cy="446.5" r="10" data-id="59" data-brand="Ping" data-year="2021" tabindex="0" role="button" aria-label="Ping G425 SFT" />
+    <circle class="dsi__pt dsi__pt--ping" cx="265.0" cy="214.0" r="10" data-id="60" data-brand="Ping" data-year="2023" tabindex="0" role="button" aria-label="Ping G430 Max" />
+    <circle class="dsi__pt dsi__pt--ping" cx="115.2" cy="472.7" r="10" data-id="61" data-brand="Ping" data-year="2023" tabindex="0" role="button" aria-label="Ping G430 SFT" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="197.8" cy="182.9" r="10" data-id="62" data-brand="TaylorMade" data-year="2023" tabindex="0" role="button" aria-label="TaylorMade Stealth 2" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="153.0" cy="307.4" r="10" data-id="63" data-brand="TaylorMade" data-year="2023" tabindex="0" role="button" aria-label="TaylorMade Stealth 2 Plus" />
+    <circle class="dsi__pt dsi__pt--taylormade" cx="147.4" cy="291.0" r="10" data-id="64" data-brand="TaylorMade" data-year="2023" tabindex="0" role="button" aria-label="TaylorMade Stealth 2 HD" />
+    <circle class="dsi__pt dsi__pt--wilson" cx="286.0" cy="420.3" r="10" data-id="65" data-brand="Wilson" data-year="2023" tabindex="0" role="button" aria-label="Wilson Dynapwr Carbon" />
+    <circle class="dsi__pt dsi__pt--wilson" cx="364.4" cy="377.8" r="10" data-id="66" data-brand="Wilson" data-year="2023" tabindex="0" role="button" aria-label="Wilson Dynapwr Max" />
+    <circle class="dsi__pt dsi__pt--wilson" cx="361.6" cy="246.8" r="10" data-id="67" data-brand="Wilson" data-year="2023" tabindex="0" role="button" aria-label="Wilson Dynapwr LS" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="241.2" cy="225.5" r="10" data-id="68" data-brand="Callaway" data-year="2023" tabindex="0" role="button" aria-label="Callaway Paradym" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="139.0" cy="451.5" r="10" data-id="69" data-brand="Callaway" data-year="2023" tabindex="0" role="button" aria-label="Callaway Paradym X" />
+    <circle class="dsi__pt dsi__pt--callaway" cx="393.8" cy="335.2" r="10" data-id="70" data-brand="Callaway" data-year="2025" tabindex="0" role="button" aria-label="Callaway Elyte TD Max" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="272.0" cy="294.2" r="10" data-id="71" data-brand="Titleist" data-year="2022" tabindex="0" role="button" aria-label="Titleist TSR2" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="220.2" cy="320.5" r="10" data-id="72" data-brand="Titleist" data-year="2022" tabindex="0" role="button" aria-label="Titleist TSR3" />
+    <circle class="dsi__pt dsi__pt--titleist" cx="162.8" cy="410.5" r="10" data-id="73" data-brand="Titleist" data-year="2022" tabindex="0" role="button" aria-label="Titleist TSR4" />
+  </g>
+      <circle class="dsi__ring dsi__ring--primary" cx="0" cy="0" r="16" fill="none" stroke="#000000" stroke-width="2.5" style="display:none;" pointer-events="none" />
+      <circle class="dsi__ring dsi__ring--compare" cx="0" cy="0" r="16" fill="none" stroke="#000000" stroke-width="2.5" stroke-dasharray="4 3" style="display:none;" pointer-events="none" />
+      <text class="dsi__axis-label" x="265.0" y="780" text-anchor="middle">TOE − HEEL CARRY (YDS) →</text>
+      <g class="dsi__leaders" pointer-events="none">
+    <line class="dsi__leader" x1="323.8" y1="382.7" x2="325.3" y2="474.2" data-id="0" />
+    <line class="dsi__leader" x1="284.6" y1="317.2" x2="438.6" y2="242.8" data-id="1" />
+    <line class="dsi__leader" x1="322.4" y1="497.3" x2="331.2" y2="542.8" data-id="2" />
+    <line class="dsi__leader" x1="157.2" y1="690.5" x2="113.5" y2="700.6" data-id="3" />
+    <line class="dsi__leader" x1="305.6" y1="394.1" x2="321.7" y2="417.8" data-id="4" />
+    <line class="dsi__leader" x1="242.6" y1="659.4" x2="186.0" y2="669.5" data-id="5" />
+    <line class="dsi__leader" x1="302.8" y1="351.6" x2="311.6" y2="395.1" data-id="6" />
+    <line class="dsi__leader" x1="262.2" y1="307.4" x2="374.4" y2="254.6" data-id="7" />
+    <line class="dsi__leader" x1="315.4" y1="340.1" x2="384.5" y2="454.7" data-id="8" />
+    <line class="dsi__leader" x1="176.8" y1="390.9" x2="92.0" y2="449.0" data-id="9" />
+    <line class="dsi__leader" x1="372.8" y1="336.8" x2="427.6" y2="368.4" data-id="10" />
+    <line class="dsi__leader" x1="144.6" y1="222.2" x2="116.4" y2="198.7" data-id="11" />
+    <line class="dsi__leader" x1="258.0" y1="299.2" x2="324.0" y2="239.9" data-id="12" />
+    <line class="dsi__leader" x1="255.2" y1="333.6" x2="229.6" y2="314.9" data-id="13" />
+    <line class="dsi__leader" x1="216.0" y1="240.2" x2="154.7" y2="172.7" data-id="14" />
+    <line class="dsi__leader" x1="220.2" y1="320.5" x2="120.4" y2="230.5" data-id="15" />
+    <line class="dsi__leader" x1="284.6" y1="471.1" x2="291.0" y2="581.7" data-id="16" />
+    <line class="dsi__leader" x1="358.8" y1="423.6" x2="411.4" y2="465.0" data-id="17" />
+    <line class="dsi__leader" x1="307.0" y1="453.1" x2="325.8" y2="516.4" data-id="18" />
+    <line class="dsi__leader" x1="409.2" y1="327.0" x2="444.5" y2="309.0" data-id="19" />
+    <line class="dsi__leader" x1="283.2" y1="330.3" x2="313.9" y2="212.6" data-id="20" />
+    <line class="dsi__leader" x1="297.2" y1="382.7" x2="190.7" y2="523.8" data-id="21" />
+    <line class="dsi__leader" x1="269.2" y1="386.0" x2="220.3" y2="480.9" data-id="22" />
+    <line class="dsi__leader" x1="260.8" y1="345.0" x2="350.7" y2="132.5" data-id="23" />
+    <line class="dsi__leader" x1="332.2" y1="390.9" x2="441.4" y2="529.1" data-id="24" />
+    <line class="dsi__leader" x1="246.8" y1="286.1" x2="232.0" y2="257.4" data-id="25" />
+    <line class="dsi__leader" x1="189.4" y1="341.7" x2="131.3" y2="335.0" data-id="26" />
+    <line class="dsi__leader" x1="452.6" y1="225.5" x2="455.9" y2="262.3" data-id="27" />
+    <line class="dsi__leader" x1="448.4" y1="109.2" x2="447.4" y2="95.5" data-id="28" />
+    <line class="dsi__leader" x1="242.6" y1="389.2" x2="234.8" y2="426.4" data-id="29" />
+    <line class="dsi__leader" x1="308.4" y1="395.8" x2="425.0" y2="511.7" data-id="30" />
+    <line class="dsi__leader" x1="241.2" y1="176.4" x2="283.8" y2="130.3" data-id="31" />
+    <line class="dsi__leader" x1="207.6" y1="358.1" x2="130.7" y2="382.9" data-id="32" />
+    <line class="dsi__leader" x1="349.0" y1="376.1" x2="424.1" y2="507.1" data-id="33" />
+    <line class="dsi__leader" x1="286.0" y1="279.5" x2="336.6" y2="260.1" data-id="34" />
+    <line class="dsi__leader" x1="245.4" y1="343.4" x2="131.9" y2="253.6" data-id="35" />
+    <line class="dsi__leader" x1="195.0" y1="422.0" x2="154.9" y2="414.4" data-id="36" />
+    <line class="dsi__leader" x1="312.6" y1="325.4" x2="433.5" y2="285.7" data-id="37" />
+    <line class="dsi__leader" x1="319.6" y1="330.3" x2="338.0" y2="333.8" data-id="38" />
+    <line class="dsi__leader" x1="255.2" y1="353.2" x2="104.3" y2="300.9" data-id="39" />
+    <line class="dsi__leader" x1="322.4" y1="497.3" x2="385.1" y2="591.5" data-id="40" />
+    <line class="dsi__leader" x1="255.2" y1="446.5" x2="193.2" y2="543.2" data-id="41" />
+    <line class="dsi__leader" x1="109.6" y1="517.0" x2="91.6" y2="548.3" data-id="42" />
+    <line class="dsi__leader" x1="252.4" y1="372.9" x2="211.5" y2="349.5" data-id="43" />
+    <line class="dsi__leader" x1="246.8" y1="274.6" x2="152.9" y2="141.9" data-id="44" />
+    <line class="dsi__leader" x1="328.0" y1="351.6" x2="414.5" y2="398.7" data-id="45" />
+    <line class="dsi__leader" x1="235.6" y1="287.7" x2="202.2" y2="230.6" data-id="46" />
+    <line class="dsi__leader" x1="323.8" y1="330.3" x2="376.5" y2="327.2" data-id="47" />
+    <line class="dsi__leader" x1="304.2" y1="327.0" x2="429.8" y2="216.1" data-id="48" />
+    <line class="dsi__leader" x1="239.8" y1="309.0" x2="211.4" y2="279.2" data-id="49" />
+    <line class="dsi__leader" x1="311.2" y1="307.4" x2="438.5" y2="143.3" data-id="50" />
+    <line class="dsi__leader" x1="256.6" y1="286.1" x2="300.8" y2="323.1" data-id="51" />
+    <line class="dsi__leader" x1="230.0" y1="135.4" x2="254.8" y2="84.8" data-id="52" />
+    <line class="dsi__leader" x1="297.2" y1="304.1" x2="311.2" y2="275.1" data-id="53" />
+    <line class="dsi__leader" x1="178.2" y1="471.1" x2="120.9" y2="599.5" data-id="54" />
+    <line class="dsi__leader" x1="171.2" y1="592.3" x2="235.7" y2="616.8" data-id="56" />
+    <line class="dsi__leader" x1="372.8" y1="386.0" x2="422.4" y2="432.9" data-id="57" />
+    <line class="dsi__leader" x1="284.6" y1="335.2" x2="272.8" y2="341.8" data-id="58" />
+    <line class="dsi__leader" x1="160.0" y1="446.5" x2="206.0" y2="456.1" data-id="59" />
+    <line class="dsi__leader" x1="265.0" y1="214.0" x2="296.9" y2="167.4" data-id="60" />
+    <line class="dsi__leader" x1="115.2" y1="472.7" x2="93.9" y2="506.0" data-id="61" />
+    <line class="dsi__leader" x1="197.8" y1="182.9" x2="152.2" y2="106.0" data-id="62" />
+    <line class="dsi__leader" x1="153.0" y1="307.4" x2="133.2" y2="301.1" data-id="63" />
+    <line class="dsi__leader" x1="147.4" y1="291.0" x2="88.3" y2="276.3" data-id="64" />
+    <line class="dsi__leader" x1="286.0" y1="420.3" x2="176.3" y2="576.0" data-id="65" />
+    <line class="dsi__leader" x1="364.4" y1="377.8" x2="412.0" y2="401.7" data-id="66" />
+    <line class="dsi__leader" x1="361.6" y1="246.8" x2="426.4" y2="195.8" data-id="67" />
+    <line class="dsi__leader" x1="241.2" y1="225.5" x2="191.7" y2="191.5" data-id="68" />
+    <line class="dsi__leader" x1="139.0" y1="451.5" x2="84.7" y2="466.6" data-id="69" />
+    <line class="dsi__leader" x1="393.8" y1="335.2" x2="431.2" y2="334.1" data-id="70" />
+    <line class="dsi__leader" x1="272.0" y1="294.2" x2="272.0" y2="256.6" data-id="71" />
+    <line class="dsi__leader" x1="220.2" y1="320.5" x2="199.9" y2="300.2" data-id="72" />
+    <line class="dsi__leader" x1="162.8" y1="410.5" x2="142.5" y2="430.8" data-id="73" />
+  </g>
+  <g class="dsi__labels" pointer-events="none">
+    <text class="dsi__label" x="325.3" y="474.2" text-anchor="middle" dominant-baseline="middle" data-id="0">Ai Smoke Max</text>
+    <text class="dsi__label" x="438.6" y="242.8" text-anchor="middle" dominant-baseline="middle" data-id="1">Elyte</text>
+    <text class="dsi__label" x="331.2" y="542.8" text-anchor="middle" dominant-baseline="middle" data-id="2">Quantum</text>
+    <text class="dsi__label" x="113.5" y="700.6" text-anchor="middle" dominant-baseline="middle" data-id="3">Ai Smoke Max D</text>
+    <text class="dsi__label" x="321.7" y="417.8" text-anchor="middle" dominant-baseline="middle" data-id="4">Elyte X</text>
+    <text class="dsi__label" x="186.0" y="669.5" text-anchor="middle" dominant-baseline="middle" data-id="5">Quantum Max D</text>
+    <text class="dsi__label" x="311.6" y="395.1" text-anchor="middle" dominant-baseline="middle" data-id="6">Ai Smoke TD</text>
+    <text class="dsi__label" x="374.4" y="254.6" text-anchor="middle" dominant-baseline="middle" data-id="7">Elyte TD</text>
+    <text class="dsi__label" x="384.5" y="454.7" text-anchor="middle" dominant-baseline="middle" data-id="8">Quantum TD</text>
+    <text class="dsi__label" x="92.0" y="449.0" text-anchor="middle" dominant-baseline="middle" data-id="9">Dark Speed Max</text>
+    <text class="dsi__label" x="427.6" y="368.4" text-anchor="middle" dominant-baseline="middle" data-id="10">Dark Speed Adapt Max-K</text>
+    <text class="dsi__label" x="116.4" y="198.7" text-anchor="middle" dominant-baseline="middle" data-id="11">OPTM Max K</text>
+    <text class="dsi__label" x="324.0" y="239.9" text-anchor="middle" dominant-baseline="middle" data-id="12">Dark Speed LS</text>
+    <text class="dsi__label" x="229.6" y="314.9" text-anchor="middle" dominant-baseline="middle" data-id="13">Dark Speed Adapt LS</text>
+    <text class="dsi__label" x="154.7" y="172.7" text-anchor="middle" dominant-baseline="middle" data-id="14">OPTM LS</text>
+    <text class="dsi__label" x="120.4" y="230.5" text-anchor="middle" dominant-baseline="middle" data-id="15">Dark Speed X</text>
+    <text class="dsi__label" x="291.0" y="581.7" text-anchor="middle" dominant-baseline="middle" data-id="16">Dark Speed Adapt X</text>
+    <text class="dsi__label" x="411.4" y="465.0" text-anchor="middle" dominant-baseline="middle" data-id="17">OPTM X</text>
+    <text class="dsi__label" x="325.8" y="516.4" text-anchor="middle" dominant-baseline="middle" data-id="18">G430 Max 10K</text>
+    <text class="dsi__label" x="444.5" y="309.0" text-anchor="middle" dominant-baseline="middle" data-id="19">G440 K</text>
+    <text class="dsi__label" x="313.9" y="212.6" text-anchor="middle" dominant-baseline="middle" data-id="20">G430 LST</text>
+    <text class="dsi__label" x="190.7" y="523.8" text-anchor="middle" dominant-baseline="middle" data-id="21">G440 LST</text>
+    <text class="dsi__label" x="220.3" y="480.9" text-anchor="middle" dominant-baseline="middle" data-id="22">G440 Max</text>
+    <text class="dsi__label" x="350.7" y="132.5" text-anchor="middle" dominant-baseline="middle" data-id="23">G400</text>
+    <text class="dsi__label" x="441.4" y="529.1" text-anchor="middle" dominant-baseline="middle" data-id="24">G400 Max</text>
+    <text class="dsi__label" x="232.0" y="257.4" text-anchor="middle" dominant-baseline="middle" data-id="25">Qi10</text>
+    <text class="dsi__label" x="131.3" y="335.0" text-anchor="middle" dominant-baseline="middle" data-id="26">Qi35</text>
+    <text class="dsi__label" x="455.9" y="262.3" text-anchor="middle" dominant-baseline="middle" data-id="27">Qi4D</text>
+    <text class="dsi__label" x="447.4" y="95.5" text-anchor="middle" dominant-baseline="middle" data-id="28">Qi10 LS</text>
+    <text class="dsi__label" x="234.8" y="426.4" text-anchor="middle" dominant-baseline="middle" data-id="29">Qi35 LS</text>
+    <text class="dsi__label" x="425.0" y="511.7" text-anchor="middle" dominant-baseline="middle" data-id="30">Qi4D LS</text>
+    <text class="dsi__label" x="283.8" y="130.3" text-anchor="middle" dominant-baseline="middle" data-id="31">Qi10 Max</text>
+    <text class="dsi__label" x="130.7" y="382.9" text-anchor="middle" dominant-baseline="middle" data-id="32">Qi35 Max</text>
+    <text class="dsi__label" x="424.1" y="507.1" text-anchor="middle" dominant-baseline="middle" data-id="33">Qi4D Max</text>
+    <text class="dsi__label" x="336.6" y="260.1" text-anchor="middle" dominant-baseline="middle" data-id="34">GT 2</text>
+    <text class="dsi__label" x="131.9" y="253.6" text-anchor="middle" dominant-baseline="middle" data-id="35">GTS 2</text>
+    <text class="dsi__label" x="154.9" y="414.4" text-anchor="middle" dominant-baseline="middle" data-id="36">GT 3</text>
+    <text class="dsi__label" x="433.5" y="285.7" text-anchor="middle" dominant-baseline="middle" data-id="37">GTS 3</text>
+    <text class="dsi__label" x="338.0" y="333.8" text-anchor="middle" dominant-baseline="middle" data-id="38">GT 4</text>
+    <text class="dsi__label" x="104.3" y="300.9" text-anchor="middle" dominant-baseline="middle" data-id="39">GTS 4</text>
+    <text class="dsi__label" x="385.1" y="591.5" text-anchor="middle" dominant-baseline="middle" data-id="40">Quantum Max</text>
+    <text class="dsi__label" x="193.2" y="543.2" text-anchor="middle" dominant-baseline="middle" data-id="41">Quantum TD Max</text>
+    <text class="dsi__label" x="91.6" y="548.3" text-anchor="middle" dominant-baseline="middle" data-id="42">OPTM Max D</text>
+    <text class="dsi__label" x="211.5" y="349.5" text-anchor="middle" dominant-baseline="middle" data-id="43">JPX One</text>
+    <text class="dsi__label" x="152.9" y="141.9" text-anchor="middle" dominant-baseline="middle" data-id="44">JPX One Select</text>
+    <text class="dsi__label" x="414.5" y="398.7" text-anchor="middle" dominant-baseline="middle" data-id="45">Lightning Tour Max 10K+</text>
+    <text class="dsi__label" x="202.2" y="230.6" text-anchor="middle" dominant-baseline="middle" data-id="46">Zxi LS</text>
+    <text class="dsi__label" x="376.5" y="327.2" text-anchor="middle" dominant-baseline="middle" data-id="47">Zxi</text>
+    <text class="dsi__label" x="429.8" y="216.1" text-anchor="middle" dominant-baseline="middle" data-id="48">Zxi Max</text>
+    <text class="dsi__label" x="211.4" y="279.2" text-anchor="middle" dominant-baseline="middle" data-id="49">ZX5 MK2</text>
+    <text class="dsi__label" x="438.5" y="143.3" text-anchor="middle" dominant-baseline="middle" data-id="50">ZX7 MK2</text>
+    <text class="dsi__label" x="300.8" y="323.1" text-anchor="middle" dominant-baseline="middle" data-id="51">ZX5 MK2 LS</text>
+    <text class="dsi__label" x="254.8" y="84.8" text-anchor="middle" dominant-baseline="middle" data-id="52">ZX7</text>
+    <text class="dsi__label" x="311.2" y="275.1" text-anchor="middle" dominant-baseline="middle" data-id="53">ZX5</text>
+    <text class="dsi__label" x="120.9" y="599.5" text-anchor="middle" dominant-baseline="middle" data-id="54">HiBore XL</text>
+    <text class="dsi__label" x="87.2" y="416.5" text-anchor="middle" dominant-baseline="middle" data-id="55">Dark Speed Adapt Max-D</text>
+    <text class="dsi__label" x="235.7" y="616.8" text-anchor="middle" dominant-baseline="middle" data-id="56">G440 SFT</text>
+    <text class="dsi__label" x="422.4" y="432.9" text-anchor="middle" dominant-baseline="middle" data-id="57">G425 LST</text>
+    <text class="dsi__label" x="272.8" y="341.8" text-anchor="middle" dominant-baseline="middle" data-id="58">G425 Max</text>
+    <text class="dsi__label" x="206.0" y="456.1" text-anchor="middle" dominant-baseline="middle" data-id="59">G425 SFT</text>
+    <text class="dsi__label" x="296.9" y="167.4" text-anchor="middle" dominant-baseline="middle" data-id="60">G430 Max</text>
+    <text class="dsi__label" x="93.9" y="506.0" text-anchor="middle" dominant-baseline="middle" data-id="61">G430 SFT</text>
+    <text class="dsi__label" x="152.2" y="106.0" text-anchor="middle" dominant-baseline="middle" data-id="62">Stealth 2</text>
+    <text class="dsi__label" x="133.2" y="301.1" text-anchor="middle" dominant-baseline="middle" data-id="63">Stealth 2 Plus</text>
+    <text class="dsi__label" x="88.3" y="276.3" text-anchor="middle" dominant-baseline="middle" data-id="64">Stealth 2 HD</text>
+    <text class="dsi__label" x="176.3" y="576.0" text-anchor="middle" dominant-baseline="middle" data-id="65">Dynapwr Carbon</text>
+    <text class="dsi__label" x="412.0" y="401.7" text-anchor="middle" dominant-baseline="middle" data-id="66">Dynapwr Max</text>
+    <text class="dsi__label" x="426.4" y="195.8" text-anchor="middle" dominant-baseline="middle" data-id="67">Dynapwr LS</text>
+    <text class="dsi__label" x="191.7" y="191.5" text-anchor="middle" dominant-baseline="middle" data-id="68">Paradym</text>
+    <text class="dsi__label" x="84.7" y="466.6" text-anchor="middle" dominant-baseline="middle" data-id="69">Paradym X</text>
+    <text class="dsi__label" x="431.2" y="334.1" text-anchor="middle" dominant-baseline="middle" data-id="70">Elyte TD Max</text>
+    <text class="dsi__label" x="272.0" y="256.6" text-anchor="middle" dominant-baseline="middle" data-id="71">TSR2</text>
+    <text class="dsi__label" x="199.9" y="300.2" text-anchor="middle" dominant-baseline="middle" data-id="72">TSR3</text>
+    <text class="dsi__label" x="142.5" y="430.8" text-anchor="middle" dominant-baseline="middle" data-id="73">TSR4</text>
+  </g>
+  <text class="dsi__axis-label" x="15" y="392.5" text-anchor="middle" transform="rotate(-90, 15, 392.5)">HIGH − LOW CARRY (YDS) ↑</text>
+      <text class="dsi__median-label" x="267.6" y="75">MEDIAN</text>
+    </svg>
+  </div>
+
+  <div class="dsi__detail" data-selected="21" data-compare="">
+    <div class="dsi__controls">
+      <div class="dsi__control-group">
+        <label class="dsi__control-label" for="dsi-brand">Filter by brand</label>
+        <select class="dsi__select" id="dsi-brand" aria-label="Filter drivers by brand">
+          <option value="">All brands</option><option value="Callaway">Callaway</option><option value="Cleveland">Cleveland</option><option value="Cobra">Cobra</option><option value="Mizuno">Mizuno</option><option value="PXG">PXG</option><option value="Ping">Ping</option><option value="Srixon">Srixon</option><option value="TaylorMade">TaylorMade</option><option value="Titleist">Titleist</option><option value="Wilson">Wilson</option>
+        </select>
+      </div>
+      <div class="dsi__control-group">
+        <label class="dsi__control-label" for="dsi-era">Filter by release year</label>
+        <select class="dsi__select" id="dsi-era" aria-label="Filter drivers by release year">
+          <option value="">All years</option>
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="pre-2023">Pre-2023</option>
+        </select>
+      </div>
+      <div class="dsi__control-group">
+        <label class="dsi__control-label" for="dsi-compare">Compare with</label>
+        <select class="dsi__select dsi__select--compare" id="dsi-compare" aria-label="Select a driver to compare with the primary selection">
+          <option value="">Single view (no comparison)</option>
+          <optgroup label="Callaway">
+            <option value="0">Ai Smoke Max (2024)</option>
+            <option value="3">Ai Smoke Max D (2024)</option>
+            <option value="6">Ai Smoke TD (2024)</option>
+            <option value="1">Elyte (2025)</option>
+            <option value="7">Elyte TD (2025)</option>
+            <option value="70">Elyte TD Max (2025)</option>
+            <option value="4">Elyte X (2025)</option>
+            <option value="68">Paradym (2023)</option>
+            <option value="69">Paradym X (2023)</option>
+            <option value="2">Quantum (2026)</option>
+            <option value="40">Quantum Max (2026)</option>
+            <option value="5">Quantum Max D (2026)</option>
+            <option value="8">Quantum TD (2026)</option>
+            <option value="41">Quantum TD Max (2026)</option>
+          </optgroup>
+          <optgroup label="Cleveland">
+            <option value="54">HiBore XL (2007)</option>
+          </optgroup>
+          <optgroup label="Cobra">
+            <option value="13">Dark Speed Adapt LS (2025)</option>
+            <option value="55">Dark Speed Adapt Max-D (2025)</option>
+            <option value="10">Dark Speed Adapt Max-K (2025)</option>
+            <option value="16">Dark Speed Adapt X (2025)</option>
+            <option value="12">Dark Speed LS (2024)</option>
+            <option value="9">Dark Speed Max (2024)</option>
+            <option value="15">Dark Speed X (2024)</option>
+            <option value="14">OPTM LS (2026)</option>
+            <option value="42">OPTM Max D (2026)</option>
+            <option value="11">OPTM Max K (2026)</option>
+            <option value="17">OPTM X (2026)</option>
+          </optgroup>
+          <optgroup label="Mizuno">
+            <option value="43">JPX One (2025)</option>
+            <option value="44">JPX One Select (2025)</option>
+          </optgroup>
+          <optgroup label="PXG">
+            <option value="45">Lightning Tour Max 10K+ (2025)</option>
+          </optgroup>
+          <optgroup label="Ping">
+            <option value="23">G400 (2017)</option>
+            <option value="24">G400 Max (2018)</option>
+            <option value="57">G425 LST (2021)</option>
+            <option value="58">G425 Max (2021)</option>
+            <option value="59">G425 SFT (2021)</option>
+            <option value="20">G430 LST (2023)</option>
+            <option value="60">G430 Max (2023)</option>
+            <option value="18">G430 Max 10K (2024)</option>
+            <option value="61">G430 SFT (2023)</option>
+            <option value="19">G440 K (2025)</option>
+            <option value="21">G440 LST (2025)</option>
+            <option value="22">G440 Max (2025)</option>
+            <option value="56">G440 SFT (2025)</option>
+          </optgroup>
+          <optgroup label="Srixon">
+            <option value="53">ZX5 (2020)</option>
+            <option value="49">ZX5 MK2 (2023)</option>
+            <option value="51">ZX5 MK2 LS (2023)</option>
+            <option value="52">ZX7 (2020)</option>
+            <option value="50">ZX7 MK2 (2023)</option>
+            <option value="47">Zxi (2025)</option>
+            <option value="46">Zxi LS (2025)</option>
+            <option value="48">Zxi Max (2025)</option>
+          </optgroup>
+          <optgroup label="TaylorMade">
+            <option value="25">Qi10 (2024)</option>
+            <option value="28">Qi10 LS (2024)</option>
+            <option value="31">Qi10 Max (2024)</option>
+            <option value="26">Qi35 (2025)</option>
+            <option value="29">Qi35 LS (2025)</option>
+            <option value="32">Qi35 Max (2025)</option>
+            <option value="27">Qi4D (2026)</option>
+            <option value="30">Qi4D LS (2026)</option>
+            <option value="33">Qi4D Max (2026)</option>
+            <option value="62">Stealth 2 (2023)</option>
+            <option value="64">Stealth 2 HD (2023)</option>
+            <option value="63">Stealth 2 Plus (2023)</option>
+          </optgroup>
+          <optgroup label="Titleist">
+            <option value="34">GT 2 (2024)</option>
+            <option value="36">GT 3 (2024)</option>
+            <option value="38">GT 4 (2024)</option>
+            <option value="35">GTS 2 (2026)</option>
+            <option value="37">GTS 3 (2026)</option>
+            <option value="39">GTS 4 (2026)</option>
+            <option value="71">TSR2 (2022)</option>
+            <option value="72">TSR3 (2022)</option>
+            <option value="73">TSR4 (2022)</option>
+          </optgroup>
+          <optgroup label="Wilson">
+            <option value="65">Dynapwr Carbon (2023)</option>
+            <option value="67">Dynapwr LS (2023)</option>
+            <option value="66">Dynapwr Max (2023)</option>
+          </optgroup>
+        </select>
+      </div>
+      <button type="button" class="dsi__clear" hidden>Clear comparison</button>
+    </div>
+
+    <div class="dsi__body">
+      <div class="dsi__side" data-side="primary">
+        <div class="dsi__side-header">
+          <span class="dsi__side-brand" data-role="brand"></span>
+          <span class="dsi__side-model" data-role="model"></span>
+          <span class="dsi__side-mc">Center strike <strong data-role="mc"></strong> yds</span>
+        </div>
+        <div class="dsi__stats">
+          <div class="dsi__stat"><span class="dsi__stat-label">HIGH</span><span class="dsi__stat-val" data-role="high"></span></div>
+          <div class="dsi__stat"><span class="dsi__stat-label">LOW</span><span class="dsi__stat-val" data-role="low"></span></div>
+          <div class="dsi__stat"><span class="dsi__stat-label">HEEL</span><span class="dsi__stat-val" data-role="heel"></span></div>
+          <div class="dsi__stat"><span class="dsi__stat-label">TOE</span><span class="dsi__stat-val" data-role="toe"></span></div>
+        </div>
+        <div class="dsi__heatmap-wrap">
+          <div class="dsi__heatmap-label">Carry by face zone (yards)</div>
+          <div class="dsi__heatmap">
+            <div class="dsi__cell" data-role-zone="HH"><span class="dsi__cell-zone">HIGH HEEL</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="HC"><span class="dsi__cell-zone">HIGH CENTER</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="HT"><span class="dsi__cell-zone">HIGH TOE</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="MH"><span class="dsi__cell-zone">MID HEEL</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="MC"><span class="dsi__cell-zone">CENTER</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="MT"><span class="dsi__cell-zone">MID TOE</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="LH"><span class="dsi__cell-zone">LOW HEEL</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="LC"><span class="dsi__cell-zone">LOW CENTER</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="LT"><span class="dsi__cell-zone">LOW TOE</span><span class="dsi__cell-val"></span></div>
+          </div>
+          <div class="dsi__cell-axis"><span class="dsi__cell-axis-item">HEEL</span><span class="dsi__cell-axis-item">CENTER</span><span class="dsi__cell-axis-item">TOE</span></div>
+        </div>
+      </div>
+      <div class="dsi__side" data-side="compare" hidden>
+        <div class="dsi__side-header">
+          <span class="dsi__side-brand" data-role="brand"></span>
+          <span class="dsi__side-model" data-role="model"></span>
+          <span class="dsi__side-mc">Center strike <strong data-role="mc"></strong> yds</span>
+        </div>
+        <div class="dsi__stats">
+          <div class="dsi__stat"><span class="dsi__stat-label">HIGH</span><span class="dsi__stat-val" data-role="high"></span></div>
+          <div class="dsi__stat"><span class="dsi__stat-label">LOW</span><span class="dsi__stat-val" data-role="low"></span></div>
+          <div class="dsi__stat"><span class="dsi__stat-label">HEEL</span><span class="dsi__stat-val" data-role="heel"></span></div>
+          <div class="dsi__stat"><span class="dsi__stat-label">TOE</span><span class="dsi__stat-val" data-role="toe"></span></div>
+        </div>
+        <div class="dsi__heatmap-wrap">
+          <div class="dsi__heatmap-label">Carry by face zone (yards)</div>
+          <div class="dsi__heatmap">
+            <div class="dsi__cell" data-role-zone="HH"><span class="dsi__cell-zone">HIGH HEEL</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="HC"><span class="dsi__cell-zone">HIGH CENTER</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="HT"><span class="dsi__cell-zone">HIGH TOE</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="MH"><span class="dsi__cell-zone">MID HEEL</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="MC"><span class="dsi__cell-zone">CENTER</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="MT"><span class="dsi__cell-zone">MID TOE</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="LH"><span class="dsi__cell-zone">LOW HEEL</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="LC"><span class="dsi__cell-zone">LOW CENTER</span><span class="dsi__cell-val"></span></div>
+            <div class="dsi__cell" data-role-zone="LT"><span class="dsi__cell-zone">LOW TOE</span><span class="dsi__cell-val"></span></div>
+          </div>
+          <div class="dsi__cell-axis"><span class="dsi__cell-axis-item">HEEL</span><span class="dsi__cell-axis-item">CENTER</span><span class="dsi__cell-axis-item">TOE</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dsi__scale">
+      <span>Lower carry</span>
+      <div class="dsi__scale-swatches">
+        <div class="dsi__scale-swatch" style="background:#ED3E49;"></div>
+        <div class="dsi__scale-swatch" style="background:#F96A32;"></div>
+        <div class="dsi__scale-swatch" style="background:#FFE845;"></div>
+        <div class="dsi__scale-swatch" style="background:#94C93D;"></div>
+        <div class="dsi__scale-swatch" style="background:#21681B;"></div>
+      </div>
+      <span>Higher carry</span>
+    </div>
+  </div>
+
+  <div class="dsi__legend">
+    <span class="dsi__legend-label">Brands</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--callaway" aria-hidden="true"></span>Callaway</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--cleveland" aria-hidden="true"></span>Cleveland</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--cobra" aria-hidden="true"></span>Cobra</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--mizuno" aria-hidden="true"></span>Mizuno</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--ping" aria-hidden="true"></span>Ping</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--pxg" aria-hidden="true"></span>PXG</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--srixon" aria-hidden="true"></span>Srixon</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--taylormade" aria-hidden="true"></span>TaylorMade</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--titleist" aria-hidden="true"></span>Titleist</span>
+    <span class="dsi__legend-item"><span class="dsi__legend-dot dsi__legend-dot--wilson" aria-hidden="true"></span>Wilson</span>
+  </div>
+
+  <div class="dsi__source">
+    Source: Robot testing at Golf Laboratories. 74 drivers tested at 95 mph club speed, neutral attack angle, six shots per zone, spanning Ping's G400 (2017) through the 2026 flagship crop. Horizontal axis is toe-region carry minus heel-region carry; vertical axis is high-region carry minus low-region carry. Heat map colors compare each zone against the field-wide range (184 to 231 yards). Solid ring marks the primary driver; dashed ring marks the comparison.
+  </div>
+</div>
+
+<script>
+(function() {
+  var root = document.currentScript.previousElementSibling;
+  while (root && root.nodeType !== 1) root = root.previousSibling;
+  if (!root || !root.classList.contains('dsi')) {
+    var all = document.querySelectorAll('.dsi');
+    root = all[all.length - 1];
+  }
+
+  var DRIVERS = [{"id":0,"brand":"Callaway","name":"Callaway Ai Smoke Max","mc":224.6,"year":2024,"zones":{"MC":224.6,"MT":220.3,"MH":210.2,"HC":218.6,"HT":217.1,"HH":210.9,"LC":215.4,"LT":212.8,"LH":201.5},"high":215.5,"low":209.9,"heel":207.5,"toe":216.7,"x":9.2,"y":5.6},{"id":1,"brand":"Callaway","name":"Callaway Elyte","mc":228.6,"year":2025,"zones":{"MC":228.6,"MT":227.2,"MH":221.2,"HC":226.1,"HT":225.7,"HH":218.0,"LC":218.2,"LT":214.2,"LH":208.8},"high":223.3,"low":213.7,"heel":216.0,"toe":222.4,"x":6.4,"y":9.6},{"id":2,"brand":"Callaway","name":"Callaway Quantum","mc":225.0,"year":2026,"zones":{"MC":225.0,"MT":222.8,"MH":216.5,"HC":216.5,"HT":215.6,"HH":204.3,"LC":219.4,"LT":215.4,"LH":205.7},"high":212.1,"low":213.5,"heel":208.8,"toe":217.9,"x":9.1,"y":-1.4},{"id":3,"brand":"Callaway","name":"Callaway Ai Smoke Max D","mc":222.4,"year":2024,"zones":{"MC":222.4,"MT":213.5,"MH":215.1,"HC":209.9,"HT":199.0,"HH":202.6,"LC":221.5,"LT":213.4,"LH":216.1},"high":203.8,"low":217.0,"heel":211.3,"toe":208.6,"x":-2.7,"y":-13.2},{"id":4,"brand":"Callaway","name":"Callaway Elyte X","mc":228.7,"year":2025,"zones":{"MC":228.7,"MT":225.0,"MH":216.8,"HC":224.1,"HT":222.5,"HH":214.5,"LC":220.6,"LT":216.6,"LH":209.3},"high":220.4,"low":215.5,"heel":213.5,"toe":221.4,"x":7.9,"y":4.9},{"id":5,"brand":"Callaway","name":"Callaway Quantum Max D","mc":224.4,"year":2026,"zones":{"MC":224.4,"MT":220.6,"MH":219.5,"HC":212.9,"HT":206.3,"HH":198.5,"LC":223.2,"LT":214.8,"LH":213.6},"high":205.9,"low":217.2,"heel":210.5,"toe":213.9,"x":3.4,"y":-11.3},{"id":6,"brand":"Callaway","name":"Callaway Ai Smoke TD","mc":226.8,"year":2024,"zones":{"MC":226.8,"MT":225.0,"MH":214.7,"HC":223.4,"HT":222.0,"HH":214.6,"LC":218.2,"LT":212.3,"LH":207.0},"high":220.0,"low":212.5,"heel":212.1,"toe":219.8,"x":7.7,"y":7.5},{"id":7,"brand":"Callaway","name":"Callaway Elyte TD","mc":230.1,"year":2025,"zones":{"MC":230.1,"MT":224.4,"MH":222.4,"HC":228.2,"HT":225.6,"HH":219.1,"LC":216.7,"LT":215.8,"LH":209.9},"high":224.3,"low":214.1,"heel":217.1,"toe":221.9,"x":4.8,"y":10.2},{"id":8,"brand":"Callaway","name":"Callaway Quantum TD","mc":223.1,"year":2026,"zones":{"MC":223.1,"MT":224.6,"MH":215.3,"HC":222.1,"HT":219.7,"HH":211.7,"LC":215.6,"LT":210.8,"LH":202.3},"high":217.8,"low":209.6,"heel":209.8,"toe":218.4,"x":8.6,"y":8.2},{"id":9,"brand":"Cobra","name":"Cobra Dark Speed Max","mc":219.2,"year":2024,"zones":{"MC":219.2,"MT":215.7,"MH":216.2,"HC":217.3,"HT":210.2,"HH":213.0,"LC":211.3,"LT":206.7,"LH":207.3},"high":213.5,"low":208.4,"heel":212.2,"toe":210.9,"x":-1.3,"y":5.1},{"id":10,"brand":"Cobra","name":"Cobra Dark Speed Adapt Max-K","mc":226.2,"year":2025,"zones":{"MC":226.2,"MT":226.4,"MH":214.4,"HC":227.7,"HT":227.4,"HH":215.5,"LC":218.8,"LT":220.4,"LH":206.2},"high":223.5,"low":215.1,"heel":212.0,"toe":224.7,"x":12.7,"y":8.4},{"id":11,"brand":"Cobra","name":"Cobra OPTM Max K","mc":221.4,"year":2026,"zones":{"MC":221.4,"MT":203.7,"MH":213.7,"HC":225.3,"HT":208.5,"HH":214.4,"LC":207.5,"LT":199.9,"LH":194.8},"high":216.1,"low":200.7,"heel":207.6,"toe":204.0,"x":-3.6,"y":15.4},{"id":12,"brand":"Cobra","name":"Cobra Dark Speed LS","mc":226.0,"year":2024,"zones":{"MC":226.0,"MT":220.3,"MH":213.3,"HC":221.4,"HT":220.1,"HH":217.3,"LC":213.3,"LT":208.5,"LH":204.9},"high":219.6,"low":208.9,"heel":211.8,"toe":216.3,"x":4.5,"y":10.7},{"id":13,"brand":"Cobra","name":"Cobra Dark Speed Adapt LS","mc":227.2,"year":2025,"zones":{"MC":227.2,"MT":221.8,"MH":219.1,"HC":225.8,"HT":219.7,"HH":216.5,"LC":218.8,"LT":212.2,"LH":205.2},"high":220.7,"low":212.1,"heel":213.6,"toe":217.9,"x":4.3,"y":8.6},{"id":14,"brand":"Cobra","name":"Cobra OPTM LS","mc":223.1,"year":2026,"zones":{"MC":223.1,"MT":219.0,"MH":218.0,"HC":225.5,"HT":214.9,"HH":217.6,"LC":212.2,"LT":204.4,"LH":198.4},"high":219.3,"low":205.0,"heel":211.3,"toe":212.8,"x":1.5,"y":14.3},{"id":15,"brand":"Cobra","name":"Cobra Dark Speed X","mc":227.7,"year":2024,"zones":{"MC":227.7,"MT":221.5,"MH":219.9,"HC":227.2,"HT":219.1,"HH":219.4,"LC":214.8,"LT":213.3,"LH":209.3},"high":221.9,"low":212.5,"heel":216.2,"toe":218.0,"x":1.8,"y":9.4},{"id":16,"brand":"Cobra","name":"Cobra Dark Speed Adapt X","mc":226.2,"year":2025,"zones":{"MC":226.2,"MT":224.8,"MH":218.7,"HC":223.2,"HT":220.4,"HH":213.0,"LC":224.0,"LT":218.9,"LH":213.2},"high":218.9,"low":218.7,"heel":215.0,"toe":221.4,"x":6.4,"y":0.2},{"id":17,"brand":"Cobra","name":"Cobra OPTM X","mc":224.8,"year":2026,"zones":{"MC":224.8,"MT":224.8,"MH":216.0,"HC":219.6,"HT":218.9,"HH":206.5,"LC":218.2,"LT":215.7,"LH":201.7},"high":215.0,"low":211.9,"heel":208.1,"toe":219.8,"x":11.7,"y":3.1},{"id":18,"brand":"Ping","name":"Ping G430 Max 10K","mc":223.3,"year":2024,"zones":{"MC":223.3,"MT":220.1,"MH":214.1,"HC":218.6,"HT":217.4,"HH":209.6,"LC":220.2,"LT":215.8,"LH":205.8},"high":215.2,"low":213.9,"heel":209.8,"toe":217.8,"x":8.0,"y":1.3},{"id":19,"brand":"Ping","name":"Ping G440 K","mc":224.4,"year":2025,"zones":{"MC":224.4,"MT":228.3,"MH":211.3,"HC":224.2,"HT":223.6,"HH":209.1,"LC":217.2,"LT":213.6,"LH":199.2},"high":219.0,"low":210.0,"heel":206.5,"toe":221.8,"x":15.3,"y":9.0},{"id":20,"brand":"Ping","name":"Ping G430 LST","mc":227.2,"year":2023,"zones":{"MC":227.2,"MT":225.2,"MH":216.0,"HC":225.4,"HT":222.0,"HH":215.1,"LC":217.5,"LT":210.6,"LH":207.9},"high":220.8,"low":212.0,"heel":213.0,"toe":219.3,"x":6.3,"y":8.8},{"id":21,"brand":"Ping","name":"Ping G440 LST","mc":229.2,"year":2025,"zones":{"MC":229.2,"MT":228.1,"MH":220.1,"HC":229.2,"HT":227.4,"HH":219.4,"LC":224.3,"LT":220.3,"LH":214.6},"high":225.3,"low":219.7,"heel":218.0,"toe":225.3,"x":7.3,"y":5.6},{"id":22,"brand":"Ping","name":"Ping G440 Max","mc":227.9,"year":2025,"zones":{"MC":227.9,"MT":225.9,"MH":221.8,"HC":225.2,"HT":224.7,"HH":216.8,"LC":222.1,"LT":216.1,"LH":212.1},"high":222.2,"low":216.8,"heel":216.9,"toe":222.2,"x":5.3,"y":5.4},{"id":23,"brand":"Ping","name":"Ping G400","mc":221.1,"year":2017,"zones":{"MC":221.1,"MT":217.2,"MH":215.5,"HC":219.1,"HT":218.6,"HH":208.9,"LC":213.1,"LT":206.3,"LH":203.5},"high":215.5,"low":207.6,"heel":209.3,"toe":214.0,"x":4.7,"y":7.9},{"id":24,"brand":"Ping","name":"Ping G400 Max","mc":224.1,"year":2018,"zones":{"MC":224.1,"MT":221.2,"MH":213.6,"HC":221.8,"HT":220.2,"HH":204.7,"LC":216.1,"LT":210.9,"LH":204.4},"high":215.6,"low":210.5,"heel":207.6,"toe":217.4,"x":9.8,"y":5.1},{"id":25,"brand":"TaylorMade","name":"TaylorMade Qi10","mc":220.9,"year":2024,"zones":{"MC":220.9,"MT":215.8,"MH":215.6,"HC":223.6,"HT":221.8,"HH":215.3,"LC":212.8,"LT":208.8,"LH":204.6},"high":220.2,"low":208.7,"heel":211.8,"toe":215.5,"x":3.7,"y":11.5},{"id":26,"brand":"TaylorMade","name":"TaylorMade Qi35","mc":226.9,"year":2025,"zones":{"MC":226.9,"MT":221.0,"MH":218.7,"HC":226.6,"HT":218.3,"HH":221.4,"LC":218.9,"LT":211.3,"LH":211.9},"high":222.1,"low":214.0,"heel":217.3,"toe":216.9,"x":-0.4,"y":8.1},{"id":27,"brand":"TaylorMade","name":"TaylorMade Qi4D","mc":222.2,"year":2026,"zones":{"MC":222.2,"MT":225.8,"MH":205.7,"HC":224.0,"HT":223.6,"HH":207.2,"LC":205.5,"LT":211.3,"LH":192.5},"high":218.3,"low":203.1,"heel":201.8,"toe":220.2,"x":18.4,"y":15.2},{"id":28,"brand":"TaylorMade","name":"TaylorMade Qi10 LS","mc":224.1,"year":2024,"zones":{"MC":224.1,"MT":226.7,"MH":211.5,"HC":227.2,"HT":228.3,"HH":213.5,"LC":208.8,"LT":208.8,"LH":184.5},"high":223.0,"low":200.7,"heel":203.2,"toe":221.3,"x":18.1,"y":22.3},{"id":29,"brand":"TaylorMade","name":"TaylorMade Qi35 LS","mc":228.4,"year":2025,"zones":{"MC":228.4,"MT":219.8,"MH":216.5,"HC":226.7,"HT":216.1,"HH":217.0,"LC":222.3,"LT":214.9,"LH":207.0},"high":219.9,"low":214.7,"heel":213.5,"toe":216.9,"x":3.4,"y":5.2},{"id":30,"brand":"TaylorMade","name":"TaylorMade Qi4D LS","mc":222.8,"year":2026,"zones":{"MC":222.8,"MT":218.6,"MH":208.4,"HC":217.2,"HT":206.6,"HH":206.4,"LC":214.9,"LT":207.4,"LH":193.5},"high":210.1,"low":205.3,"heel":202.8,"toe":210.9,"x":8.1,"y":4.8},{"id":31,"brand":"TaylorMade","name":"TaylorMade Qi10 Max","mc":221.0,"year":2024,"zones":{"MC":221.0,"MT":214.5,"MH":212.1,"HC":226.4,"HT":222.5,"HH":217.3,"LC":211.5,"LT":201.2,"LH":198.9},"high":222.1,"low":203.9,"heel":209.4,"toe":212.7,"x":3.3,"y":18.2},{"id":32,"brand":"TaylorMade","name":"TaylorMade Qi35 Max","mc":225.9,"year":2025,"zones":{"MC":225.9,"MT":221.3,"MH":214.5,"HC":226.0,"HT":217.5,"HH":221.6,"LC":219.0,"LT":212.4,"LH":212.4},"high":221.7,"low":214.6,"heel":216.2,"toe":217.1,"x":0.9,"y":7.1},{"id":33,"brand":"TaylorMade","name":"TaylorMade Qi4D Max","mc":220.0,"year":2026,"zones":{"MC":220.0,"MT":218.2,"MH":210.4,"HC":216.8,"HT":214.3,"HH":205.3,"LC":213.1,"LT":210.6,"LH":194.6},"high":212.1,"low":206.1,"heel":203.4,"toe":214.4,"x":11.0,"y":6.0},{"id":34,"brand":"Titleist","name":"Titleist GT 2","mc":228.0,"year":2024,"zones":{"MC":228.0,"MT":221.3,"MH":217.2,"HC":226.5,"HT":223.5,"HH":216.7,"LC":217.1,"LT":211.3,"LH":202.6},"high":222.2,"low":210.3,"heel":212.2,"toe":218.7,"x":6.5,"y":11.9},{"id":35,"brand":"Titleist","name":"Titleist GTS 2","mc":226.1,"year":2026,"zones":{"MC":226.1,"MT":219.8,"MH":216.4,"HC":225.8,"HT":218.3,"HH":214.8,"LC":218.9,"LT":210.0,"LH":206.0},"high":219.6,"low":211.6,"heel":212.4,"toe":216.0,"x":3.6,"y":8.0},{"id":36,"brand":"Titleist","name":"Titleist GT 3","mc":229.6,"year":2024,"zones":{"MC":229.6,"MT":222.5,"MH":220.5,"HC":225.9,"HT":213.5,"HH":218.1,"LC":221.9,"LT":214.4,"LH":211.7},"high":219.2,"low":216.0,"heel":216.8,"toe":216.8,"x":0.0,"y":3.2},{"id":37,"brand":"Titleist","name":"Titleist GTS 3","mc":226.1,"year":2026,"zones":{"MC":226.1,"MT":221.8,"MH":214.8,"HC":227.1,"HT":220.3,"HH":213.6,"LC":219.5,"LT":212.8,"LH":201.3},"high":220.3,"low":211.2,"heel":209.9,"toe":218.3,"x":8.4,"y":9.1},{"id":38,"brand":"Titleist","name":"Titleist GT 4","mc":230.1,"year":2024,"zones":{"MC":230.1,"MT":227.3,"MH":215.9,"HC":229.3,"HT":223.8,"HH":216.8,"LC":221.3,"LT":215.3,"LH":206.8},"high":223.3,"low":214.5,"heel":213.2,"toe":222.1,"x":8.9,"y":8.8},{"id":39,"brand":"Titleist","name":"Titleist GTS 4","mc":230.7,"year":2026,"zones":{"MC":230.7,"MT":224.7,"MH":221.2,"HC":230.5,"HT":222.7,"HH":218.7,"LC":223.5,"LT":215.8,"LH":210.6},"high":224.0,"low":216.6,"heel":216.8,"toe":221.1,"x":4.3,"y":7.4},{"id":40,"brand":"Callaway","name":"Callaway Quantum Max","mc":225.0,"year":2026,"zones":{"MC":225.0,"MT":222.8,"MH":216.5,"HC":216.5,"HT":215.6,"HH":204.3,"LC":219.4,"LT":215.4,"LH":205.7},"high":212.1,"low":213.5,"heel":208.8,"toe":217.9,"x":9.1,"y":-1.4},{"id":41,"brand":"Callaway","name":"Callaway Quantum TD Max","mc":221.8,"year":2026,"zones":{"MC":221.8,"MT":220.7,"MH":216.0,"HC":217.2,"HT":212.7,"HH":208.0,"LC":216.3,"LT":209.9,"LH":206.4},"high":212.6,"low":210.9,"heel":210.1,"toe":214.4,"x":4.3,"y":1.7},{"id":42,"brand":"Cobra","name":"Cobra OPTM Max D","mc":216.2,"year":2026,"zones":{"MC":216.2,"MT":211.2,"MH":218.7,"HC":212.9,"HT":204.0,"HH":206.5,"LC":215.3,"LT":203.7,"LH":212.1},"high":207.8,"low":210.4,"heel":212.4,"toe":206.3,"x":-6.1,"y":-2.6},{"id":43,"brand":"Mizuno","name":"Mizuno JPX One","mc":217.2,"year":2025,"zones":{"MC":217.2,"MT":214.1,"MH":207.4,"HC":215.8,"HT":211.2,"HH":205.7,"LC":209.8,"LT":202.3,"LH":202.1},"high":210.9,"low":204.7,"heel":205.1,"toe":209.2,"x":4.1,"y":6.2},{"id":44,"brand":"Mizuno","name":"Mizuno JPX One Select","mc":213.7,"year":2025,"zones":{"MC":213.7,"MT":203.0,"MH":202.8,"HC":210.7,"HT":203.9,"HH":197.8,"LC":193.8,"LT":193.3,"LH":188.7},"high":204.1,"low":191.9,"heel":196.4,"toe":200.1,"x":3.7,"y":12.2},{"id":45,"brand":"PXG","name":"PXG Lightning Tour Max 10K+","mc":222.5,"year":2025,"zones":{"MC":222.5,"MT":222.4,"MH":214.1,"HC":220.9,"HT":220.6,"HH":208.2,"LC":213.6,"LT":210.7,"LH":202.9},"high":216.6,"low":209.1,"heel":208.4,"toe":217.9,"x":9.5,"y":7.5},{"id":46,"brand":"Srixon","name":"Srixon Zxi LS","mc":226.9,"year":2025,"zones":{"MC":226.9,"MT":217.9,"MH":215.6,"HC":227.6,"HT":219.7,"HH":216.9,"LC":217.2,"LT":208.2,"LH":204.6},"high":221.4,"low":210.0,"heel":212.4,"toe":215.3,"x":2.9,"y":11.4},{"id":47,"brand":"Srixon","name":"Srixon Zxi","mc":226.6,"year":2025,"zones":{"MC":226.6,"MT":220.7,"MH":212.6,"HC":226.2,"HT":223.6,"HH":213.8,"LC":218.9,"LT":214.0,"LH":204.2},"high":221.2,"low":212.4,"heel":210.2,"toe":219.4,"x":9.2,"y":8.8},{"id":48,"brand":"Srixon","name":"Srixon Zxi Max","mc":225.7,"year":2025,"zones":{"MC":225.7,"MT":221.9,"MH":214.9,"HC":226.3,"HT":219.7,"HH":211.0,"LC":215.6,"LT":211.0,"LH":203.3},"high":219.0,"low":210.0,"heel":209.7,"toe":217.5,"x":7.8,"y":9.0},{"id":49,"brand":"Srixon","name":"Srixon ZX5 MK2","mc":223.2,"year":2023,"zones":{"MC":223.2,"MT":217.8,"MH":214.3,"HC":220.2,"HT":212.5,"HH":212.3,"LC":212.0,"LT":204.2,"LH":198.4},"high":215.0,"low":204.9,"heel":208.3,"toe":211.5,"x":3.2,"y":10.1},{"id":50,"brand":"Srixon","name":"Srixon ZX7 MK2","mc":223.9,"year":2023,"zones":{"MC":223.9,"MT":217.2,"MH":206.0,"HC":217.7,"HT":210.3,"HH":208.8,"LC":212.9,"LT":202.8,"LH":190.7},"high":212.3,"low":202.1,"heel":201.8,"toe":210.1,"x":8.3,"y":10.2},{"id":51,"brand":"Srixon","name":"Srixon ZX5 MK2 LS","mc":224.6,"year":2023,"zones":{"MC":224.6,"MT":215.2,"MH":211.7,"HC":219.7,"HT":211.8,"HH":209.9,"LC":212.1,"LT":201.3,"LH":193.4},"high":213.8,"low":202.3,"heel":205.0,"toe":209.4,"x":4.4,"y":11.5},{"id":52,"brand":"Srixon","name":"Srixon ZX7","mc":221.0,"year":2020,"zones":{"MC":221.0,"MT":214.6,"MH":214.3,"HC":223.6,"HT":217.2,"HH":214.9,"LC":205.9,"LT":196.4,"LH":191.5},"high":218.6,"low":197.9,"heel":206.9,"toe":209.4,"x":2.5,"y":20.7},{"id":53,"brand":"Srixon","name":"Srixon ZX5","mc":220.3,"year":2020,"zones":{"MC":220.3,"MT":218.9,"MH":210.1,"HC":217.9,"HT":215.4,"HH":208.2,"LC":207.0,"LT":204.5,"LH":198.6},"high":213.8,"low":203.4,"heel":205.6,"toe":212.9,"x":7.3,"y":10.4},{"id":54,"brand":"Cleveland","name":"Cleveland HiBore XL","mc":223.9,"year":2007,"zones":{"MC":223.9,"MT":217.0,"MH":218.6,"HC":219.5,"HT":214.7,"HH":216.8,"LC":221.0,"LT":214.7,"LH":214.7},"high":217.0,"low":216.8,"heel":216.7,"toe":215.5,"x":-1.2,"y":0.2},{"id":55,"brand":"Cobra","name":"Cobra Dark Speed Adapt Max-D","mc":224.4,"year":2025,"zones":{"MC":224.4,"MT":214.3,"MH":221.2,"HC":220.4,"HT":211.6,"HH":216.9,"LC":216.2,"LT":204.3,"LH":216.4},"high":216.3,"low":212.3,"heel":218.2,"toe":210.1,"x":-8.1,"y":4.0},{"id":56,"brand":"Ping","name":"Ping G440 SFT","mc":222.7,"year":2025,"zones":{"MC":222.7,"MT":216.4,"MH":218.6,"HC":211.6,"HT":209.7,"HH":206.9,"LC":220.8,"LT":211.6,"LH":217.3},"high":209.4,"low":216.6,"heel":214.3,"toe":212.6,"x":-1.7,"y":-7.2},{"id":57,"brand":"Ping","name":"Ping G425 LST","mc":231.2,"year":2021,"zones":{"MC":231.2,"MT":227.0,"MH":217.0,"HC":226.0,"HT":225.5,"HH":209.9,"LC":222.1,"LT":217.9,"LH":205.4},"high":220.5,"low":215.1,"heel":210.8,"toe":223.5,"x":12.7,"y":5.4},{"id":58,"brand":"Ping","name":"Ping G425 Max","mc":223.9,"year":2021,"zones":{"MC":223.9,"MT":220.9,"MH":216.2,"HC":222.7,"HT":221.4,"HH":212.2,"LC":215.1,"LT":210.6,"LH":205.1},"high":218.8,"low":210.3,"heel":211.2,"toe":217.6,"x":6.4,"y":8.5},{"id":59,"brand":"Ping","name":"Ping G425 SFT","mc":215.9,"year":2021,"zones":{"MC":215.9,"MT":207.8,"MH":210.2,"HC":212.1,"HT":204.8,"HH":204.9,"LC":210.9,"LT":200.4,"LH":205.4},"high":207.3,"low":205.6,"heel":206.8,"toe":204.3,"x":-2.5,"y":1.7},{"id":60,"brand":"Ping","name":"Ping G430 Max","mc":225.6,"year":2023,"zones":{"MC":225.6,"MT":222.9,"MH":213.8,"HC":225.4,"HT":225.4,"HH":223.9,"LC":214.5,"LT":208.5,"LH":204.0},"high":224.9,"low":209.0,"heel":213.9,"toe":218.9,"x":5.0,"y":15.9},{"id":61,"brand":"Ping","name":"Ping G430 SFT","mc":220.2,"year":2023,"zones":{"MC":220.2,"MT":210.2,"MH":216.4,"HC":212.6,"HT":206.3,"HH":208.9,"LC":216.1,"LT":201.5,"LH":209.9},"high":209.3,"low":209.2,"heel":211.7,"toe":206.0,"x":-5.7,"y":0.1},{"id":62,"brand":"TaylorMade","name":"TaylorMade Stealth 2","mc":225.9,"year":2023,"zones":{"MC":225.9,"MT":217.8,"MH":216.9,"HC":227.5,"HT":218.9,"HH":218.9,"LC":211.9,"LT":199.9,"LH":200.3},"high":221.8,"low":204.0,"heel":212.0,"toe":212.2,"x":0.2,"y":17.8},{"id":63,"brand":"TaylorMade","name":"TaylorMade Stealth 2 Plus","mc":228.9,"year":2023,"zones":{"MC":228.9,"MT":216.9,"MH":221.3,"HC":225.4,"HT":216.3,"HH":219.8,"LC":217.7,"LT":206.2,"LH":207.1},"high":220.5,"low":210.3,"heel":216.1,"toe":213.1,"x":-3.0,"y":10.2},{"id":64,"brand":"TaylorMade","name":"TaylorMade Stealth 2 HD","mc":222.0,"year":2023,"zones":{"MC":222.0,"MT":215.2,"MH":214.6,"HC":218.6,"HT":214.2,"HH":218.6,"LC":212.0,"LT":199.7,"LH":206.0},"high":217.1,"low":205.9,"heel":213.1,"toe":209.7,"x":-3.4,"y":11.2},{"id":65,"brand":"Wilson","name":"Wilson Dynapwr Carbon","mc":226.3,"year":2023,"zones":{"MC":226.3,"MT":218.4,"MH":213.4,"HC":221.9,"HT":218.7,"HH":210.8,"LC":220.3,"LT":213.8,"LH":207.2},"high":217.1,"low":213.8,"heel":210.5,"toe":217.0,"x":6.5,"y":3.3},{"id":66,"brand":"Wilson","name":"Wilson Dynapwr Max","mc":222.9,"year":2023,"zones":{"MC":222.9,"MT":220.7,"MH":208.3,"HC":221.6,"HT":218.9,"HH":204.9,"LC":216.5,"LT":210.5,"LH":200.5},"high":215.1,"low":209.2,"heel":204.6,"toe":216.7,"x":12.1,"y":5.9},{"id":67,"brand":"Wilson","name":"Wilson Dynapwr LS","mc":222.9,"year":2023,"zones":{"MC":222.9,"MT":218.1,"MH":207.6,"HC":222.4,"HT":220.1,"HH":210.2,"LC":211.2,"LT":207.6,"LH":192.4},"high":217.6,"low":203.7,"heel":203.4,"toe":215.3,"x":11.9,"y":13.9},{"id":68,"brand":"Callaway","name":"Callaway Paradym","mc":222.7,"year":2023,"zones":{"MC":222.7,"MT":215.8,"MH":214.1,"HC":223.1,"HT":217.7,"HH":213.5,"LC":208.7,"LT":202.0,"LH":197.9},"high":218.1,"low":202.9,"heel":208.5,"toe":211.8,"x":3.3,"y":15.2},{"id":69,"brand":"Callaway","name":"Callaway Paradym X","mc":219.1,"year":2023,"zones":{"MC":219.1,"MT":212.5,"MH":217.8,"HC":215.9,"HT":210.1,"HH":211.0,"LC":214.0,"LT":206.4,"LH":212.4},"high":212.3,"low":210.9,"heel":213.7,"toe":209.7,"x":-4.0,"y":1.4},{"id":70,"brand":"Callaway","name":"Callaway Elyte TD Max","mc":222.8,"year":2025,"zones":{"MC":222.8,"MT":218.8,"MH":208.0,"HC":221.2,"HT":220.0,"HH":204.8,"LC":215.1,"LT":211.0,"LH":194.4},"high":215.3,"low":206.8,"heel":202.4,"toe":216.6,"x":14.2,"y":8.5},{"id":71,"brand":"Titleist","name":"Titleist TSR2","mc":223.5,"year":2022,"zones":{"MC":223.5,"MT":220.8,"MH":216.9,"HC":224.5,"HT":223.2,"HH":215.4,"LC":213.1,"LT":210.8,"LH":206.2},"high":221.0,"low":210.0,"heel":212.8,"toe":218.3,"x":5.5,"y":11.0},{"id":72,"brand":"Titleist","name":"Titleist TSR3","mc":227.7,"year":2022,"zones":{"MC":227.7,"MT":221.5,"MH":219.9,"HC":227.2,"HT":219.1,"HH":219.4,"LC":214.8,"LT":213.3,"LH":209.3},"high":221.9,"low":212.5,"heel":216.2,"toe":218.0,"x":1.8,"y":9.4},{"id":73,"brand":"Titleist","name":"Titleist TSR4","mc":220.3,"year":2022,"zones":{"MC":220.3,"MT":212.7,"MH":212.0,"HC":220.0,"HT":196.6,"HH":202.8,"LC":210.0,"LT":198.2,"LH":199.6},"high":206.5,"low":202.6,"heel":204.8,"toe":202.5,"x":-2.3,"y":3.9}];
+  var byId = {};
+  for (var i = 0; i < DRIVERS.length; i++) byId[DRIVERS[i].id] = DRIVERS[i];
+
+  function $(sel) { return root.querySelector(sel); }
+  function $$(sel) { return root.querySelectorAll(sel); }
+
+  function bgColorFor(v) {
+    if (v >= 224) return '#21681B';
+    if (v >= 217) return '#94C93D';
+    if (v >= 210) return '#FFE845';
+    if (v >= 200) return '#F96A32';
+    return '#ED3E49';
+  }
+  function fgColorFor(v) {
+    if (v >= 210 && v < 224) return '#000000';
+    return '#FFFFFF';
+  }
+
+  function updateSide(sideName, id) {
+    var side = root.querySelector('.dsi__side[data-side="' + sideName + '"]');
+    if (!side) return;
+    var d = byId[id];
+    if (!d) return;
+
+    side.querySelector('[data-role="brand"]').textContent = d.brand.toUpperCase();
+    side.querySelector('[data-role="model"]').textContent = d.name.replace(d.brand + ' ', '');
+    side.querySelector('[data-role="mc"]').textContent = d.mc.toFixed(1);
+
+    var zones = ['HH','HC','HT','MH','MC','MT','LH','LC','LT'];
+    zones.forEach(function(z) {
+      var cell = side.querySelector('[data-role-zone="' + z + '"]');
+      if (!cell) return;
+      var val = d.zones[z];
+      cell.querySelector('.dsi__cell-val').textContent = val.toFixed(1);
+      cell.style.backgroundColor = bgColorFor(val);
+      cell.style.color = fgColorFor(val);
+    });
+
+    side.querySelector('[data-role="high"]').textContent = d.high.toFixed(1);
+    side.querySelector('[data-role="low"]').textContent = d.low.toFixed(1);
+    side.querySelector('[data-role="heel"]').textContent = d.heel.toFixed(1);
+    side.querySelector('[data-role="toe"]').textContent = d.toe.toFixed(1);
+
+    // Update rings in ALL SVGs (desktop and mobile)
+    var rings = root.querySelectorAll('.dsi__ring--' + sideName);
+    rings.forEach(function(ring) {
+      var svg = ring.closest('svg');
+      var pt = svg.querySelector('.dsi__pt[data-id="' + id + '"]');
+      if (pt) {
+        ring.setAttribute('cx', pt.getAttribute('cx'));
+        ring.setAttribute('cy', pt.getAttribute('cy'));
+        ring.style.display = 'block';
+      }
+    });
+  }
+
+  function updateLabelSelection() {
+    // Remove --selected class from all labels+leaders
+    root.querySelectorAll('.dsi__label--selected').forEach(function(el) {
+      el.classList.remove('dsi__label--selected');
+    });
+    root.querySelectorAll('.dsi__leader--selected').forEach(function(el) {
+      el.classList.remove('dsi__leader--selected');
+    });
+    // Add --selected to primary's labels+leaders (across both SVGs)
+    var detail = root.querySelector('.dsi__detail');
+    var primaryId = detail.getAttribute('data-selected');
+    if (primaryId !== null && primaryId !== '') {
+      root.querySelectorAll('.dsi__label[data-id="' + primaryId + '"]').forEach(function(el) {
+        el.classList.add('dsi__label--selected');
+      });
+      root.querySelectorAll('.dsi__leader[data-id="' + primaryId + '"]').forEach(function(el) {
+        el.classList.add('dsi__leader--selected');
+      });
+    }
+    var compareId = detail.getAttribute('data-compare');
+    if (compareId !== null && compareId !== '') {
+      root.querySelectorAll('.dsi__label[data-id="' + compareId + '"]').forEach(function(el) {
+        el.classList.add('dsi__label--selected');
+      });
+      root.querySelectorAll('.dsi__leader[data-id="' + compareId + '"]').forEach(function(el) {
+        el.classList.add('dsi__leader--selected');
+      });
+    }
+  }
+
+  function setPrimary(id) {
+    root.querySelector('.dsi__detail').setAttribute('data-selected', id);
+    updateSide('primary', id);
+    updateLabelSelection();
+  }
+
+  function setCompare(idOrNull) {
+    var detail = root.querySelector('.dsi__detail');
+    var body = root.querySelector('.dsi__body');
+    var compareSide = root.querySelector('.dsi__side[data-side="compare"]');
+    var compareRings = root.querySelectorAll('.dsi__ring--compare');
+    var clearBtn = root.querySelector('.dsi__clear');
+    var select = root.querySelector('#dsi-compare');
+
+    if (idOrNull === null || idOrNull === undefined || idOrNull === '') {
+      detail.setAttribute('data-compare', '');
+      body.classList.remove('dsi__body--compare');
+      compareSide.setAttribute('hidden', '');
+      compareRings.forEach(function(r) { r.style.display = 'none'; });
+      if (select.value !== '') select.value = '';
+      clearBtn.setAttribute('hidden', '');
+    } else {
+      detail.setAttribute('data-compare', idOrNull);
+      body.classList.add('dsi__body--compare');
+      compareSide.removeAttribute('hidden');
+      updateSide('compare', idOrNull);
+      if (parseInt(select.value, 10) !== idOrNull) select.value = String(idOrNull);
+      clearBtn.removeAttribute('hidden');
+    }
+    updateLabelSelection();
+  }
+
+  function matchesEra(year, era) {
+    if (era === '') return true;
+    if (era === 'pre-2023') return year < 2023;
+    return year === parseInt(era, 10);
+  }
+
+  function applyFilters() {
+    var brand = $('#dsi-brand').value;
+    var era = $('#dsi-era').value;
+    // Update dots in both SVGs
+    var pts = $$('.dsi__pt');
+    pts.forEach(function(pt) {
+      var ptBrand = pt.getAttribute('data-brand');
+      var ptYear = parseInt(pt.getAttribute('data-year'), 10);
+      var match = (brand === '' || ptBrand === brand) && matchesEra(ptYear, era);
+      if (match) pt.classList.remove('dsi__pt--dimmed');
+      else pt.classList.add('dsi__pt--dimmed');
+    });
+    // Update desktop labels and leaders based on data-id match
+    var labels = $$('.dsi__label[data-id]');
+    labels.forEach(function(el) {
+      var d = byId[parseInt(el.getAttribute('data-id'), 10)];
+      var match = (brand === '' || d.brand === brand) && matchesEra(d.year, era);
+      if (match) el.classList.remove('dsi__label--dimmed');
+      else el.classList.add('dsi__label--dimmed');
+    });
+    var leaders = $$('.dsi__leader[data-id]');
+    leaders.forEach(function(el) {
+      var d = byId[parseInt(el.getAttribute('data-id'), 10)];
+      var match = (brand === '' || d.brand === brand) && matchesEra(d.year, era);
+      if (match) el.classList.remove('dsi__leader--dimmed');
+      else el.classList.add('dsi__leader--dimmed');
+    });
+  }
+
+  // Wire dot clicks (works across both SVGs)
+  var pts = $$('.dsi__pt');
+  for (var i = 0; i < pts.length; i++) {
+    (function(pt) {
+      pt.addEventListener('click', function() {
+        setPrimary(parseInt(pt.getAttribute('data-id'), 10));
+      });
+      pt.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setPrimary(parseInt(pt.getAttribute('data-id'), 10));
+        }
+      });
+    })(pts[i]);
+  }
+
+  // Wire filter dropdowns
+  $('#dsi-brand').addEventListener('change', applyFilters);
+  $('#dsi-era').addEventListener('change', applyFilters);
+
+  // Wire compare dropdown
+  $('#dsi-compare').addEventListener('change', function() {
+    var v = $('#dsi-compare').value;
+    setCompare(v === '' ? null : parseInt(v, 10));
+  });
+
+  // Wire clear button
+  $('.dsi__clear').addEventListener('click', function() {
+    setCompare(null);
+  });
+
+  // Initial render
+  var initId = parseInt($('.dsi__detail').getAttribute('data-selected'), 10);
+  setPrimary(initId);
+  setCompare(null);
+})();
+</script>
+</div><script>(function(){function r(){parent.postMessage({type:"chart-height",height:document.documentElement.scrollHeight},"*")}addEventListener("load",r);addEventListener("resize",r);new ResizeObserver(r).observe(document.body)})()</script>
+</body></html>
