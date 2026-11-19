@@ -131,6 +131,7 @@
 
 .dsi__body { display: grid; grid-template-columns: 1fr; gap: 24px; }
 .dsi__body--compare { grid-template-columns: 1fr 1fr; }
+.dsi__side { min-width: 0; }
 .dsi__body--compare .dsi__heatmap-wrap { max-width: none; }
 
 .dsi__side-header {
@@ -245,7 +246,9 @@
 }
 
 @media (max-width: 720px) {
+  body { padding: 0; }
   .dsi { padding: 16px 12px; }
+  .dsi__detail { padding: 16px 12px 18px; }
   .dsi__title { font-size: 22px; }
   .dsi__body--compare { grid-template-columns: 1fr; }
   .dsi__side-model { font-size: 20px; }
