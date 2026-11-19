@@ -15,7 +15,7 @@
 
     --fg: #e1e8e3;
     --fg-muted: #9db0a4;
-    --fg-faint: #62786b;
+    --fg-faint: #7a9083; /* >= 4.5:1 on every background below */
 
     --green: #6cc08b;
     --green-soft: #3f8a5c;
@@ -172,6 +172,7 @@ h1, h2, h3, h4 {
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: -0.01em;
+    text-wrap: balance;
 }
 
 .section-title {
@@ -450,7 +451,7 @@ a.project-card:hover {
     color: var(--fg-faint);
     font-size: 13px;
     margin-bottom: 1rem;
-    word-break: break-all;
+    overflow-wrap: anywhere;
 }
 
 .breadcrumb a { color: var(--fg-muted); text-decoration: none; }
@@ -477,9 +478,14 @@ a.project-card:hover {
     font-size: 15px;
     line-height: 1.65;
     color: #c9d4cd;
+    overflow-wrap: break-word;
 }
 
 .content > * + * { margin-top: 1em; }
+
+.content p,
+.content li,
+.content blockquote { text-wrap: pretty; }
 
 .content h2,
 .content h3,
@@ -879,7 +885,15 @@ mark.search-highlight.is-current {
 
     .tabline-tabs a { padding: .55rem .6rem; }
     .hero { padding-top: 2.25rem; }
+    .hero-links { gap: .6rem 1.25rem; }
     .keys-hint { display: none; }
+    .bprev { display: none; }
+
+    /* iOS zooms the page when focusing inputs under 16px */
+    .post-filter input { font-size: 16px; }
+
+    .code-block pre,
+    .content > pre { padding: .8rem .75rem; }
 
     .post-row {
         grid-template-columns: 1fr;
@@ -888,6 +902,11 @@ mark.search-highlight.is-current {
 
     .status-line .seg-enc,
     .status-line .seg-ft { display: none; }
+}
+
+/* Keyboard hints mean nothing on touch-only devices, e.g. tablets */
+@media (hover: none) and (pointer: coarse) {
+    .keys-hint { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
